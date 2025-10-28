@@ -1,3 +1,6 @@
+# Core dependencies for Cor Gaze Detection Library
+# Pure Python implementation - no compilation required
+
 numpy>=1.19.0
 opencv-python>=4.5.0
 matplotlib>=3.3.0

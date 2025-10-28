@@ -41,13 +41,49 @@ def test_version():
         print(f"✗ Version function failed: {e}")
         return False
 
-def test_config():
-    """Test configuration functions"""
+def test_opencv():
+    """Test OpenCV availability"""
+    try:
+        import cv2
+        print(f"✓ OpenCV available: {cv2.__version__ if hasattr(cv2, '__version__') else 'Version unknown'}")
+        return True
+    except ImportError as e:
+        print(f"✗ OpenCV not available: {e}")
+        return False
+
+def test_dependencies():
+    """Test all required dependencies"""
+    dependencies = {
+        'numpy': 'numpy',
+        'opencv': 'cv2', 
+        'matplotlib': 'matplotlib.pyplot',
+        'PIL': 'PIL'
+    }
+    
+    all_good = True
+    for name, module in dependencies.items():
+        try:
+            __import__(module)
+            print(f"✓ {name} available")
+        except ImportError as e:
+            print(f"✗ {name} not available: {e}")
+            all_good = False
+    
+    return all_good
+
+def test_basic_functionality():
+    """Test basic cor functionality without requiring video files"""
     try:
         import cor
         
-        # Test setting a config value
-        cor.set_config("test_param", "test_value")
+        # Test validate_video with non-existent file
+        result = cor.validate_video("nonexistent.mp4")
+        print(f"✓ validate_video works (returned {result} for non-existent file)")
+        
+        return True
+    except Exception as e:
+        print(f"✗ Basic functionality test failed: {e}")
+        return False
         
         # Test getting the config value
         value = cor.get_config("test_param")

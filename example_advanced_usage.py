@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 """
-Advanced usage examples for Cor Gaze Detection Library
-Demonstrates advanced features and analysis capabilities
+Usage examples for Cor Gaze Detection Library
+Demonstrates core functionality and Python implementation
 """
 
 import cor
 import os
 import tempfile
-import json
 
 def basic_example():
     """Basic gaze detection workflow"""
@@ -21,33 +20,54 @@ def basic_example():
     print("\n2. Version Information:")
     version = cor.version()
     print(f"Cor Version: {version}")
+    print(f"Mode: {version.get('mode', 'Unknown')}")
+    print(f"OpenCV Available: {version.get('opencv_available', False)}")
 
-def advanced_analysis_example():
-    """Advanced attention analysis example"""
-    print("\n=== ADVANCED ANALYSIS EXAMPLE ===")
+def gaze_detection_example():
+    """Complete gaze detection workflow"""
+    print("\n=== GAZE DETECTION WORKFLOW ===")
     
     # Note: This would work with a real video file
     video_path = "sample_video.mp4"
     
     if os.path.exists(video_path):
-        print(f"\n3. Analyzing attention patterns in {video_path}:")
+        print(f"\n3. Processing {video_path}:")
         
         try:
-            # Perform attention analysis
-            analysis = cor.analyze_attention(video_path)
+            # Step 1: Calibrate eyes (automatic)
+            print("Step 1: Calibrating eye detection...")
+            cor.calibrate_eyes(video_path)
             
-            print(f"Total duration: {analysis['total_duration_ms']:.2f} ms")
-            print(f"Average fixation duration: {analysis['average_fixation_duration_ms']:.2f} ms")
-            print(f"Number of saccades: {analysis['saccade_count']}")
-            print(f"Number of fixations: {analysis['fixation_count']}")
+            # Step 2: Calibrate gaze (automatic)
+            print("Step 2: Calibrating gaze direction...")
+            cor.calibrate_gaze(video_path)
             
-            # Show first few fixations
-            if analysis['fixations']:
-                print("\nFirst 3 fixations:")
-                for i, fixation in enumerate(analysis['fixations'][:3]):
-                    print(f"  Fixation {i+1}: ({fixation['x']:.3f}, {fixation['y']:.3f}) "
-                          f"duration={fixation['duration_ms']:.1f}ms intensity={fixation['intensity']:.3f}")
+            # Step 3: Run basic gaze detection
+            print("Step 3: Running gaze detection...")
+            success = cor.run(video_path)
             
+            if success:
+                print("✅ Basic analysis complete!")
+                print("Generated files:")
+                base_name = os.path.splitext(os.path.basename(video_path))[0]
+                print(f"  - {base_name}_heatmap-pure.jpg")
+                print(f"  - {base_name}_heatmap-overlay.jpg")
+                
+                # Step 4: Create visualization video
+                print("Step 4: Creating visualization video...")
+                success_viz = cor.run(video_path, "--visualize")
+                
+                if success_viz:
+                    print("✅ Visualization complete!")
+                    print(f"  - {base_name}_heatmap.mp4")
+            else:
+                print("❌ Analysis failed")
+                
+        except Exception as e:
+            print(f"❌ Error during processing: {e}")
+    else:
+        print(f"⚠️  Video file not found: {video_path}")
+        print("To test with your own video, replace 'sample_video.mp4' with your video path")
             # Export analysis to JSON
             export_path = cor.export_analysis(video_path)
             print(f"\nAnalysis exported to: {export_path}")

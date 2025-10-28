@@ -18,19 +18,19 @@ TABLE OF CONTENTS
 
 1. OVERVIEW
 -----------
-Cor is a high-performance gaze detection library implemented in C with Python bindings. 
-It provides real-time eye tracking and gaze analysis capabilities for video processing 
-applications. The library uses advanced computer vision algorithms based on OpenCV for 
-robust detection across various lighting conditions and head poses.
+Cor is a comprehensive gaze detection library implemented in Python using OpenCV and matplotlib. 
+It provides automated eye tracking and gaze analysis capabilities for video processing 
+applications. The library uses proven computer vision algorithms for robust detection 
+across various lighting conditions and head poses.
 
 Key Features:
 - Multi-format video processing (MP4, AVI, MOV, MKV, WMV, FLV, WEBM)
-- Interactive calibration system for eye and gaze detection
-- Customizable heatmap generation with multiple color schemes
-- Real-time visualization with overlay capabilities
-- Progress tracking with visual progress bars for all operations
-- Automatic confidence assessment with detailed accuracy metrics
-- High-performance C++ implementation with Python interface
+- Automatic calibration system for eye and gaze detection
+- Professional heatmap generation with multiple color schemes
+- Video visualization with gaze tracking overlays
+- Progress tracking with real-time updates during processing
+- Pure Python implementation - no compilation required
+- Cross-platform compatibility (Windows, macOS, Linux)
 - Configurable detection parameters through text files
 
 2. INSTALLATION AND SETUP
@@ -39,8 +39,9 @@ Key Features:
 System Requirements:
 - Operating System: Windows, macOS, Linux
 - Python: 3.7 or higher
-- OpenCV: 4.5 or higher
+- OpenCV: 4.5 or higher (opencv-python package)
 - NumPy: 1.19 or higher
+- Matplotlib: 3.3 or higher
 - Memory: Minimum 4GB RAM (8GB recommended for large videos)
 - Storage: 100MB for library + space for output files
 
@@ -48,6 +49,15 @@ Installation Methods:
 
 Method 1 - PyPI Installation:
     pip install cor
+
+Method 2 - Source Installation:
+    git clone https://github.com/victorcynzo/cor
+    cd cor
+    pip install -e .
+
+Method 3 - Direct Installation:
+    pip install opencv-python matplotlib numpy Pillow
+    pip install -e .
 
 Method 2 - Source Installation:
     git clone https://github.com/cor-team/cor.git
