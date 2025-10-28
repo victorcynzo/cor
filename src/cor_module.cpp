@@ -61,7 +61,7 @@ PyMODINIT_FUNC PyInit_cor(void) {
     }
     
     // Add version information
-    PyModule_AddStringConstant(module, "__version__", "1.0.0");
+    PyModule_AddStringConstant(module, "__version__", "1.0.2");
     PyModule_AddIntConstant(module, "VERSION_MAJOR", COR_VERSION_MAJOR);
     PyModule_AddIntConstant(module, "VERSION_MINOR", COR_VERSION_MINOR);
     PyModule_AddIntConstant(module, "VERSION_PATCH", COR_VERSION_PATCH);
@@ -398,6 +398,72 @@ void print_progress_bar(int current, int total, const char* prefix = "Progress",
     }
 }
 
+// Confidence assessment utility
+void display_confidence_assessment(const std::vector<GazePoint>& gaze_points, int total_frames) {
+    if (gaze_points.empty() || total_frames <= 0) {
+        printf("\n=== GAZE DETECTION CONFIDENCE ASSESSMENT ===\n");
+        printf("❌ No valid gaze data detected\n");
+        printf("Confidence: 0.0%% (No reliable gaze tracking)\n");
+        printf("============================================\n\n");
+        return;
+    }
+    
+    // Calculate confidence metrics
+    float total_confidence = 0.0f;
+    int high_confidence_points = 0;
+    int medium_confidence_points = 0;
+    int low_confidence_points = 0;
+    
+    for (const auto& point : gaze_points) {
+        total_confidence += point.confidence;
+        
+        if (point.confidence >= 0.8f) {
+            high_confidence_points++;
+        } else if (point.confidence >= 0.6f) {
+            medium_confidence_points++;
+        } else {
+            low_confidence_points++;
+        }
+    }
+    
+    float average_confidence = total_confidence / gaze_points.size();
+    float detection_rate = (float)gaze_points.size() / total_frames;
+    float high_confidence_ratio = (float)high_confidence_points / gaze_points.size();
+    
+    // Calculate overall accuracy confidence
+    float accuracy_confidence = (average_confidence * 0.5f + detection_rate * 0.3f + high_confidence_ratio * 0.2f) * 100.0f;
+    
+    // Display assessment
+    printf("\n=== GAZE DETECTION CONFIDENCE ASSESSMENT ===\n");
+    printf("📊 Analysis Results:\n");
+    printf("   • Total frames processed: %d\n", total_frames);
+    printf("   • Valid gaze points detected: %zu\n", gaze_points.size());
+    printf("   • Detection rate: %.1f%%\n", detection_rate * 100.0f);
+    printf("   • Average confidence per point: %.1f%%\n", average_confidence * 100.0f);
+    printf("\n📈 Confidence Distribution:\n");
+    printf("   • High confidence (≥80%%): %d points (%.1f%%)\n", 
+           high_confidence_points, (float)high_confidence_points / gaze_points.size() * 100.0f);
+    printf("   • Medium confidence (60-79%%): %d points (%.1f%%)\n", 
+           medium_confidence_points, (float)medium_confidence_points / gaze_points.size() * 100.0f);
+    printf("   • Low confidence (<60%%): %d points (%.1f%%)\n", 
+           low_confidence_points, (float)low_confidence_points / gaze_points.size() * 100.0f);
+    
+    printf("\n🎯 Overall Accuracy Confidence: %.1f%%\n", accuracy_confidence);
+    
+    // Provide interpretation
+    if (accuracy_confidence >= 85.0f) {
+        printf("✅ Excellent - High reliability for research and analysis\n");
+    } else if (accuracy_confidence >= 70.0f) {
+        printf("✅ Good - Suitable for most applications\n");
+    } else if (accuracy_confidence >= 55.0f) {
+        printf("⚠️  Fair - Consider recalibration for better accuracy\n");
+    } else {
+        printf("❌ Poor - Recalibration strongly recommended\n");
+    }
+    
+    printf("============================================\n\n");
+}
+
 // Logging utility
 void log_message(const char* level, const char* message) {
     if (g_debug_mode || strcmp(level, "ERROR") == 0) {
@@ -408,7 +474,7 @@ rsion information function
 PyObject* cor_version(PyObject* self, PyObject* args) {
     PyObject* version_dict = PyDict_New();
     
-    PyDict_SetItemString(version_dict, "version", PyUnicode_FromString("1.0.0"));
+    PyDict_SetItemString(version_dict, "version", PyUnicode_FromString("1.0.2"));
     PyDict_SetItemString(version_dict, "major", PyLong_FromLong(COR_VERSION_MAJOR));
     PyDict_SetItemString(version_dict, "minor", PyLong_FromLong(COR_VERSION_MINOR));
     PyDict_SetItemString(version_dict, "patch", PyLong_FromLong(COR_VERSION_PATCH));

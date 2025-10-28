@@ -196,6 +196,9 @@ int process_video_file(const char* video_path, bool visualize) {
         return -1;
     }
     
+    // Display confidence assessment
+    display_confidence_assessment(gaze_points, processed_frames);
+    
     // Generate heatmaps
     HeatmapConfig heatmap_config = get_heatmap_config();
     

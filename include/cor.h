@@ -9,7 +9,7 @@
 // Version information
 #define COR_VERSION_MAJOR 1
 #define COR_VERSION_MINOR 0
-#define COR_VERSION_PATCH 0
+#define COR_VERSION_PATCH 2
 
 // Configuration file paths
 #define EYE_DETECTION_CONFIG "eye-detection-values.txt"
@@ -108,6 +108,7 @@ bool is_supported_video_format(const char* filename);
 char* get_output_filename(const char* input_path, const char* suffix, const char* extension);
 void log_message(const char* level, const char* message);
 void print_progress_bar(int current, int total, const char* prefix, const char* suffix, int length);
+void display_confidence_assessment(const std::vector<GazePoint>& gaze_points, int total_frames);
 void init_video_processing();
 HeatmapConfig get_heatmap_config();
 cv::Mat create_heatmap_overlay(cv::Mat background, cv::Mat heatmap, float alpha);

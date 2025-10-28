@@ -25,7 +25,7 @@ def check_c_includes():
     issues = []
     
     for c_file in c_files:
-        with open(c_file, 'r') as f:
+        with open(c_file, 'r', encoding='utf-8') as f:
             content = f.read()
             
         # Check for common include issues

@@ -1,7 +1,7 @@
 COR GAZE DETECTION LIBRARY - TECHNICAL DOCUMENTATION
 ==================================================
 
-VERSION: 1.0.0
+VERSION: 1.0.2
 LAST UPDATED: October 2024
 
 TABLE OF CONTENTS
@@ -29,6 +29,7 @@ Key Features:
 - Customizable heatmap generation with multiple color schemes
 - Real-time visualization with overlay capabilities
 - Progress tracking with visual progress bars for all operations
+- Automatic confidence assessment with detailed accuracy metrics
 - High-performance C++ implementation with Python interface
 - Configurable detection parameters through text files
 
@@ -347,12 +348,20 @@ Example Content:
 - Frame-level Tracking: Detailed progress for video analysis operations
 - Calibration Progress: Step-by-step progress during interactive calibration
 
-6.3 MEMORY USAGE
+6.3 CONFIDENCE ASSESSMENT
+- Automatic Accuracy Evaluation: Post-processing confidence analysis
+- Detection Rate Analysis: Percentage of successful gaze detections
+- Confidence Distribution: Breakdown of high/medium/low confidence points
+- Overall Accuracy Score: Composite reliability metric (0-100%)
+- Interpretation Guidelines: Clear recommendations based on confidence levels
+- Quality Recommendations: Suggestions for improving detection accuracy
+
+6.4 MEMORY USAGE
 - Typical Usage: 50-200MB for standard video processing
 - Large Videos: Streaming processing to minimize memory footprint
 - Calibration: Temporary storage of 20 frames (~100MB)
 
-6.4 PERFORMANCE BENCHMARKS
+6.5 PERFORMANCE BENCHMARKS
 - Standard Video (720p, 30fps): ~15-25 fps processing speed
 - High Resolution (1080p+): ~8-15 fps processing speed
 - Calibration Interface: Real-time interaction (30+ fps)

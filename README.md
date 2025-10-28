@@ -16,6 +16,7 @@ Cor is a high-performance Python library written in C for real-time gaze detecti
 - **Performance Benchmarking**: Built-in tools for performance analysis
 - **Data Export**: JSON export of detailed analysis results
 - **Progress Tracking**: Real-time progress bars for all video processing operations
+- **Confidence Assessment**: Automatic accuracy evaluation with detailed metrics
 - **High Performance**: Optimized C++ implementation for fast processing
 - **Flexible Configuration**: Extensive customization through configuration files
 
@@ -152,6 +153,41 @@ Progress bars use Unicode block characters (█) for clear visual feedback and d
 - Percentage completion
 - Operation-specific status messages
 
+## Confidence Assessment
+
+After each gaze detection analysis, Cor automatically evaluates and displays the confidence in its accuracy:
+
+### Assessment Metrics
+- **Detection Rate**: Percentage of frames with successful gaze detection
+- **Average Confidence**: Mean confidence score across all detected gaze points
+- **Confidence Distribution**: Breakdown of high/medium/low confidence detections
+- **Overall Accuracy Confidence**: Composite score indicating reliability
+
+### Example Output
+```
+=== GAZE DETECTION CONFIDENCE ASSESSMENT ===
+📊 Analysis Results:
+   • Total frames processed: 1500
+   • Valid gaze points detected: 1342
+   • Detection rate: 89.5%
+   • Average confidence per point: 76.3%
+
+📈 Confidence Distribution:
+   • High confidence (≥80%): 892 points (66.5%)
+   • Medium confidence (60-79%): 321 points (23.9%)
+   • Low confidence (<60%): 129 points (9.6%)
+
+🎯 Overall Accuracy Confidence: 82.4%
+✅ Excellent - High reliability for research and analysis
+============================================
+```
+
+### Confidence Levels
+- **85%+**: Excellent - High reliability for research and analysis
+- **70-84%**: Good - Suitable for most applications
+- **55-69%**: Fair - Consider recalibration for better accuracy
+- **<55%**: Poor - Recalibration strongly recommended
+
 ## Examples
 
 ### Basic Workflow
@@ -216,6 +252,13 @@ If you use Cor in your research, please cite:
 ## Changelog
 
 ### v1.0.1
+- Added comprehensive progress bars for all video processing operations
+- Implemented confidence assessment system with detailed accuracy metrics
+- Enhanced heatmap generation with real-time progress tracking
+- Improved user experience with visual feedback during processing
+- Added confidence distribution analysis and interpretation
+
+### v1.0.0
 - Initial release
 - Core gaze detection functionality
 - Interactive calibration tools
