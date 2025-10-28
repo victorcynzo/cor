@@ -1,5 +1,6 @@
-from setuptools import setup, Extension
+from setuptools import setup, Extension, find_packages
 import sys
+import os
 
 def get_numpy_include():
     try:
@@ -25,11 +26,31 @@ def get_opencv_info():
         libraries = []
         
         if sys.platform == 'win32':
-            # For opencv-python on Windows
-            include_dirs = [
+            # Try to find OpenCV headers in opencv-python installation
+            possible_include_dirs = [
                 os.path.join(cv2_path, 'include'),
                 os.path.join(cv2_path, '..', 'include'),
+                os.path.join(cv2_path, 'headers'),
+                os.path.join(cv2_path, '..', 'headers'),
+                # Check site-packages for opencv headers
+                os.path.join(os.path.dirname(cv2_path), 'opencv_python.libs', 'include'),
+                # Common Windows OpenCV installation paths
+                'C:/opencv/build/include',
+                'C:/opencv/include',
+                'C:/Program Files/opencv/include',
+                'C:/Program Files (x86)/opencv/include'
             ]
+            
+            # Find existing include directories
+            for inc_dir in possible_include_dirs:
+                if os.path.exists(inc_dir):
+                    include_dirs.append(inc_dir)
+                    # Also add opencv2 subdirectory if it exists
+                    opencv2_dir = os.path.join(inc_dir, 'opencv2')
+                    if os.path.exists(opencv2_dir):
+                        include_dirs.append(inc_dir)
+                        break
+            
             # opencv-python usually comes with pre-built libraries
             libraries = []  # opencv-python handles this internally
         else:
@@ -46,30 +67,65 @@ def get_opencv_info():
         else:
             return ['/usr/include/opencv4'], ['/usr/lib'], ['opencv_core', 'opencv_imgproc', 'opencv_highgui', 'opencv_videoio', 'opencv_objdetect']
 
+def check_opencv_headers():
+    """Check if OpenCV headers are available"""
+    include_dirs, _, _ = get_opencv_info()
+    
+    for inc_dir in include_dirs:
+        opencv_hpp = os.path.join(inc_dir, 'opencv2', 'opencv.hpp')
+        if os.path.exists(opencv_hpp):
+            return True
+    
+    # Also check common header locations
+    common_headers = [
+        'C:/opencv/build/include/opencv2/opencv.hpp',
+        '/usr/include/opencv4/opencv2/opencv.hpp',
+        '/usr/local/include/opencv4/opencv2/opencv.hpp'
+    ]
+    
+    for header in common_headers:
+        if os.path.exists(header):
+            return True
+    
+    return False
+
 # Get OpenCV configuration
 opencv_includes, opencv_lib_dirs, opencv_libs = get_opencv_info()
 
-# Define the extension module
-cor_module = Extension(
-    'cor',
-    sources=[
-        'src/cor_module.cpp',
-        'src/eye_detection.cpp',
-        'src/gaze_detection.cpp',
-        'src/calibration.cpp',
-        'src/heatmap.cpp',
-        'src/video_processing.cpp',
-        'src/advanced_features.cpp'
-    ],
-    include_dirs=[
-        get_numpy_include(),
-        'include'
-    ] + opencv_includes,
-    libraries=opencv_libs,
-    library_dirs=opencv_lib_dirs,
-    extra_compile_args=['/std:c++14' if sys.platform == 'win32' else '-std=c++11'] + 
-                       (['/O2'] if sys.platform == 'win32' else ['-O3'])
-)
+# Check if we can build the C extension
+can_build_extension = check_opencv_headers()
+
+ext_modules = []
+if can_build_extension:
+    # Define the extension module
+    cor_module = Extension(
+        'cor',
+        sources=[
+            'src/cor_module.cpp',
+            'src/eye_detection.cpp',
+            'src/gaze_detection.cpp',
+            'src/calibration.cpp',
+            'src/heatmap.cpp',
+            'src/video_processing.cpp',
+            'src/advanced_features.cpp'
+        ],
+        include_dirs=[
+            get_numpy_include(),
+            'include'
+        ] + opencv_includes,
+        libraries=opencv_libs,
+        library_dirs=opencv_lib_dirs,
+        extra_compile_args=['/std:c++14' if sys.platform == 'win32' else '-std=c++11'] + 
+                           (['/O2'] if sys.platform == 'win32' else ['-O3'])
+    )
+    ext_modules = [cor_module]
+else:
+    print("WARNING: OpenCV development headers not found.")
+    print("The C extension will not be built. Installing Python-only version.")
+    print("To get full functionality, install OpenCV development headers:")
+    print("  - Windows: Install opencv-contrib-python or build OpenCV from source")
+    print("  - Linux: sudo apt-get install libopencv-dev")
+    print("  - macOS: brew install opencv")
 
 setup(
     name='cor',
@@ -80,7 +136,8 @@ setup(
     author='Cor Development Team',
     author_email='contact@cor-gaze.com',
     url='https://github.com/cor-team/cor',
-    ext_modules=[cor_module],
+    packages=find_packages(),
+    ext_modules=ext_modules,
     setup_requires=[
         'numpy>=1.19.0'
     ],

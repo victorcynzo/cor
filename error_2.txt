@@ -1,0 +1,140 @@
+PS C:\Users\vynzo\Documents\Thesis\code\kiro\cor-testing\cor> pip install -e .
+Obtaining file:///C:/Users/vynzo/Documents/Thesis/code/kiro/cor-testing/cor
+  Installing build dependencies ... done
+  Checking if build backend supports build_editable ... done
+  Getting requirements to build editable ... done
+  Preparing editable metadata (pyproject.toml) ... done
+Requirement already satisfied: numpy>=1.19.0 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from cor==1.0.2) (1.24.2)
+Requirement already satisfied: opencv-python>=4.5.0 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from cor==1.0.2) (4.7.0.72)
+Requirement already satisfied: matplotlib>=3.3.0 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from cor==1.0.2) (3.7.1)
+Requirement already satisfied: Pillow>=8.0.0 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from cor==1.0.2) (9.4.0)
+Requirement already satisfied: contourpy>=1.0.1 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from matplotlib>=3.3.0->cor==1.0.2) (1.0.7)
+Requirement already satisfied: cycler>=0.10 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from matplotlib>=3.3.0->cor==1.0.2) (0.11.0)
+Requirement already satisfied: fonttools>=4.22.0 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from matplotlib>=3.3.0->cor==1.0.2) (4.39.2)
+Requirement already satisfied: kiwisolver>=1.0.1 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from matplotlib>=3.3.0->cor==1.0.2) (1.4.4)
+Requirement already satisfied: packaging>=20.0 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from matplotlib>=3.3.0->cor==1.0.2) (23.0)
+Requirement already satisfied: pyparsing>=2.3.1 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from matplotlib>=3.3.0->cor==1.0.2) (3.0.9)
+Requirement already satisfied: python-dateutil>=2.7 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from matplotlib>=3.3.0->cor==1.0.2) (2.8.2)
+Requirement already satisfied: importlib-resources>=3.2.0 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from matplotlib>=3.3.0->cor==1.0.2) (5.12.0)
+Requirement already satisfied: zipp>=3.1.0 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from importlib-resources>=3.2.0->matplotlib>=3.3.0->cor==1.0.2) (3.15.0)
+Requirement already satisfied: six>=1.5 in c:\users\vynzo\appdata\local\programs\python\python38\lib\site-packages (from python-dateutil>=2.7->matplotlib>=3.3.0->cor==1.0.2) (1.16.0)
+Building wheels for collected packages: cor
+  Building editable for cor (pyproject.toml) ... error
+  error: subprocess-exited-with-error
+
+  × Building editable for cor (pyproject.toml) did not run successfully.
+  │ exit code: 1
+  ╰─> [107 lines of output]
+      running editable_wheel
+      creating C:\Users\vynzo\AppData\Local\Temp\pip-wheel-hxeim_kr\.tmp-6tm0xevu\cor.egg-info
+      writing C:\Users\vynzo\AppData\Local\Temp\pip-wheel-hxeim_kr\.tmp-6tm0xevu\cor.egg-info\PKG-INFO
+      writing dependency_links to C:\Users\vynzo\AppData\Local\Temp\pip-wheel-hxeim_kr\.tmp-6tm0xevu\cor.egg-info\dependency_links.txt
+      writing requirements to C:\Users\vynzo\AppData\Local\Temp\pip-wheel-hxeim_kr\.tmp-6tm0xevu\cor.egg-info\requires.txt
+      writing top-level names to C:\Users\vynzo\AppData\Local\Temp\pip-wheel-hxeim_kr\.tmp-6tm0xevu\cor.egg-info\top_level.txt
+      writing manifest file 'C:\Users\vynzo\AppData\Local\Temp\pip-wheel-hxeim_kr\.tmp-6tm0xevu\cor.egg-info\SOURCES.txt'
+      reading manifest file 'C:\Users\vynzo\AppData\Local\Temp\pip-wheel-hxeim_kr\.tmp-6tm0xevu\cor.egg-info\SOURCES.txt'
+      reading manifest template 'MANIFEST.in'
+      warning: no files found matching '*.c' under directory 'src'
+      warning: no previously-included files matching '*.pyc' found anywhere in distribution
+      warning: no previously-included files matching '__pycache__' found anywhere in distribution
+      adding license file 'LICENSE'
+      writing manifest file 'C:\Users\vynzo\AppData\Local\Temp\pip-wheel-hxeim_kr\.tmp-6tm0xevu\cor.egg-info\SOURCES.txt'
+      creating 'C:\Users\vynzo\AppData\Local\Temp\pip-wheel-hxeim_kr\.tmp-6tm0xevu\cor-1.0.2.dist-info'
+      creating C:\Users\vynzo\AppData\Local\Temp\pip-wheel-hxeim_kr\.tmp-6tm0xevu\cor-1.0.2.dist-info\WHEEL
+      running build_ext
+      building 'cor' extension
+      creating C:\Users\vynzo\AppData\Local\Temp\tmp49bfbkwy.build-temp\Release\src
+      "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.35.32215\bin\HostX86\x64\cl.exe" /c /nologo /O2 /W3 /GL /DNDEBUG /MD -IC:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\numpy\core\include -Iinclude -IC:\Users\vynzo\AppData\Local\Programs\Python\Python38\include -IC:\Users\vynzo\AppData\Local\Programs\Python\Python38\Include "-IC:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.35.32215\include" "-IC:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Tools\MSVC\14.35.32215\ATLMFC\include" "-IC:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\VS\include" "-IC:\Program Files (x86)\Windows Kits\10\include\10.0.22000.0\ucrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.22000.0\\um" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.22000.0\\shared" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.22000.0\\winrt" "-IC:\Program Files (x86)\Windows Kits\10\\include\10.0.22000.0\\cppwinrt" "-IC:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um" /EHsc /Tpsrc/advanced_features.cpp /FoC:\Users\vynzo\AppData\Local\Temp\tmp49bfbkwy.build-temp\Release\src/advanced_features.obj /std:c++14 /O2
+      advanced_features.cpp
+      C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\numpy\core\include\numpy\npy_1_7_deprecated_api.h(14) : Warning Msg: Using deprecated NumPy API, disable it with #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+      include\cor.h(6): fatal error C1083: Cannot open include file: 'opencv2/opencv.hpp': No such file or directory
+      C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\command\bdist_wheel.py:109: RuntimeWarning: Config variable 'Py_DEBUG' is unset, Python ABI tag may be incorrect
+        if get_flag("Py_DEBUG", hasattr(sys, "gettotalrefcount"), warn=(impl == "cp")):
+      Traceback (most recent call last):
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\spawn.py", line 70, in spawn
+          subprocess.check_call(cmd, env=_inject_macos_ver(env))
+        File "C:\Users\vynzo\AppData\Local\Programs\Python\Python38\lib\subprocess.py", line 364, in check_call
+          raise CalledProcessError(retcode, cmd)
+      subprocess.CalledProcessError: Command '['C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.35.32215\\bin\\HostX86\\x64\\cl.exe', '/c', '/nologo', '/O2', '/W3', '/GL', '/DNDEBUG', '/MD', '-IC:\\Users\\vynzo\\AppData\\Local\\Temp\\pip-build-env-ry0lhxv8\\overlay\\Lib\\site-packages\\numpy\\core\\include', '-Iinclude', '-IC:\\Users\\vynzo\\AppData\\Local\\Programs\\Python\\Python38\\include', '-IC:\\Users\\vynzo\\AppData\\Local\\Programs\\Python\\Python38\\Include', '-IC:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.35.32215\\include', '-IC:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.35.32215\\ATLMFC\\include', '-IC:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Auxiliary\\VS\\include', '-IC:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.22000.0\\ucrt', '-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22000.0\\\\um', '-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22000.0\\\\shared', '-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22000.0\\\\winrt', '-IC:\\Program Files (x86)\\Windows Kits\\10\\\\include\\10.0.22000.0\\\\cppwinrt', '-IC:\\Program Files (x86)\\Windows Kits\\NETFXSDK\\4.8\\include\\um', '/EHsc', '/Tpsrc/advanced_features.cpp', '/FoC:\\Users\\vynzo\\AppData\\Local\\Temp\\tmp49bfbkwy.build-temp\\Release\\src/advanced_features.obj', '/std:c++14', '/O2']' returned non-zero exit status 2.
+
+      The above exception was the direct cause of the following exception:
+
+      Traceback (most recent call last):
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\_msvccompiler.py", line 455, in compile
+          self.spawn(args)
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\_msvccompiler.py", line 553, in spawn
+          return super().spawn(cmd, env=env)
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\ccompiler.py", line 1045, in spawn
+          spawn(cmd, dry_run=self.dry_run, **kwargs)
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\spawn.py", line 76, in spawn
+          raise DistutilsExecError(
+      distutils.errors.DistutilsExecError: command 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.35.32215\\bin\\HostX86\\x64\\cl.exe' failed with exit code 2
+
+      During handling of the above exception, another exception occurred:
+
+      Traceback (most recent call last):
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\command\editable_wheel.py", line 137, in run
+          self._create_wheel_file(bdist_wheel)
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\command\editable_wheel.py", line 338, in _create_wheel_file
+          files, mapping = self._run_build_commands(dist_name, unpacked, lib, tmp)
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\command\editable_wheel.py", line 261, in _run_build_commands
+          self._run_build_subcommands()
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\command\editable_wheel.py", line 288, in _run_build_subcommands
+          self.run_command(name)
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\cmd.py", line 316, in run_command
+          self.distribution.run_command(command)
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\dist.py", line 999, in run_command
+          super().run_command(command)
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\dist.py", line 973, in run_command
+          cmd_obj.run()
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\command\build_ext.py", line 98, in run
+          _build_ext.run(self)
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\command\build_ext.py", line 359, in run
+          self.build_extensions()
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\command\build_ext.py", line 476, in build_extensions
+          self._build_extensions_serial()
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\command\build_ext.py", line 502, in _build_extensions_serial
+          self.build_extension(ext)
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\command\build_ext.py", line 263, in build_extension
+          _build_ext.build_extension(self, ext)
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\command\build_ext.py", line 557, in build_extension
+          objects = self.compiler.compile(
+        File "C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\_msvccompiler.py", line 457, in compile
+          raise CompileError(msg)
+      distutils.errors.CompileError: command 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.35.32215\\bin\\HostX86\\x64\\cl.exe' failed with exit code 2
+      C:\Users\vynzo\AppData\Local\Temp\pip-build-env-ry0lhxv8\overlay\Lib\site-packages\setuptools\_distutils\dist.py:973: _DebuggingTips: Problem in editable installation.
+      !!
+
+              ********************************************************************************
+              An error happened while installing `cor` in editable mode.
+
+              The following steps are recommended to help debug this problem:
+
+              - Try to install the project normally, without using the editable mode.
+                Does the error still persist?
+                (If it does, try fixing the problem before attempting the editable mode).
+              - If you are using binary extensions, make sure you have all OS-level
+                dependencies installed (e.g. compilers, toolchains, binary libraries, ...).
+              - Try the latest version of setuptools (maybe the error was already fixed).
+              - If you (or your project dependencies) are using any setuptools extension
+                or customization, make sure they support the editable mode.
+
+              After following the steps above, if the problem still persists and
+              you think this is related to how setuptools handles editable installations,
+              please submit a reproducible example
+              (see https://stackoverflow.com/help/minimal-reproducible-example) to:
+
+                  https://github.com/pypa/setuptools/issues
+
+              See https://setuptools.pypa.io/en/latest/userguide/development_mode.html for details.
+              ********************************************************************************
+
+      !!
+        cmd_obj.run()
+      error: command 'C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.35.32215\\bin\\HostX86\\x64\\cl.exe' failed with exit code 2
+      [end of output]
+
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  ERROR: Failed building editable for cor
+Failed to build cor
+ERROR: Failed to build installable wheels for some pyproject.toml based projects (cor)

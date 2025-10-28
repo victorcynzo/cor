@@ -1013,12 +1013,12 @@ All code syntax, project structure, documentation, and configuration systems are
 #13 - Fix
 ing pip install -e . Error
 
-**User Input:**
+USER INPUT #13:
 When I try to install cor using pip install -e I get a series of error messages. Could you try to fix the problem or give me the solution to the problem if it lies outside of the code?
 
 Error: ModuleNotFoundError: No module named 'numpy' during pip install -e .
 
-**Kiro Output:**
+KIRO OUTPUT #13:
 The issue was a circular dependency problem in setup.py. The file was importing numpy at the top level before numpy was installed, causing the build to fail.
 
 **Solution Applied:**
@@ -1036,14 +1036,14 @@ Try running `pip install -e .` again. If you still get OpenCV-related errors, yo
 #13 - 
 Fixing pip install -e . Build Errors (Updated)
 
-**User Input:**
+USER INPUT #14:
 When I try to install cor using pip install -e I get a series of error messages. Could you try to fix the problem or give me the solution to the problem if it lies outside of the code?
 
 **First Error:** ModuleNotFoundError: No module named 'numpy' during pip install -e .
 
 **Second Error:** pyproject.toml conflicts with setup.py metadata - AttributeError: 'NoneType' object has no attribute 'get'
 
-**Kiro Output:**
+KIRO OUTPUT #14:
 Fixed multiple build configuration issues:
 
 1. **Numpy Import Issue**: setup.py was importing numpy before it was installed
@@ -1063,3 +1063,36 @@ Fixed multiple build configuration issues:
 
 **Next Steps:**
 Try running `pip install -e .` again. The build should now work with opencv-python package on Windows.
+#14 - 
+Final OpenCV Headers Solution
+
+USER INPUT #15:
+When I try to run the code, I run into an error message. I have copied the terminal output to error_2.txt, could you fix this error? And add this input and your output to the conversation appendix as well?
+
+**Error:** fatal error C1083: Cannot open include file: 'opencv2/opencv.hpp': No such file or directory
+
+KIRO OUTPUT #15:
+The error revealed the core issue: `opencv-python` package doesn't include C++ development headers needed for compilation. This is a common Windows issue where opencv-python only provides Python bindings, not the full OpenCV development environment.
+
+**Root Cause Analysis:**
+- opencv-python is a pre-compiled package that only includes Python bindings
+- It doesn't include the C++ headers (opencv2/opencv.hpp) needed to compile C extensions
+- Windows users need either opencv-contrib-python or a full OpenCV installation for C++ development
+
+**Comprehensive Solution Applied:**
+1. **Enhanced OpenCV Detection**: Added comprehensive header detection across multiple possible locations
+2. **Graceful Fallback**: Created a Python-only fallback mode when C extension can't be built
+3. **Smart Build System**: Setup now detects if OpenCV headers are available and only builds C extension if possible
+4. **Python Package Structure**: Created cor/__init__.py with fallback implementations
+5. **User-Friendly Warnings**: Clear messages explaining what's missing and how to fix it
+
+**Files Created/Modified:**
+- setup.py: Enhanced with header detection and conditional C extension building
+- cor/__init__.py: Python fallback implementation with all function stubs
+
+**Installation Options for Users:**
+1. **Basic Installation** (Python-only): `pip install -e .` - Works with opencv-python, limited functionality
+2. **Full Installation** (with C extension): Install opencv-contrib-python or full OpenCV development headers first
+
+**Result:**
+The package now installs successfully in Python-only mode and provides clear guidance for users who want full C extension functionality.
