@@ -37,7 +37,7 @@ pip install cor
 ### Install from Source
 
 ```bash
-git clone https://github.com/cor-team/cor.git
+git clone https://github.com/victorcynzo/cor
 cd cor
 pip install -e .
 ```
