@@ -1,0 +1,215 @@
+# Cor Gaze Detection Library - General Configuration
+# This file contains customizable parameters for gaze detection and heatmap generation
+# Modify these values to adjust the behavior of the Cor library
+
+# ===== HEATMAP CONFIGURATION =====
+
+# Heatmap Color Scheme
+heatmap_color_scheme=sequential_blue
+# Available options:
+#   sequential_blue     - Blue gradient from light to dark
+#   sequential_red      - Red gradient from light to dark  
+#   sequential_green    - Green gradient from light to dark
+#   sequential_purple   - Purple gradient from light to dark
+#   diverging_blue_red  - Blue (low) to red (high) gradient
+#   diverging_green_red - Green (low) to red (high) gradient
+#   diverging_blue_yellow - Blue (low) to yellow (high) gradient
+#   categorical_5       - 5-color categorical scheme
+#   categorical_7       - 7-color categorical scheme
+#   rainbow            - Full spectrum rainbow colors
+
+# Heatmap Intensity and Appearance
+heatmap_intensity_multiplier=1.0
+# Controls overall brightness of heatmap (0.1 - 5.0)
+# Lower values = dimmer heatmap, Higher values = brighter heatmap
+
+heatmap_blur_radius=15
+# Gaussian blur radius for heatmap smoothing (5 - 50 pixels)
+# Lower values = sharper hotspots, Higher values = smoother gradients
+
+heatmap_resolution_factor=1.0
+# Resolution multiplier for heatmap generation (0.5 - 2.0)
+# 0.5 = half resolution (faster), 1.0 = original, 2.0 = double resolution
+
+heatmap_alpha_transparency=0.6
+# Transparency level for heatmap overlay (0.0 - 1.0)
+# 0.0 = fully transparent, 1.0 = fully opaque
+
+# ===== VIDEO PROCESSING =====
+
+# Frame Processing
+frame_skip_factor=1
+# Process every Nth frame (1 = all frames, 2 = every other frame, etc.)
+# Higher values = faster processing but lower accuracy
+
+max_processing_fps=30
+# Maximum frames per second to process (5 - 60)
+# Limits processing speed for real-time applications
+
+output_video_quality=0.8
+# Video compression quality for --visualize output (0.1 - 1.0)
+# 0.1 = lowest quality/smallest file, 1.0 = highest quality/largest file
+
+video_codec_preference=h264
+# Preferred codec for output videos: h264, h265, vp8, vp9
+
+# ===== VISUALIZATION SETTINGS =====
+
+# Gaze Indicator Appearance
+gaze_circle_radius=10
+# Radius of gaze indicator circle in pixels (5 - 30)
+
+gaze_circle_color=0,255,0
+# RGB color values for gaze indicator (0-255 each)
+# Format: R,G,B (e.g., 255,0,0 for red, 0,255,0 for green)
+
+gaze_circle_thickness=2
+# Thickness of gaze circle border (-1 for filled circle, 1-10 for border)
+
+# Pupil Connection Lines
+pupil_line_thickness=2
+# Thickness of lines connecting gaze point to pupils (1 - 8)
+
+pupil_line_color=255,255,0
+# RGB color values for pupil connection lines (cyan by default)
+
+pupil_line_style=solid
+# Line style: solid, dashed, dotted
+
+# Eye Detection Visualization
+show_eye_boundaries=false
+# Display detected eye boundaries in visualization
+
+eye_boundary_color=255,0,0
+# RGB color for eye boundary rectangles (red by default)
+
+show_pupil_centers=true
+# Display detected pupil centers as small dots
+
+pupil_center_color=0,0,255
+# RGB color for pupil center indicators (blue by default)
+
+# ===== PERFORMANCE SETTINGS =====
+
+# Memory Management
+max_memory_usage_mb=1024
+# Maximum memory usage in megabytes (256 - 4096)
+
+enable_gpu_acceleration=false
+# Use GPU acceleration if available (requires CUDA/OpenCL)
+
+thread_count=0
+# Number of processing threads (0 = auto-detect, 1-16 = manual)
+
+# Caching
+enable_frame_caching=true
+# Cache processed frames to improve performance
+
+cache_size_mb=256
+# Maximum cache size in megabytes (64 - 1024)
+
+# ===== OUTPUT SETTINGS =====
+
+# File Naming
+output_filename_template={videoname}_{type}
+# Template for output filenames
+# Available variables: {videoname}, {type}, {timestamp}, {resolution}
+
+create_timestamp_folders=false
+# Create folders with timestamps for each processing session
+
+overwrite_existing_files=true
+# Overwrite existing output files without prompting
+
+# Metadata
+include_processing_metadata=true
+# Include processing parameters in output file metadata
+
+save_processing_log=false
+# Save detailed processing log to text file
+
+# ===== QUALITY CONTROL =====
+
+# Detection Thresholds
+minimum_detection_confidence=0.6
+# Minimum confidence score for valid detections (0.3 - 0.95)
+
+maximum_tracking_error=50
+# Maximum allowed tracking error in pixels (10 - 200)
+
+# Filtering
+enable_outlier_filtering=true
+# Remove outlier gaze points that seem unrealistic
+
+outlier_threshold_multiplier=2.5
+# Multiplier for outlier detection (1.5 - 4.0)
+
+temporal_consistency_check=true
+# Verify temporal consistency of gaze tracking
+
+# ===== ADVANCED FEATURES =====
+
+# Experimental Features
+enable_3d_gaze_estimation=false
+# Experimental 3D gaze vector calculation
+
+enable_attention_mapping=false
+# Generate attention maps in addition to gaze heatmaps
+
+enable_saccade_analysis=false
+# Analyze saccadic eye movements
+
+# Debug and Development
+debug_mode=false
+# Enable debug output and intermediate file saving
+
+verbose_logging=false
+# Enable detailed console output during processing
+
+save_intermediate_frames=false
+# Save intermediate processing frames for debugging
+
+# ===== CALIBRATION SETTINGS =====
+
+# Calibration Interface
+calibration_window_size=800,600
+# Size of calibration window in pixels (width,height)
+
+calibration_point_size=20
+# Size of calibration target points in pixels (10 - 50)
+
+calibration_point_color=255,0,0
+# RGB color for calibration target points
+
+auto_advance_calibration=false
+# Automatically advance to next calibration frame after timeout
+
+calibration_frame_timeout=10
+# Seconds to wait before auto-advancing calibration frame (5 - 30)
+
+# ===== COMPATIBILITY SETTINGS =====
+
+# Legacy Support
+support_legacy_formats=true
+# Support older video formats and codecs
+
+force_software_decoding=false
+# Force software video decoding (disable hardware acceleration)
+
+# Platform Specific
+windows_media_foundation=true
+# Use Windows Media Foundation on Windows systems
+
+macos_avfoundation=true
+# Use AVFoundation on macOS systems
+
+linux_gstreamer=false
+# Use GStreamer on Linux systems (requires installation)
+
+# ===== NOTES =====
+# - Restart any running Cor processes after modifying this file
+# - Invalid values will be replaced with defaults
+# - Comments (lines starting with #) are ignored
+# - Boolean values: true/false (case insensitive)
+# - Color values: R,G,B format with values 0-255
+# - File paths: Use forward slashes (/) on all platforms

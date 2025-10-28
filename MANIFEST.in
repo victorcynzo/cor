@@ -1,0 +1,11 @@
+include README.md
+include Documentation.txt
+include requirements.txt
+include eye-detection-values.txt
+include gaze-direction-values.txt
+include cor.txt
+include kiro-conversation-appendix.txt
+recursive-include include *.h
+recursive-include src *.c
+global-exclude *.pyc
+global-exclude __pycache__

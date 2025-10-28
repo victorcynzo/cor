@@ -1,0 +1,58 @@
+# Development dependencies for Cor Gaze Detection Library
+# Install with: pip install -r requirements-dev.txt
+
+# Core runtime dependencies
+numpy>=1.19.0
+opencv-python>=4.5.0
+matplotlib>=3.3.0
+Pillow>=8.0.0
+
+# Development and build tools
+setuptools>=45.0.0
+wheel>=0.36.0
+Cython>=0.29.0
+pybind11>=2.6.0
+
+# Testing frameworks
+pytest>=6.0.0
+pytest-cov>=2.10.0
+pytest-benchmark>=3.4.0
+unittest-xml-reporting>=3.0.0
+
+# Code quality tools
+flake8>=3.8.0
+black>=21.0.0
+isort>=5.0.0
+mypy>=0.800
+pylint>=2.6.0
+
+# Documentation tools
+sphinx>=3.5.0
+sphinx-rtd-theme>=0.5.0
+sphinx-autodoc-typehints>=1.11.0
+myst-parser>=0.15.0
+
+# Performance profiling
+cProfile
+line_profiler>=3.3.0
+memory_profiler>=0.58.0
+
+# Build and packaging
+build>=0.7.0
+twine>=3.4.0
+check-manifest>=0.46
+
+# OpenCV development headers (system dependent)
+# Note: May require system-level installation of OpenCV development packages
+# Ubuntu/Debian: sudo apt-get install libopencv-dev python3-opencv
+# CentOS/RHEL: sudo yum install opencv-devel
+# macOS: brew install opencv
+# Windows: Install OpenCV manually or use conda
+
+# Optional GPU acceleration (CUDA support)
+# opencv-contrib-python>=4.5.0  # Uncomment for CUDA support
+
+# Development utilities
+ipython>=7.20.0
+jupyter>=1.0.0
+notebook>=6.2.0
