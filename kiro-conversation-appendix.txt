@@ -1010,3 +1010,26 @@ The library is ready for use once OpenCV development libraries are installed:
 - macOS: brew install opencv
 
 All code syntax, project structure, documentation, and configuration systems are working correctly.
+#13 - Fix
+ing pip install -e . Error
+
+**User Input:**
+When I try to install cor using pip install -e I get a series of error messages. Could you try to fix the problem or give me the solution to the problem if it lies outside of the code?
+
+Error: ModuleNotFoundError: No module named 'numpy' during pip install -e .
+
+**Kiro Output:**
+The issue was a circular dependency problem in setup.py. The file was importing numpy at the top level before numpy was installed, causing the build to fail.
+
+**Solution Applied:**
+1. Modified setup.py to use a safe numpy import function that handles missing numpy gracefully
+2. Added setup_requires=['numpy>=1.19.0'] to ensure numpy is available during build
+3. Updated include/library paths to be Windows-compatible
+4. Created pyproject.toml with proper build-system requirements
+
+**Files Modified:**
+- setup.py: Fixed numpy import and added Windows compatibility
+- pyproject.toml: Created new file with build dependencies
+
+**Next Steps:**
+Try running `pip install -e .` again. If you still get OpenCV-related errors, you may need to install OpenCV development libraries for Windows or use opencv-python package only.

@@ -1,5 +1,14 @@
 from setuptools import setup, Extension
-import numpy
+import sys
+
+def get_numpy_include():
+    try:
+        import numpy
+        return numpy.get_include()
+    except ImportError:
+        # If numpy is not installed, return empty string
+        # setuptools will handle the dependency
+        return ""
 
 # Define the extension module
 cor_module = Extension(
@@ -14,14 +23,18 @@ cor_module = Extension(
         'src/advanced_features.cpp'
     ],
     include_dirs=[
-        numpy.get_include(),
+        get_numpy_include(),
         'include',
-        '/usr/include/opencv4',
-        '/usr/local/include/opencv4'
+        # Windows OpenCV paths
+        'C:/opencv/build/include' if sys.platform == 'win32' else '/usr/include/opencv4',
+        'C:/opencv/build/include/opencv2' if sys.platform == 'win32' else '/usr/local/include/opencv4'
     ],
-    libraries=['opencv_core', 'opencv_imgproc', 'opencv_highgui', 'opencv_videoio', 'opencv_objdetect'],
-    library_dirs=['/usr/lib', '/usr/local/lib'],
-    extra_compile_args=['-std=c++11', '-O3']
+    libraries=['opencv_world470' if sys.platform == 'win32' else 'opencv_core'] + 
+              ([] if sys.platform == 'win32' else ['opencv_imgproc', 'opencv_highgui', 'opencv_videoio', 'opencv_objdetect']),
+    library_dirs=['C:/opencv/build/x64/vc15/lib' if sys.platform == 'win32' else '/usr/lib'] + 
+                 ([] if sys.platform == 'win32' else ['/usr/local/lib']),
+    extra_compile_args=['/std:c++14' if sys.platform == 'win32' else '-std=c++11'] + 
+                       (['/O2'] if sys.platform == 'win32' else ['-O3'])
 )
 
 setup(
@@ -34,6 +47,9 @@ setup(
     author_email='contact@cor-gaze.com',
     url='https://github.com/cor-team/cor',
     ext_modules=[cor_module],
+    setup_requires=[
+        'numpy>=1.19.0'
+    ],
     install_requires=[
         'numpy>=1.19.0',
         'opencv-python>=4.5.0',
