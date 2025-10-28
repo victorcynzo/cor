@@ -10,6 +10,45 @@ def get_numpy_include():
         # setuptools will handle the dependency
         return ""
 
+def get_opencv_info():
+    """Get OpenCV include and library information"""
+    try:
+        import cv2
+        import os
+        
+        # Get OpenCV installation path
+        cv2_path = os.path.dirname(cv2.__file__)
+        
+        # Common include directories
+        include_dirs = []
+        library_dirs = []
+        libraries = []
+        
+        if sys.platform == 'win32':
+            # For opencv-python on Windows
+            include_dirs = [
+                os.path.join(cv2_path, 'include'),
+                os.path.join(cv2_path, '..', 'include'),
+            ]
+            # opencv-python usually comes with pre-built libraries
+            libraries = []  # opencv-python handles this internally
+        else:
+            # For Linux/Mac
+            include_dirs = ['/usr/include/opencv4', '/usr/local/include/opencv4']
+            library_dirs = ['/usr/lib', '/usr/local/lib']
+            libraries = ['opencv_core', 'opencv_imgproc', 'opencv_highgui', 'opencv_videoio', 'opencv_objdetect']
+            
+        return include_dirs, library_dirs, libraries
+    except ImportError:
+        # Fallback if OpenCV not installed
+        if sys.platform == 'win32':
+            return [], [], []
+        else:
+            return ['/usr/include/opencv4'], ['/usr/lib'], ['opencv_core', 'opencv_imgproc', 'opencv_highgui', 'opencv_videoio', 'opencv_objdetect']
+
+# Get OpenCV configuration
+opencv_includes, opencv_lib_dirs, opencv_libs = get_opencv_info()
+
 # Define the extension module
 cor_module = Extension(
     'cor',
@@ -24,15 +63,10 @@ cor_module = Extension(
     ],
     include_dirs=[
         get_numpy_include(),
-        'include',
-        # Windows OpenCV paths
-        'C:/opencv/build/include' if sys.platform == 'win32' else '/usr/include/opencv4',
-        'C:/opencv/build/include/opencv2' if sys.platform == 'win32' else '/usr/local/include/opencv4'
-    ],
-    libraries=['opencv_world470' if sys.platform == 'win32' else 'opencv_core'] + 
-              ([] if sys.platform == 'win32' else ['opencv_imgproc', 'opencv_highgui', 'opencv_videoio', 'opencv_objdetect']),
-    library_dirs=['C:/opencv/build/x64/vc15/lib' if sys.platform == 'win32' else '/usr/lib'] + 
-                 ([] if sys.platform == 'win32' else ['/usr/local/lib']),
+        'include'
+    ] + opencv_includes,
+    libraries=opencv_libs,
+    library_dirs=opencv_lib_dirs,
     extra_compile_args=['/std:c++14' if sys.platform == 'win32' else '-std=c++11'] + 
                        (['/O2'] if sys.platform == 'win32' else ['-O3'])
 )

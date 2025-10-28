@@ -1033,3 +1033,33 @@ The issue was a circular dependency problem in setup.py. The file was importing 
 
 **Next Steps:**
 Try running `pip install -e .` again. If you still get OpenCV-related errors, you may need to install OpenCV development libraries for Windows or use opencv-python package only.
+#13 - 
+Fixing pip install -e . Build Errors (Updated)
+
+**User Input:**
+When I try to install cor using pip install -e I get a series of error messages. Could you try to fix the problem or give me the solution to the problem if it lies outside of the code?
+
+**First Error:** ModuleNotFoundError: No module named 'numpy' during pip install -e .
+
+**Second Error:** pyproject.toml conflicts with setup.py metadata - AttributeError: 'NoneType' object has no attribute 'get'
+
+**Kiro Output:**
+Fixed multiple build configuration issues:
+
+1. **Numpy Import Issue**: setup.py was importing numpy before it was installed
+2. **pyproject.toml Conflicts**: The [project] section in pyproject.toml conflicted with setup.py metadata
+3. **OpenCV Path Issues**: Hard-coded Windows OpenCV paths wouldn't work with opencv-python package
+
+**Solutions Applied:**
+1. Created safe numpy import function that handles missing numpy gracefully
+2. Simplified pyproject.toml to only handle build-system requirements (removed conflicting [project] section)
+3. Added dynamic OpenCV detection that works with opencv-python package
+4. Added setup_requires=['numpy>=1.19.0'] to ensure numpy is available during build
+5. Created get_opencv_info() function to automatically detect OpenCV installation
+
+**Files Modified:**
+- setup.py: Fixed numpy import, added OpenCV auto-detection, improved Windows compatibility
+- pyproject.toml: Simplified to only contain build-system requirements
+
+**Next Steps:**
+Try running `pip install -e .` again. The build should now work with opencv-python package on Windows.
