@@ -41,6 +41,19 @@ cd cor
 pip install -e .
 ```
 
+## Command Line Usage
+
+```bash
+# Get help
+python -c "import cor; cor.help()"
+
+# Run gaze detection
+python -c "import cor; cor.run('video.mp4')"
+
+# Run with visualization
+python -c "import cor; cor.run('video.mp4', '--visualize')"
+```
+
 ## Quick Start
 
 ```python
