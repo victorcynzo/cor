@@ -15,6 +15,7 @@ Cor is a high-performance Python library written in C for real-time gaze detecti
 - **Attention Pattern Analysis**: Automatic detection of fixations and saccades
 - **Performance Benchmarking**: Built-in tools for performance analysis
 - **Data Export**: JSON export of detailed analysis results
+- **Progress Tracking**: Real-time progress bars for all video processing operations
 - **High Performance**: Optimized C++ implementation for fast processing
 - **Flexible Configuration**: Extensive customization through configuration files
 
@@ -137,6 +138,20 @@ Cor is optimized for performance with:
 - Multi-threaded processing capabilities
 - Memory-efficient streaming for large video files
 
+## Progress Tracking
+
+All video processing operations include real-time progress bars:
+- **Video Processing**: Shows frame-by-frame progress during analysis
+- **Calibration**: Tracks progress through calibration frames
+- **Attention Analysis**: Displays progress during pattern analysis
+- **Heatmap Generation**: Shows processing status for visualization
+- **Benchmarking**: Real-time performance measurement progress
+
+Progress bars use Unicode block characters (█) for clear visual feedback and display:
+- Current/total frames processed
+- Percentage completion
+- Operation-specific status messages
+
 ## Examples
 
 ### Basic Workflow
@@ -200,7 +215,7 @@ If you use Cor in your research, please cite:
 
 ## Changelog
 
-### v1.0.0
+### v1.0.1
 - Initial release
 - Core gaze detection functionality
 - Interactive calibration tools

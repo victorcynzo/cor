@@ -177,11 +177,9 @@ int process_video_file(const char* video_path, bool visualize) {
         
         processed_frames++;
         
-        // Progress indicator
-        if (processed_frames % 100 == 0) {
-            printf("Processed %d frames (%.1f%%)\n", 
-                   processed_frames, 
-                   (float)frame_number / frame_count * 100.0f);
+        // Progress bar update
+        if (processed_frames % 10 == 0 || processed_frames == 1) {
+            print_progress_bar(frame_number, frame_count, "Processing video", "frames processed");
         }
     }
     

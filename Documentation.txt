@@ -28,6 +28,7 @@ Key Features:
 - Interactive calibration system for eye and gaze detection
 - Customizable heatmap generation with multiple color schemes
 - Real-time visualization with overlay capabilities
+- Progress tracking with visual progress bars for all operations
 - High-performance C++ implementation with Python interface
 - Configurable detection parameters through text files
 
@@ -339,12 +340,19 @@ Example Content:
 - Frame Skipping: Configurable frame sampling for speed
 - ROI Processing: Region of interest focusing for efficiency
 
-6.2 MEMORY USAGE
+6.2 PROGRESS TRACKING
+- Real-time Progress Bars: Visual feedback for all video processing operations
+- Unicode Block Characters: Clear progress visualization using █ characters
+- Operation-specific Messages: Contextual status information for each process
+- Frame-level Tracking: Detailed progress for video analysis operations
+- Calibration Progress: Step-by-step progress during interactive calibration
+
+6.3 MEMORY USAGE
 - Typical Usage: 50-200MB for standard video processing
 - Large Videos: Streaming processing to minimize memory footprint
 - Calibration: Temporary storage of 20 frames (~100MB)
 
-6.3 PERFORMANCE BENCHMARKS
+6.4 PERFORMANCE BENCHMARKS
 - Standard Video (720p, 30fps): ~15-25 fps processing speed
 - High Resolution (1080p+): ~8-15 fps processing speed
 - Calibration Interface: Real-time interaction (30+ fps)

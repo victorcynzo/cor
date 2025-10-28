@@ -65,6 +65,7 @@ static int extract_calibration_frames(const char* video_path) {
     }
     
     printf("Extracted %d frames for calibration\n", calib_state.total_frames);
+    print_progress_bar(calib_state.total_frames, MAX_CALIBRATION_FRAMES, "Frame extraction", "frames extracted");
     return 0;
 }
 
@@ -144,6 +145,7 @@ int run_eye_calibration(const char* video_path) {
             // Accept current frame and move to next
             calib_state.eye_results.push_back(eye_result);
             calib_state.current_frame++;
+            print_progress_bar(calib_state.current_frame, calib_state.total_frames, "Eye calibration", "frames calibrated");
             printf("Frame %d accepted\n", calib_state.current_frame);
         } else if (key == 'r' || key == 'R') {
             // Reset current frame (reload detection)
@@ -273,6 +275,7 @@ int run_gaze_calibration(const char* video_path) {
                 calib_state.gaze_points.push_back(gaze_point);
             }
             calib_state.current_frame++;
+            print_progress_bar(calib_state.current_frame, calib_state.total_frames, "Gaze calibration", "frames calibrated");
             printf("Frame %d accepted\n", calib_state.current_frame);
         } else if (key == 'r' || key == 'R') {
             // Reset current frame

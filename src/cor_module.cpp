@@ -377,6 +377,27 @@ char* get_output_filename(const char* input_path, const char* suffix, const char
     return output;
 }
 
+// Progress bar utility
+void print_progress_bar(int current, int total, const char* prefix = "Progress", const char* suffix = "Complete", int length = 50) {
+    if (total <= 0) return;
+    
+    float percent = (float(current) / float(total)) * 100.0f;
+    int filled_length = int(length * current / total);
+    
+    // Create the bar string
+    std::string bar(filled_length, '█');
+    bar += std::string(length - filled_length, '-');
+    
+    // Print the progress bar
+    printf("\r%s |%s| %d/%d (%.1f%%) %s", prefix, bar.c_str(), current, total, percent, suffix);
+    fflush(stdout);
+    
+    // Print newline when complete
+    if (current == total) {
+        printf("\n");
+    }
+}
+
 // Logging utility
 void log_message(const char* level, const char* message) {
     if (g_debug_mode || strcmp(level, "ERROR") == 0) {
@@ -637,6 +658,11 @@ PyObject* cor_benchmark(PyObject* self, PyObject* args) {
             successful_detections++;
         }
         processed_frames++;
+        
+        // Update progress bar every 10 frames
+        if (processed_frames % 10 == 0 || processed_frames == max_frames) {
+            print_progress_bar(processed_frames, max_frames, "Benchmarking", "frames processed");
+        }
     }
     
     auto end_time = std::chrono::high_resolution_clock::now();
@@ -681,13 +707,23 @@ PyObject* cor_analyze_attention(PyObject* self, PyObject* args) {
     
     printf("Analyzing attention patterns...\n");
     
+    int frame_count = (int)cap.get(cv::CAP_PROP_FRAME_COUNT);
+    int processed_frames = 0;
+    
     while (cap.read(frame)) {
+        processed_frames++;
+        
         EyeDetectionResult eye_result = detect_eyes_in_frame(frame);
         if (eye_result.valid) {
             GazePoint gaze_point = calculate_gaze_direction(eye_result);
             if (gaze_point.confidence > 0.5f) {
                 gaze_points.push_back(gaze_point);
             }
+        }
+        
+        // Update progress bar every 50 frames
+        if (processed_frames % 50 == 0 || processed_frames == frame_count) {
+            print_progress_bar(processed_frames, frame_count, "Attention analysis", "frames analyzed");
         }
     }
     
@@ -756,13 +792,23 @@ PyObject* cor_generate_advanced_heatmap(PyObject* self, PyObject* args) {
     
     printf("Generating advanced heatmap (mode: %s)...\n", mode);
     
+    int frame_count = (int)cap.get(cv::CAP_PROP_FRAME_COUNT);
+    int processed_frames = 0;
+    
     while (cap.read(frame)) {
+        processed_frames++;
+        
         EyeDetectionResult eye_result = detect_eyes_in_frame(frame);
         if (eye_result.valid) {
             GazePoint gaze_point = calculate_gaze_direction(eye_result);
             if (gaze_point.confidence > 0.5f) {
                 gaze_points.push_back(gaze_point);
             }
+        }
+        
+        // Update progress bar every 50 frames
+        if (processed_frames % 50 == 0 || processed_frames == frame_count) {
+            print_progress_bar(processed_frames, frame_count, "Heatmap generation", "frames processed");
         }
     }
     
@@ -861,13 +907,23 @@ PyObject* cor_export_analysis(PyObject* self, PyObject* args) {
     
     printf("Processing video for analysis export...\n");
     
+    int frame_count = (int)cap.get(cv::CAP_PROP_FRAME_COUNT);
+    int processed_frames = 0;
+    
     while (cap.read(frame)) {
+        processed_frames++;
+        
         EyeDetectionResult eye_result = detect_eyes_in_frame(frame);
         if (eye_result.valid) {
             GazePoint gaze_point = calculate_gaze_direction(eye_result);
             if (gaze_point.confidence > 0.5f) {
                 gaze_points.push_back(gaze_point);
             }
+        }
+        
+        // Update progress bar every 50 frames
+        if (processed_frames % 50 == 0 || processed_frames == frame_count) {
+            print_progress_bar(processed_frames, frame_count, "Analysis export", "frames processed");
         }
     }
     

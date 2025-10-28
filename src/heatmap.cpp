@@ -80,16 +80,33 @@ Mat generate_heatmap(std::vector<GazePoint> gaze_points, int width, int height, 
     float sigma = config.blur_radius / 3.0f; // Standard deviation
     Mat kernel = create_gaussian_kernel(config.blur_radius, sigma);
     
-    // Accumulate gaze points
+    // Accumulate gaze points with progress tracking
+    int total_points = gaze_points.size();
+    int processed_points = 0;
+    
     for (const auto& gaze_point : gaze_points) {
-        if (gaze_point.confidence < 0.5f) continue; // Skip low-confidence points
+        processed_points++;
+        
+        if (gaze_point.confidence < 0.5f) {
+            // Update progress even for skipped points
+            if (processed_points % 100 == 0 || processed_points == total_points) {
+                print_progress_bar(processed_points, total_points, "Heatmap generation", "gaze points processed");
+            }
+            continue; // Skip low-confidence points
+        }
         
         // Convert normalized coordinates to heatmap coordinates
         int x = (int)(gaze_point.x * heatmap_width);
         int y = (int)(gaze_point.y * heatmap_height);
         
         // Ensure coordinates are within bounds
-        if (x < 0 || x >= heatmap_width || y < 0 || y >= heatmap_height) continue;
+        if (x < 0 || x >= heatmap_width || y < 0 || y >= heatmap_height) {
+            // Update progress even for out-of-bounds points
+            if (processed_points % 100 == 0 || processed_points == total_points) {
+                print_progress_bar(processed_points, total_points, "Heatmap generation", "gaze points processed");
+            }
+            continue;
+        }
         
         // Add Gaussian blob at gaze point location
         int kernel_radius = config.blur_radius;
@@ -104,6 +121,11 @@ Mat generate_heatmap(std::vector<GazePoint> gaze_points, int width, int height, 
                     heatmap.at<float>(hy, hx) += weighted_value;
                 }
             }
+        }
+        
+        // Update progress bar every 100 points or at the end
+        if (processed_points % 100 == 0 || processed_points == total_points) {
+            print_progress_bar(processed_points, total_points, "Heatmap generation", "gaze points processed");
         }
     }
     
@@ -168,9 +190,20 @@ Mat generate_attention_map(std::vector<GazePoint> gaze_points, int width, int he
     
     if (gaze_points.empty()) return attention_map;
     
-    // Create attention regions based on gaze clustering
+    // Create attention regions based on gaze clustering with progress tracking
+    int total_points = gaze_points.size();
+    int processed_points = 0;
+    
     for (const auto& gaze_point : gaze_points) {
-        if (gaze_point.confidence < 0.6f) continue;
+        processed_points++;
+        
+        if (gaze_point.confidence < 0.6f) {
+            // Update progress even for skipped points
+            if (processed_points % 100 == 0 || processed_points == total_points) {
+                print_progress_bar(processed_points, total_points, "Attention map", "gaze points processed");
+            }
+            continue;
+        }
         
         int x = (int)(gaze_point.x * width);
         int y = (int)(gaze_point.y * height);
@@ -192,6 +225,11 @@ Mat generate_attention_map(std::vector<GazePoint> gaze_points, int width, int he
                     }
                 }
             }
+        }
+        
+        // Update progress bar every 100 points or at the end
+        if (processed_points % 100 == 0 || processed_points == total_points) {
+            print_progress_bar(processed_points, total_points, "Attention map", "gaze points processed");
         }
     }
     

@@ -29,13 +29,13 @@ def test_file_structure():
         
         # Source code
         "include/cor.h",
-        "src/cor_module.c",
-        "src/eye_detection.c",
-        "src/gaze_detection.c",
-        "src/calibration.c",
-        "src/heatmap.c",
-        "src/video_processing.c",
-        "src/advanced_features.c",
+        "src/cor_module.cpp",
+        "src/eye_detection.cpp",
+        "src/gaze_detection.cpp",
+        "src/calibration.cpp",
+        "src/heatmap.cpp",
+        "src/video_processing.cpp",
+        "src/advanced_features.cpp",
         
         # Test and build files
         "test_cor.py",
@@ -173,13 +173,13 @@ def test_source_code_structure():
     
     # Check source files
     source_files = [
-        "src/cor_module.c",
-        "src/eye_detection.c", 
-        "src/gaze_detection.c",
-        "src/calibration.c",
-        "src/heatmap.c",
-        "src/video_processing.c",
-        "src/advanced_features.c"
+        "src/cor_module.cpp",
+        "src/eye_detection.cpp", 
+        "src/gaze_detection.cpp",
+        "src/calibration.cpp",
+        "src/heatmap.cpp",
+        "src/video_processing.cpp",
+        "src/advanced_features.cpp"
     ]
     
     for src_file in source_files:
@@ -233,7 +233,7 @@ def generate_project_summary():
     categories = {
         "Core Files": ["setup.py", "README.md", "Documentation.txt", "LICENSE"],
         "Configuration": ["eye-detection-values.txt", "gaze-direction-values.txt", "cor.txt"],
-        "Source Code": ["include/cor.h"] + [f"src/{f}" for f in os.listdir("src") if f.endswith(".c")],
+        "Source Code": ["include/cor.h"] + [f"src/{f}" for f in os.listdir("src") if f.endswith((".c", ".cpp"))],
         "Tests & Build": ["test_cor.py", "build_and_test.py", "validate_project.py", "Makefile"],
         "Examples": ["example_advanced_usage.py", "IMPROVEMENTS_SUMMARY.md"]
     }
@@ -251,7 +251,7 @@ def generate_project_summary():
     if os.path.exists("include"):
         code_files.extend([f"include/{f}" for f in os.listdir("include") if f.endswith(".h")])
     if os.path.exists("src"):
-        code_files.extend([f"src/{f}" for f in os.listdir("src") if f.endswith(".c")])
+        code_files.extend([f"src/{f}" for f in os.listdir("src") if f.endswith((".c", ".cpp"))])
     
     total_lines = 0
     for code_file in code_files:

@@ -192,8 +192,12 @@ Mat generate_advanced_heatmap(const std::vector<GazePoint>& gaze_points,
     if (strcmp(mode, "fixation") == 0) {
         // Generate fixation-based heatmap
         std::vector<AttentionRegion> fixations = detect_fixations(gaze_points);
+        int total_fixations = fixations.size();
+        int processed_fixations = 0;
         
         for (const auto& fixation : fixations) {
+            processed_fixations++;
+            
             int x = (int)(fixation.x * width);
             int y = (int)(fixation.y * height);
             
@@ -217,18 +221,32 @@ Mat generate_advanced_heatmap(const std::vector<GazePoint>& gaze_points,
                     }
                 }
             }
+            
+            // Update progress bar
+            if (processed_fixations % 10 == 0 || processed_fixations == total_fixations) {
+                print_progress_bar(processed_fixations, total_fixations, "Fixation heatmap", "fixations processed");
+            }
         }
     } else if (strcmp(mode, "saccade") == 0) {
         // Generate saccade path visualization
         std::vector<int> saccade_indices = detect_saccades(gaze_points);
+        int total_saccades = saccade_indices.size();
+        int processed_saccades = 0;
         
         for (int idx : saccade_indices) {
+            processed_saccades++;
+            
             if (idx > 0 && idx < (int)gaze_points.size() - 1) {
                 // Draw line from previous to next point
                 Point2f start(gaze_points[idx-1].x * width, gaze_points[idx-1].y * height);
                 Point2f end(gaze_points[idx+1].x * width, gaze_points[idx+1].y * height);
                 
                 line(heatmap, start, end, Scalar(1.0f), 3);
+            }
+            
+            // Update progress bar
+            if (processed_saccades % 5 == 0 || processed_saccades == total_saccades) {
+                print_progress_bar(processed_saccades, total_saccades, "Saccade heatmap", "saccades processed");
             }
         }
     } else {

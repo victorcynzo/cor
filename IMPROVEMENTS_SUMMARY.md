@@ -200,3 +200,27 @@ python validate_project.py
 - Professional packaging
 
 The Cor Gaze Detection Library is now a complete, professional-grade solution for gaze detection and analysis with extensive customization capabilities and a robust development environment.
+#
+# Latest Enhancement: Progress Bar Integration
+
+### Real-time Progress Tracking
+- **Visual Progress Bars**: Added Unicode-based progress bars (█) for all video processing operations
+- **Frame-level Tracking**: Shows current/total frames processed with percentage completion
+- **Operation-specific Messages**: Contextual status information for different processes
+- **Terminal Output**: Real-time updates directly to the terminal during processing
+
+### Integration Points
+- **Video Processing**: Progress tracking during main video analysis
+- **Calibration**: Step-by-step progress through calibration frames
+- **Attention Analysis**: Real-time feedback during pattern analysis
+- **Heatmap Generation**: Progress updates during visualization creation
+- **Benchmarking**: Live performance measurement progress
+- **Export Operations**: Status tracking during data export
+
+### Technical Implementation
+- **C++ Function**: `print_progress_bar()` utility function in cor_module.cpp
+- **Header Declaration**: Function prototype added to include/cor.h
+- **Integration**: Progress bars integrated into all major video processing loops
+- **User Experience**: Provides clear visual feedback for long-running operations
+
+This enhancement significantly improves the user experience by providing real-time feedback during video processing operations, making it clear when operations are progressing and when they complete.

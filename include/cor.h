@@ -107,6 +107,7 @@ int run_gaze_calibration(const char* video_path);
 bool is_supported_video_format(const char* filename);
 char* get_output_filename(const char* input_path, const char* suffix, const char* extension);
 void log_message(const char* level, const char* message);
+void print_progress_bar(int current, int total, const char* prefix, const char* suffix, int length);
 void init_video_processing();
 HeatmapConfig get_heatmap_config();
 cv::Mat create_heatmap_overlay(cv::Mat background, cv::Mat heatmap, float alpha);
