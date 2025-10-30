@@ -9,7 +9,7 @@
 // Version information
 #define COR_VERSION_MAJOR 1
 #define COR_VERSION_MINOR 0
-#define COR_VERSION_PATCH 2
+#define COR_VERSION_PATCH 1
 
 // Configuration file paths
 #define EYE_DETECTION_CONFIG "eye-detection-values.txt"

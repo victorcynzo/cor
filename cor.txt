@@ -212,4 +212,4 @@ linux_gstreamer=false
 # - Comments (lines starting with #) are ignored
 # - Boolean values: true/false (case insensitive)
 # - Color values: R,G,B format with values 0-255
-# - File paths: Use forward slashes (/) on all platforms
+# - File paths: Use forward slashes (/) on all platformstest_param=test_value

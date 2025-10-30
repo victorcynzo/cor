@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """
 Usage examples for Cor Gaze Detection Library
-Demonstrates core functionality and Python implementation
+Demonstrates working functionality in Python fallback mode
 """
 
 import cor
 import os
-import tempfile
 
 def basic_example():
     """Basic gaze detection workflow"""
@@ -23,27 +22,38 @@ def basic_example():
     print(f"Mode: {version.get('mode', 'Unknown')}")
     print(f"OpenCV Available: {version.get('opencv_available', False)}")
 
-def gaze_detection_example():
-    """Complete gaze detection workflow"""
-    print("\n=== GAZE DETECTION WORKFLOW ===")
+def working_gaze_detection_example():
+    """Complete gaze detection workflow with working functions"""
+    print("\n=== WORKING GAZE DETECTION WORKFLOW ===")
     
-    # Note: This would work with a real video file
-    video_path = "sample_video.mp4"
+    # Use test_video.mp4 if available, otherwise use a sample path
+    video_path = "test_video.mp4" if os.path.exists("test_video.mp4") else "sample_video.mp4"
     
     if os.path.exists(video_path):
         print(f"\n3. Processing {video_path}:")
         
         try:
-            # Step 1: Calibrate eyes (automatic)
-            print("Step 1: Calibrating eye detection...")
-            cor.calibrate_eyes(video_path)
+            # Step 1: Validate video
+            print("Step 1: Validating video...")
+            is_valid = cor.validate_video(video_path)
+            print(f"Video validation result: {is_valid}")
             
-            # Step 2: Calibrate gaze (automatic)
-            print("Step 2: Calibrating gaze direction...")
-            cor.calibrate_gaze(video_path)
+            if not is_valid:
+                print("❌ Video validation failed")
+                return
             
-            # Step 3: Run basic gaze detection
-            print("Step 3: Running gaze detection...")
+            # Step 2: Calibrate eyes (automatic)
+            print("Step 2: Calibrating eye detection...")
+            eye_result = cor.calibrate_eyes(video_path)
+            print(f"Eye calibration result: {eye_result}")
+            
+            # Step 3: Calibrate gaze (automatic)
+            print("Step 3: Calibrating gaze direction...")
+            gaze_result = cor.calibrate_gaze(video_path)
+            print(f"Gaze calibration result: {gaze_result}")
+            
+            # Step 4: Run basic gaze detection
+            print("Step 4: Running gaze detection...")
             success = cor.run(video_path)
             
             if success:
@@ -53,8 +63,8 @@ def gaze_detection_example():
                 print(f"  - {base_name}_heatmap-pure.jpg")
                 print(f"  - {base_name}_heatmap-overlay.jpg")
                 
-                # Step 4: Create visualization video
-                print("Step 4: Creating visualization video...")
+                # Step 5: Create visualization video
+                print("Step 5: Creating visualization video...")
                 success_viz = cor.run(video_path, "--visualize")
                 
                 if success_viz:
@@ -67,204 +77,93 @@ def gaze_detection_example():
             print(f"❌ Error during processing: {e}")
     else:
         print(f"⚠️  Video file not found: {video_path}")
-        print("To test with your own video, replace 'sample_video.mp4' with your video path")
-            # Export analysis to JSON
-            export_path = cor.export_analysis(video_path)
-            print(f"\nAnalysis exported to: {export_path}")
-            
-        except Exception as e:
-            print(f"Analysis failed: {e}")
+        print("To test with your own video, place a video file named 'test_video.mp4' in this directory")
+
+def python_enhanced_functions_example():
+    """Demonstrate enhanced Python functions (v1.0.1)"""
+    print("\n=== ENHANCED PYTHON FUNCTIONS (v1.0.1) ===")
+    
+    print("\n4. New Python functions available in v1.0.1:")
+    
+    # Configuration management
+    print("   Testing configuration management...")
+    current_value = cor.get_config("heatmap_color_scheme")
+    print(f"   Current heatmap_color_scheme: {current_value}")
+    
+    # Set a test value
+    set_result = cor.set_config("test_param", "test_value")
+    if set_result:
+        retrieved_value = cor.get_config("test_param")
+        print(f"   Set and retrieved test_param: {retrieved_value}")
     else:
-        print(f"Video file {video_path} not found. Skipping analysis example.")
+        print("   Config set operation failed")
+    
+    # Frame extraction
+    if os.path.exists("test_video.mp4"):
+        print("   Testing frame extraction...")
+        frames = cor.extract_frames("test_video.mp4", 3, "sample_frames")
+        print(f"   Extracted frames: {len(frames)} files")
+        
+        # Clean up extracted frames
+        import shutil
+        if os.path.exists("sample_frames"):
+            shutil.rmtree("sample_frames")
+            print("   Cleaned up extracted frames")
+    
+    # Benchmarking
+    if os.path.exists("test_video.mp4"):
+        print("   Testing performance benchmarking...")
+        benchmark_result = cor.benchmark("test_video.mp4", 20)
+        if isinstance(benchmark_result, dict) and "processing_fps" in benchmark_result:
+            print(f"   Benchmark: {benchmark_result['processing_fps']:.2f} fps, {benchmark_result['detection_rate']:.2%} detection rate")
 
-def advanced_heatmap_example():
-    """Advanced heatmap generation example"""
-    print("\n=== ADVANCED HEATMAP EXAMPLE ===")
+def c_extension_only_functions():
+    """Demonstrate functions that still require C extension"""
+    print("\n=== C EXTENSION ONLY FUNCTIONS ===")
     
-    video_path = "sample_video.mp4"
+    print("\n5. Functions that still require C extension:")
     
-    if os.path.exists(video_path):
-        print(f"\n4. Generating advanced heatmaps for {video_path}:")
-        
-        try:
-            # Generate different types of heatmaps
-            heatmap_modes = ["density", "fixation", "saccade"]
-            
-            for mode in heatmap_modes:
-                output_path = f"heatmap_{mode}.jpg"
-                cor.generate_advanced_heatmap(video_path, mode, output_path)
-                print(f"Generated {mode} heatmap: {output_path}")
-                
-        except Exception as e:
-            print(f"Advanced heatmap generation failed: {e}")
-    else:
-        print(f"Video file {video_path} not found. Skipping heatmap example.")
-
-def realtime_example():
-    """Real-time processing example"""
-    print("\n=== REAL-TIME PROCESSING EXAMPLE ===")
+    # These functions will show error messages in Python fallback mode
+    print("   Testing attention analysis...")
+    result = cor.analyze_attention("test_video.mp4")
+    print(f"   analyze_attention result: {result}")
     
-    print("\n5. Real-time camera processing:")
+    print("   Testing advanced heatmap generation...")
+    result = cor.generate_advanced_heatmap("test_video.mp4", "density")
+    print(f"   generate_advanced_heatmap result: {result}")
     
-    try:
-        # Initialize real-time processing
-        if cor.init_realtime(0):  # Use camera 0
-            print("Real-time processing initialized")
-            
-            # Process a few frames
-            print("Processing 10 frames from camera...")
-            for i in range(10):
-                gaze_data = cor.process_realtime_frame()
-                print(f"Frame {i+1}: Gaze at ({gaze_data['x']:.3f}, {gaze_data['y']:.3f}) "
-                      f"confidence={gaze_data['confidence']:.3f}")
-            
-            # Cleanup
-            cor.cleanup_realtime()
-            print("Real-time processing cleaned up")
-        else:
-            print("Failed to initialize real-time processing (camera not available)")
-            
-    except Exception as e:
-        print(f"Real-time processing failed: {e}")
-        try:
-            cor.cleanup_realtime()
-        except:
-            pass
-
-def configuration_example():
-    """Configuration management example"""
-    print("\n=== CONFIGURATION EXAMPLE ===")
-    
-    print("\n6. Configuration management:")
-    
-    try:
-        # Get current heatmap color scheme
-        current_scheme = cor.get_config("heatmap_color_scheme")
-        print(f"Current heatmap color scheme: {current_scheme}")
-        
-        # Set new color scheme
-        cor.set_config("heatmap_color_scheme", "sequential_red")
-        print("Changed heatmap color scheme to sequential_red")
-        
-        # Verify change
-        new_scheme = cor.get_config("heatmap_color_scheme")
-        print(f"New heatmap color scheme: {new_scheme}")
-        
-        # Restore original
-        cor.set_config("heatmap_color_scheme", current_scheme)
-        print(f"Restored original color scheme: {current_scheme}")
-        
-    except Exception as e:
-        print(f"Configuration example failed: {e}")
-
-def video_validation_example():
-    """Video validation and analysis example"""
-    print("\n=== VIDEO VALIDATION EXAMPLE ===")
-    
-    print("\n7. Video validation and properties:")
-    
-    # Test with different file types
-    test_files = ["sample.mp4", "test.avi", "nonexistent.mov"]
-    
-    for video_file in test_files:
-        try:
-            if os.path.exists(video_file):
-                info = cor.validate_video(video_file)
-                
-                if info['valid']:
-                    print(f"\n{video_file} - VALID:")
-                    print(f"  Resolution: {info['width']}x{info['height']}")
-                    print(f"  FPS: {info['fps']:.2f}")
-                    print(f"  Duration: {info['duration']:.2f} seconds")
-                    print(f"  Frames: {info['frame_count']}")
-                    print(f"  Codec: {info['codec']}")
-                    
-                    # Extract sample frames
-                    frames = cor.extract_frames(video_file, 3, "sample_frames")
-                    print(f"  Extracted {len(frames)} sample frames")
-                    
-                    # Run benchmark
-                    benchmark = cor.benchmark(video_file, 50)
-                    print(f"  Processing speed: {benchmark['processing_fps']:.2f} fps")
-                    print(f"  Detection rate: {benchmark['detection_rate']:.2%}")
-                else:
-                    print(f"\n{video_file} - INVALID: {info.get('error', 'Unknown error')}")
-            else:
-                print(f"\n{video_file} - FILE NOT FOUND")
-                
-        except Exception as e:
-            print(f"\n{video_file} - ERROR: {e}")
-
-def complete_workflow_example():
-    """Complete workflow from calibration to analysis"""
-    print("\n=== COMPLETE WORKFLOW EXAMPLE ===")
-    
-    video_path = "sample_video.mp4"
-    
-    if os.path.exists(video_path):
-        print(f"\n8. Complete workflow with {video_path}:")
-        
-        try:
-            # Step 1: Validate video
-            info = cor.validate_video(video_path)
-            if not info['valid']:
-                print(f"Video validation failed: {info.get('error')}")
-                return
-            
-            print(f"Video validated: {info['width']}x{info['height']}, {info['duration']:.1f}s")
-            
-            # Step 2: Optional calibration (commented out for automated example)
-            # print("Running eye calibration...")
-            # cor.calibrate_eyes(video_path)
-            # print("Running gaze calibration...")
-            # cor.calibrate_gaze(video_path)
-            
-            # Step 3: Basic gaze detection
-            print("Running basic gaze detection...")
-            cor.run(video_path)
-            
-            # Step 4: Advanced analysis
-            print("Performing attention analysis...")
-            analysis = cor.analyze_attention(video_path)
-            print(f"Found {analysis['fixation_count']} fixations and {analysis['saccade_count']} saccades")
-            
-            # Step 5: Generate advanced visualizations
-            print("Generating advanced heatmaps...")
-            cor.generate_advanced_heatmap(video_path, "fixation", "fixation_heatmap.jpg")
-            cor.generate_advanced_heatmap(video_path, "saccade", "saccade_paths.jpg")
-            
-            # Step 6: Export results
-            export_path = cor.export_analysis(video_path)
-            print(f"Results exported to: {export_path}")
-            
-            print("Complete workflow finished successfully!")
-            
-        except Exception as e:
-            print(f"Workflow failed: {e}")
-    else:
-        print(f"Video file {video_path} not found. Skipping complete workflow.")
+    print("   Testing real-time processing...")
+    result = cor.init_realtime(0)
+    print(f"   init_realtime result: {result}")
 
 def main():
     """Run all examples"""
-    print("Cor Gaze Detection Library - Advanced Usage Examples")
+    print("Cor Gaze Detection Library - Usage Examples")
+    print("=" * 60)
+    print("NOTE: This library is running in Python fallback mode.")
+    print("Some advanced features require the C extension to be compiled.")
     print("=" * 60)
     
     # Run examples
     basic_example()
-    configuration_example()
-    video_validation_example()
-    advanced_analysis_example()
-    advanced_heatmap_example()
-    realtime_example()
-    complete_workflow_example()
+    working_gaze_detection_example()
+    python_enhanced_functions_example()
+    c_extension_only_functions()
     
     print("\n" + "=" * 60)
-    print("Advanced examples completed!")
-    print("\nNext steps:")
-    print("1. Try with your own video files")
-    print("2. Experiment with different configuration settings")
-    print("3. Use real-time processing with a connected camera")
-    print("4. Analyze the exported JSON results")
+    print("Examples completed!")
+    print("\nPython fallback mode functions (v1.0.1):")
+    print("✅ cor.help() - Display help information")
+    print("✅ cor.version() - Show version information")
+    print("✅ cor.validate_video() - Basic video validation")
+    print("✅ cor.calibrate_eyes() - Automatic eye calibration")
+    print("✅ cor.calibrate_gaze() - Automatic gaze calibration")
+    print("✅ cor.run() - Complete gaze detection with heatmaps")
+    print("✅ cor.get_config() / cor.set_config() - Configuration management")
+    print("✅ cor.extract_frames() - Frame extraction with progress bars")
+    print("✅ cor.benchmark() - Performance benchmarking")
+    print("\nC extension only functions:")
+    print("⚠️  Real-time processing, advanced attention analysis, advanced heatmaps")
 
 if __name__ == "__main__":
     main()

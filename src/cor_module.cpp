@@ -61,7 +61,7 @@ PyMODINIT_FUNC PyInit_cor(void) {
     }
     
     // Add version information
-    PyModule_AddStringConstant(module, "__version__", "1.0.2");
+    PyModule_AddStringConstant(module, "__version__", "1.0.1");
     PyModule_AddIntConstant(module, "VERSION_MAJOR", COR_VERSION_MAJOR);
     PyModule_AddIntConstant(module, "VERSION_MINOR", COR_VERSION_MINOR);
     PyModule_AddIntConstant(module, "VERSION_PATCH", COR_VERSION_PATCH);
@@ -474,7 +474,7 @@ rsion information function
 PyObject* cor_version(PyObject* self, PyObject* args) {
     PyObject* version_dict = PyDict_New();
     
-    PyDict_SetItemString(version_dict, "version", PyUnicode_FromString("1.0.2"));
+    PyDict_SetItemString(version_dict, "version", PyUnicode_FromString("1.0.1"));
     PyDict_SetItemString(version_dict, "major", PyLong_FromLong(COR_VERSION_MAJOR));
     PyDict_SetItemString(version_dict, "minor", PyLong_FromLong(COR_VERSION_MINOR));
     PyDict_SetItemString(version_dict, "patch", PyLong_FromLong(COR_VERSION_PATCH));
