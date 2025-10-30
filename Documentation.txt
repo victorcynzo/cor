@@ -1,9 +1,9 @@
 COR GAZE DETECTION LIBRARY - TECHNICAL DOCUMENTATION
 ==================================================
 
-VERSION: 1.0.1
+VERSION: 1.0.2
 LAST UPDATED: October 2024
-MAJOR UPDATE: Fixed heatmap generation, exact video dimensions, progress bars, repository organization
+MAJOR UPDATE: Integrated CLI functionality, enhanced C extension documentation, professional user experience
 
 TABLE OF CONTENTS
 -----------------
@@ -67,22 +67,162 @@ Method 2 - Source Installation:
     cd cor
     pip install -e .
 
-Method 3 - Development Installation:
+Method 3 - C Extension Installation (High Performance):
+
+Prerequisites:
+- C++ compiler (Visual Studio 2019+ on Windows, GCC 7+ on Linux, Xcode on macOS)
+- OpenCV development headers and libraries (version 4.5+)
+- Python development headers
+- CMake (optional, for advanced builds)
+
+Windows Installation:
+    # Install Visual Studio Build Tools or Visual Studio Community
+    # Download from: https://visualstudio.microsoft.com/downloads/
+    
+    # Install OpenCV development package
+    pip install opencv-contrib-python-headless
+    
+    # Clone and build
     git clone https://github.com/cor-team/cor.git
     cd cor
-    pip install -r requirements-dev.txt
     python setup.py build_ext --inplace
+    pip install -e .
+
+Linux/Ubuntu Installation:
+    # Install development tools
+    sudo apt-get update
+    sudo apt-get install build-essential python3-dev pkg-config
+    
+    # Install OpenCV development headers
+    sudo apt-get install libopencv-dev libopencv-contrib-dev
+    # Alternative: sudo apt-get install libopencv-dev python3-opencv
+    
+    # Install Python packages
+    pip install opencv-contrib-python-headless numpy
+    
+    # Clone and build
+    git clone https://github.com/cor-team/cor.git
+    cd cor
+    python setup.py build_ext --inplace
+    pip install -e .
+
+macOS Installation:
+    # Install Xcode command line tools
+    xcode-select --install
+    
+    # Install OpenCV via Homebrew
+    brew install opencv
+    
+    # Install Python packages
+    pip install opencv-contrib-python-headless numpy
+    
+    # Clone and build
+    git clone https://github.com/cor-team/cor.git
+    cd cor
+    python setup.py build_ext --inplace
+    pip install -e .
 
 Method 4 - Automated Build and Test:
     python build_and_test.py
 
+C Extension Verification:
+    python -c "import cor; v = cor.version(); print(f'Mode: {v[\"mode\"]}, C Extension: {v[\"c_extension\"]}')"
+    
+    Expected output for successful C extension:
+    Mode: C Extension, C Extension: True
+    
+    If you see "Python fallback", the C extension failed to build.
+
+Troubleshooting C Extension Build:
+- Windows: Ensure Visual Studio Build Tools are installed and in PATH
+- Linux: Install missing development packages: sudo apt-get install python3-dev libopencv-dev
+- macOS: Update Xcode command line tools: xcode-select --install
+- All platforms: Verify OpenCV installation: python -c "import cv2; print(cv2.__version__)"
+
 Verification:
     python -c "import cor; print(cor.__version__)"
+
+RUNNING C EXTENSION VS PYTHON FALLBACK:
+
+The Cor library automatically detects which implementation is available and uses the best one:
+
+1. If C extension is successfully compiled and installed → Uses C Extension mode
+2. If C extension is not available → Falls back to Python implementation
+
+Detection and Usage:
+    import cor
+    
+    # Check which version is running
+    version_info = cor.version()
+    print(f"Mode: {version_info['mode']}")
+    print(f"C Extension Available: {version_info['c_extension']}")
+    
+    # Usage is identical regardless of mode
+    cor.run("video.mp4", "--visualize")
+
+Mode-Specific Features:
+    Python Fallback Mode:
+    - All basic gaze detection functionality
+    - Heatmap generation and visualization
+    - Configuration management
+    - Frame extraction and benchmarking
+    - CLI interface
+    
+    C Extension Mode (Additional Features):
+    - 10-100x faster processing
+    - Real-time camera processing
+    - Advanced attention analysis
+    - Advanced heatmap modes
+    - JSON data export
+    - Better memory management
+
+Performance Comparison:
+    Python Fallback: ~15-30 FPS processing, suitable for videos up to 1080p
+    C Extension: ~60-150 FPS processing, handles 4K videos efficiently
+
+Switching Between Modes:
+    - To force Python fallback: Rename or remove the compiled C extension files
+    - To use C extension: Follow C Extension Installation instructions above
+    - The library will automatically use the best available implementation
 
 3. API REFERENCE
 ----------------
 
-3.1 CORE FUNCTIONS
+3.1 COMMAND LINE INTERFACE
+
+cor.cli()
+    Description: Built-in command-line interface for Cor library
+    Usage: Can be called directly from terminal after installation
+    Entry Points:
+        - cor <arguments>                    # Direct command (after pip install)
+        - python -m cor <arguments>          # Python module execution
+        - python -c "import cor; cor.cli()"  # Direct function call
+    
+    Command Line Arguments:
+        video_file                           # Path to input video file (required for most operations)
+        --visualize                         # Generate visualization video with gaze overlay
+        --calibrate                         # Run both eye and gaze calibration before analysis
+        --eye-calibrate                     # Run only eye detection calibration
+        --gaze-calibrate                    # Run only gaze direction calibration
+        --validate                          # Validate video file and show properties
+        --extract-frames N                  # Extract N frames from video for preview
+        --benchmark N                       # Run performance benchmark (default: 100 frames)
+        --config PARAM VALUE                # Set configuration parameter
+        --get-config PARAM                  # Get configuration parameter value
+        --version                           # Show version information
+        --help-cor                          # Show Cor library help information
+        --help                              # Show CLI help
+    
+    Examples:
+        cor video.mp4                       # Basic gaze detection
+        cor video.mp4 --visualize          # With visualization video
+        cor video.mp4 --calibrate --visualize  # Full workflow
+        cor --version                       # Show version
+        cor --config heatmap_color_scheme sequential_red  # Set config
+        cor video.mp4 --validate           # Validate video
+        cor video.mp4 --benchmark 50       # Performance test
+
+3.2 CORE FUNCTIONS
 
 cor.help()
     Description: Displays comprehensive help information for all available functions

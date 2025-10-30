@@ -4,7 +4,33 @@
 [![Python Version](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.5+-green.svg)](https://opencv.org/)
 
-## Major Changes v1.0.1
+## Major Changes v1.0.2
+
+**🚀 Professional CLI Integration:**
+- **Built-in Command Line Interface**: Integrated comprehensive CLI directly into the library as standard feature
+- **Direct Terminal Commands**: Users can now run `cor video.mp4 --visualize` directly from terminal after installation
+- **Multiple CLI Access Methods**: Support for `cor`, `python -m cor`, and traditional Python import usage
+- **Advanced CLI Options**: Full feature set including calibration, validation, benchmarking, and configuration management
+- **Cross-Platform CLI**: Works seamlessly on Windows, macOS, and Linux with proper entry points
+
+**📚 Enhanced Documentation & User Experience:**
+- **Comprehensive C Extension Guide**: Detailed platform-specific installation instructions for high-performance C version
+- **Clear Prerequisites**: Explicit requirements and troubleshooting for C++ compilation
+- **Installation Verification**: Added utility scripts to check installation status and guide upgrades
+- **Professional Documentation**: Enhanced README and Documentation.txt with complete API coverage
+- **Educational Examples**: Organized example files with clear guidance on built-in vs custom CLI usage
+
+**🔧 Developer Tools & Organization:**
+- **Version Checker**: `check_cor_version.py` helps users determine their installation and get upgrade instructions
+- **Installation Tester**: `test_cli_install.py` verifies CLI functionality works correctly
+- **Clean Project Structure**: Organized testing files and examples with clear educational context
+- **Backward Compatibility**: All existing Python code continues to work unchanged
+
+**✅ Professional Grade**: Library now provides enterprise-level CLI experience while maintaining ease of use for beginners.
+
+---
+
+## Previous Changes v1.0.1
 
 **🔧 Critical Fixes & Enhancements:**
 - **Fixed Heatmap Generation Bug**: Resolved boolean indexing error that prevented heatmap creation
@@ -64,15 +90,60 @@ pip install -e .
 
 ## Command Line Usage
 
+### Built-in CLI (Recommended)
+
+After installation, you can use Cor directly from the command line:
+
 ```bash
+# Basic gaze detection
+cor video.mp4
+
+# With visualization video
+cor video.mp4 --visualize
+
+# Full workflow with calibration
+cor video.mp4 --calibrate --visualize
+
 # Get help
-python -c "import cor; cor.help()"
+cor --help
 
-# Run gaze detection
-python -c "import cor; cor.run('video.mp4')"
+# Show version
+cor --version
+```
 
-# Run with visualization
+### Alternative CLI Methods
+
+```bash
+# Using Python module
+python -m cor video.mp4 --visualize
+
+# Using Python import (legacy)
 python -c "import cor; cor.run('video.mp4', '--visualize')"
+```
+
+### Advanced CLI Options
+
+```bash
+# Video validation and properties
+cor video.mp4 --validate
+
+# Extract preview frames
+cor video.mp4 --extract-frames 10
+
+# Performance benchmarking
+cor video.mp4 --benchmark 100
+
+# Configuration management
+cor --config heatmap_color_scheme sequential_red
+cor --get-config heatmap_color_scheme
+
+# Calibration options
+cor video.mp4 --eye-calibrate      # Eye detection only
+cor video.mp4 --gaze-calibrate     # Gaze direction only
+cor video.mp4 --calibrate          # Both calibrations
+
+# Show Cor library help
+cor --help-cor
 ```
 
 ## Quick Start
@@ -272,21 +343,85 @@ pip install cor
 That's it! The library will automatically use Python fallback mode.
 
 #### C Extension (For advanced users/performance)
+
+**Prerequisites:**
+- C++ compiler (Visual Studio on Windows, GCC on Linux, Xcode on macOS)
+- OpenCV development headers and libraries
+- Python development headers
+
+**Step-by-Step Installation:**
+
+**Windows:**
 ```bash
-# Windows
+# 1. Install Visual Studio Build Tools or Visual Studio Community
+# 2. Install OpenCV development package
 pip install opencv-contrib-python-headless
-python setup.py build_ext --inplace
 
-# Linux/Ubuntu
-sudo apt-get install libopencv-dev python3-dev
-pip install opencv-contrib-python-headless
+# 3. Clone and build
+git clone https://github.com/cor-team/cor.git
+cd cor
 python setup.py build_ext --inplace
+pip install -e .
 
-# macOS
-brew install opencv
-pip install opencv-contrib-python-headless
-python setup.py build_ext --inplace
+# 4. Verify C extension is loaded
+python -c "import cor; print(cor.version())"
 ```
+
+**Linux/Ubuntu:**
+```bash
+# 1. Install development tools and OpenCV headers
+sudo apt-get update
+sudo apt-get install build-essential python3-dev
+sudo apt-get install libopencv-dev libopencv-contrib-dev
+
+# 2. Install Python OpenCV package
+pip install opencv-contrib-python-headless
+
+# 3. Clone and build
+git clone https://github.com/cor-team/cor.git
+cd cor
+python setup.py build_ext --inplace
+pip install -e .
+
+# 4. Verify C extension is loaded
+python -c "import cor; print(cor.version())"
+```
+
+**macOS:**
+```bash
+# 1. Install Xcode command line tools
+xcode-select --install
+
+# 2. Install OpenCV via Homebrew
+brew install opencv
+
+# 3. Install Python OpenCV package
+pip install opencv-contrib-python-headless
+
+# 4. Clone and build
+git clone https://github.com/cor-team/cor.git
+cd cor
+python setup.py build_ext --inplace
+pip install -e .
+
+# 5. Verify C extension is loaded
+python -c "import cor; print(cor.version())"
+```
+
+**Verification:**
+After installation, check that the C extension is working:
+```python
+import cor
+version_info = cor.version()
+print(f"Mode: {version_info['mode']}")  # Should show "C Extension" not "Python fallback"
+print(f"C Extension: {version_info['c_extension']}")  # Should be True
+```
+
+**Troubleshooting:**
+- If compilation fails, ensure all development headers are installed
+- On Windows, make sure Visual Studio Build Tools are properly installed
+- On Linux, try `sudo apt-get install pkg-config` if OpenCV is not found
+- On macOS, ensure Xcode command line tools are up to date
 
 ### 📊 **Feature Comparison Table**
 
@@ -322,6 +457,42 @@ python setup.py build_ext --inplace
 - You're building production applications
 - You have experience with C++ compilation
 
+## 🚀 **Running the C Extension vs Python Version**
+
+**The usage is identical** - Cor automatically detects which version is available:
+
+```python
+import cor
+
+# This code works the same in both versions
+cor.run("video.mp4", "--visualize")
+
+# Check which version you're running
+version_info = cor.version()
+print(f"Running in: {version_info['mode']}")
+```
+
+**Command Line Usage (Same for Both):**
+```bash
+# Works with both Python fallback and C extension
+cor video.mp4 --visualize
+cor video.mp4 --calibrate
+cor --version  # Shows which mode is active
+```
+
+**Advanced Features (C Extension Only):**
+```python
+# These functions require C extension
+cor.analyze_attention("video.mp4")           # Advanced attention analysis
+cor.generate_advanced_heatmap("video.mp4")   # Advanced heatmap modes
+cor.init_realtime(0)                         # Real-time camera processing
+cor.export_analysis("video.mp4")             # JSON data export
+```
+
+**Performance Comparison:**
+- **Python Fallback**: ~15-30 FPS processing, good for videos up to 1080p
+- **C Extension**: ~60-150 FPS processing, handles 4K videos efficiently
+
 ## Testing and Examples
 
 The `testing_examples/` folder contains comprehensive testing and example scripts:
@@ -330,6 +501,7 @@ The `testing_examples/` folder contains comprehensive testing and example script
 - **`build_and_test.py`** - Automated build and testing script
 - **`demo_test.py`** - Demo script using test_video.mp4
 - **`example_advanced_usage.py`** - Advanced usage examples
+- **`example_cli_wrapper.py`** - Example of creating custom CLI wrappers (educational)
 - **`comprehensive_test.py`** - Code validation and structure tests
 - **`test_structure.py`** - Project structure validation
 - **`validate_project.py`** - Project health assessment

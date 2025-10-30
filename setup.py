@@ -129,7 +129,7 @@ else:
 
 setup(
     name='cor',
-    version='1.0.1',
+    version='1.0.2',
     description='Advanced gaze detection library for video analysis',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
@@ -162,5 +162,10 @@ setup(
         'Topic :: Scientific/Engineering :: Image Processing',
         'Topic :: Multimedia :: Video'
     ],
-    keywords='gaze detection, eye tracking, computer vision, video analysis'
+    keywords='gaze detection, eye tracking, computer vision, video analysis',
+    entry_points={
+        'console_scripts': [
+            'cor=cor:cli',
+        ],
+    },
 )
