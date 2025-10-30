@@ -437,3 +437,117 @@ KEY ACHIEVEMENTS:
 ✅ Created comprehensive conversation documentation
 
 The library is now ready for production use with reliable functionality, clear documentation, and users can choose between easy Python installation or high-performance C extension based on their needs.
+
+USER INPUT #11:
+Hello, are the build_and_test.py, comprehensive_test.py, demo_test.py, example_advanced_usage.py, setup.py, test_cor.py, test_structure.py, and validate_project.py files neccesary for the ability of the code to run? Or are they only examples neccesary for us for testing? And aren't all the functionalities mentioned in those python files already in the README and documentation file?
+
+KIRO OUTPUT #11:
+Based on my examination of these Python files, I can answer your question:
+
+**Essential vs Testing/Example Files:**
+
+**Essential for the code to run:**
+- `setup.py` - **ESSENTIAL** - This is the core installation script that builds the C extension and installs the package. Without this, the library cannot be installed or built.
+
+**Testing/Example files (not essential for runtime):**
+- `build_and_test.py` - Testing/build automation script
+- `comprehensive_test.py` - Testing script for code validation
+- `demo_test.py` - Demo/example script
+- `example_advanced_usage.py` - Example usage demonstrations
+- `test_cor.py` - Test suite for functionality validation
+- `test_structure.py` - Project structure validation
+- `validate_project.py` - Project validation script
+
+**Regarding functionality overlap with README/Documentation:**
+
+Yes, you're absolutely right! The functionalities demonstrated in these Python test/example files are already documented in:
+
+1. **README.md** - Contains usage examples and core function descriptions
+2. **Documentation.txt** - Contains detailed technical documentation
+3. The configuration files (`eye-detection-values.txt`, `gaze-direction-values.txt`, `cor.txt`) contain the actual parameters
+
+The test and example files essentially duplicate what's already documented, just in executable form. They serve these purposes:
+- Validate that the installation works
+- Provide runnable examples for developers
+- Test the build system
+- Demonstrate usage patterns
+
+**Recommendation:**
+You could safely remove the testing/example files (`build_and_test.py`, `comprehensive_test.py`, `demo_test.py`, `example_advanced_usage.py`, `test_cor.py`, `test_structure.py`, `validate_project.py`) if you want a cleaner distribution, as long as you keep:
+- `setup.py` (essential for installation)
+- `README.md` (user documentation)
+- `Documentation.txt` (technical documentation)
+- Configuration files (runtime parameters)
+
+The core functionality is in the C++ source files and the Python module interface, not in these testing scripts.
+
+===========================================================
+
+USER INPUT #12:
+Could you put the testing/example files (not essential for runtime) in a newly created folder called testing_examples?
+
+KIRO OUTPUT #12:
+I successfully created a `testing_examples` folder and moved all the non-essential testing and example files there.
+
+**Files moved to `testing_examples/`:**
+- `build_and_test.py` - Build automation and testing script
+- `comprehensive_test.py` - Comprehensive code validation tests
+- `demo_test.py` - Demo script with test video
+- `example_advanced_usage.py` - Advanced usage examples
+- `test_cor.py` - Main test suite
+- `test_structure.py` - Project structure validation
+- `validate_project.py` - Project validation script
+
+**Essential files remaining in root:**
+- `setup.py` - **Essential** for installation and building
+- `README.md` - User documentation
+- `Documentation.txt` - Technical documentation
+- Configuration files (`cor.txt`, `eye-detection-values.txt`, `gaze-direction-values.txt`)
+- `requirements.txt` and `requirements-dev.txt` - Dependencies
+- `Makefile` - Build automation
+- `LICENSE` - License information
+- Source code directories (`src/`, `include/`)
+
+Your project now has a much cleaner root directory with only the essential files needed for the library to function, while all the testing and example code is neatly organized in the `testing_examples` folder for developers who want to run tests or see usage examples.
+
+===========================================================
+
+USER INPUT #13:
+Can you check and if neccesary update the README.md and Documentation.txt file with all the newly added features, functions, bugfixes, and clarifications?
+
+KIRO OUTPUT #13:
+I successfully updated both README.md and Documentation.txt with all the latest features, bugfixes, and clarifications. Here's a summary of the major updates I made:
+
+## ✅ README.md Updates:
+
+1. **Enhanced v1.0.1 changelog** with repository organization details
+2. **Updated function descriptions** with more detailed parameters and use cases
+3. **Added project structure section** showing the new organization with `testing_examples/` folder
+4. **Enhanced technical details** with specific algorithm information and performance metrics
+5. **Added testing and examples section** explaining the contents of the `testing_examples/` folder
+6. **Improved installation notes** mentioning the cleaner project structure
+
+## ✅ Documentation.txt Updates:
+
+1. **Updated version header** with major update notes
+2. **Enhanced key features** with exact video dimensions and progress bar details
+3. **Detailed function documentation** with comprehensive parameter descriptions
+4. **Enhanced progress tracking section** with v1.0.1 improvements
+5. **Updated heatmap generation section** with the major fixes
+6. **Expanded troubleshooting section** with v1.0.1 specific fixes
+7. **Added repository organization details**
+
+## 🎯 Key New Documentation Features:
+
+- **Exact video dimension matching** for heatmap outputs
+- **Unicode progress bars (█)** working in Python mode
+- **Clean, publication-ready output** without titles or legends
+- **Repository organization** with testing files in dedicated folder
+- **Enhanced configuration management** with better error handling
+- **Comprehensive testing infrastructure** documentation
+- **Performance benchmarking** details and use cases
+- **Frame extraction** functionality for video preview
+
+The documentation now accurately reflects all the implemented features, recent bugfixes, and the improved project organization. Both files provide comprehensive information for users ranging from basic usage to advanced development scenarios.
+
+===========================================================

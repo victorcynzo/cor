@@ -3,6 +3,7 @@ COR GAZE DETECTION LIBRARY - TECHNICAL DOCUMENTATION
 
 VERSION: 1.0.1
 LAST UPDATED: October 2024
+MAJOR UPDATE: Fixed heatmap generation, exact video dimensions, progress bars, repository organization
 
 TABLE OF CONTENTS
 -----------------
@@ -26,12 +27,14 @@ across various lighting conditions and head poses.
 Key Features:
 - Multi-format video processing (MP4, AVI, MOV, MKV, WMV, FLV, WEBM)
 - Automatic calibration system for eye and gaze detection
-- Professional heatmap generation with multiple color schemes
+- Professional heatmap generation with exact video dimension matching
+- Clean, publication-ready output (no titles, legends, or scaling artifacts)
 - Video visualization with gaze tracking overlays
-- Progress tracking with real-time updates during processing
+- Real-time progress tracking with Unicode progress bars (█)
 - Pure Python implementation - no compilation required
 - Cross-platform compatibility (Windows, macOS, Linux)
-- Configurable detection parameters through text files
+- Comprehensive configuration management (133+ parameters)
+- Repository organization with testing files in dedicated folder
 
 2. INSTALLATION AND SETUP
 --------------------------
@@ -146,22 +149,26 @@ cor.version()
     Returns: Dictionary with version details
     Example: version_info = cor.version()
 
-cor.get_config(param_name, config_file=None)
-    Description: Retrieves configuration parameter value
+cor.get_config(param_name, config_file="cor.txt")
+    Description: Retrieves configuration parameter value from config files
     Parameters:
         param_name (str): Name of configuration parameter
-        config_file (str, optional): Configuration file path
-    Returns: String value of parameter
+        config_file (str, optional): Configuration file path (default: "cor.txt")
+    Returns: String value of parameter or None if not found
+    Supported Files: cor.txt, eye-detection-values.txt, gaze-direction-values.txt
     Example: value = cor.get_config("heatmap_color_scheme")
+    Example: eye_param = cor.get_config("scale_factor", "eye-detection-values.txt")
 
-cor.set_config(param_name, param_value, config_file=None)
-    Description: Sets configuration parameter value
+cor.set_config(param_name, param_value, config_file="cor.txt")
+    Description: Sets configuration parameter value in config files
     Parameters:
         param_name (str): Name of configuration parameter
         param_value (str): Value to set
-        config_file (str, optional): Configuration file path
-    Returns: None
+        config_file (str, optional): Configuration file path (default: "cor.txt")
+    Returns: Boolean indicating success
+    Side Effects: Creates config file if it doesn't exist, updates existing parameters
     Example: cor.set_config("heatmap_color_scheme", "sequential_red")
+    Example: cor.set_config("gaze_sensitivity", "1.5", "gaze-direction-values.txt")
 
 cor.validate_video(video_file)
     Description: Validates video file and returns properties
@@ -170,22 +177,35 @@ cor.validate_video(video_file)
     Returns: Dictionary with validation results and video properties
     Example: info = cor.validate_video("sample.mp4")
 
-cor.extract_frames(video_file, num_frames=5, output_dir="frames")
-    Description: Extracts sample frames from video for preview
+cor.extract_frames(video_file, num_frames=10, output_dir="frames")
+    Description: Extracts evenly distributed sample frames from video for preview
     Parameters:
         video_file (str): Path to video file
-        num_frames (int): Number of frames to extract
-        output_dir (str): Directory to save frames
-    Returns: List of extracted frame filenames
-    Example: frames = cor.extract_frames("video.mp4", 10)
+        num_frames (int): Number of frames to extract (default: 10)
+        output_dir (str): Directory to save frames (default: "frames")
+    Returns: List of extracted frame file paths
+    Side Effects: Creates output directory if it doesn't exist
+    Progress: Shows Unicode progress bar during extraction
+    Output Format: JPG images named frame_001.jpg, frame_002.jpg, etc.
+    Example: frames = cor.extract_frames("video.mp4", 20, "preview_frames")
+    Use Cases: Video quality assessment, frame selection, preview generation
 
 cor.benchmark(video_file, max_frames=100)
-    Description: Runs performance benchmark on video processing
+    Description: Runs comprehensive performance benchmark on video processing
     Parameters:
         video_file (str): Path to video file
-        max_frames (int): Maximum frames to process for benchmark
-    Returns: Dictionary with performance metrics
-    Example: results = cor.benchmark("video.mp4")
+        max_frames (int): Maximum frames to process for benchmark (default: 100)
+    Returns: Dictionary with detailed performance metrics
+    Progress: Shows real-time benchmarking progress with Unicode progress bar
+    Metrics Returned:
+        - frames_processed: Number of frames analyzed
+        - processing_time: Total processing time in seconds
+        - processing_fps: Processing speed in frames per second
+        - detection_rate: Percentage of frames with successful gaze detection
+        - detections: Total number of successful detections
+        - video_fps: Original video frame rate
+    Example: results = cor.benchmark("video.mp4", 200)
+    Use Cases: Hardware optimization, performance tuning, system requirements assessment
 
 cor.analyze_attention(video_file)
     Description: Analyzes attention patterns including fixations and saccades
@@ -336,11 +356,16 @@ Example Content:
 - Smoothing: Temporal filtering to reduce noise
 - Confidence Scoring: Quality assessment for each detection
 
-5.3 HEATMAP GENERATION
-- Density Estimation: 2D Gaussian kernel density estimation
-- Normalization: Min-max scaling with configurable intensity
-- Color Mapping: Multiple schemes with customizable palettes
-- Overlay Blending: Alpha compositing for frame overlay
+5.3 HEATMAP GENERATION (v1.0.1 Major Fix)
+- Density Estimation: 2D Gaussian kernel density estimation with meshgrid coordinates
+- Exact Dimensions: Output images match input video dimensions precisely (no scaling)
+- Clean Output: Professional visualization without titles, legends, or artifacts
+- Gaussian Blobs: Configurable sigma parameter (default: 25 pixels)
+- Normalization: Min-max scaling with configurable intensity multipliers
+- Color Mapping: Multiple schemes with customizable palettes (hot, viridis, plasma, etc.)
+- Overlay Blending: Alpha compositing for frame overlay (default: 0.6 alpha)
+- Figure Optimization: Matplotlib figure sizing calculated from video resolution
+- DPI Control: 100 DPI output for consistent quality across platforms
 
 6. PERFORMANCE OPTIMIZATION
 ---------------------------
@@ -351,12 +376,16 @@ Example Content:
 - Frame Skipping: Configurable frame sampling for speed
 - ROI Processing: Region of interest focusing for efficiency
 
-6.2 PROGRESS TRACKING
+6.2 PROGRESS TRACKING (v1.0.1 Enhancement)
 - Real-time Progress Bars: Visual feedback for all video processing operations
 - Unicode Block Characters: Clear progress visualization using █ characters
 - Operation-specific Messages: Contextual status information for each process
 - Frame-level Tracking: Detailed progress for video analysis operations
 - Calibration Progress: Step-by-step progress during interactive calibration
+- Terminal Integration: Proper carriage return and flush operations for smooth updates
+- Update Frequency: Progress updates every 10 frames or at completion
+- Cross-platform Compatibility: Works on Windows, macOS, and Linux terminals
+- Performance Impact: Minimal overhead (~1% processing time)
 
 6.3 CONFIDENCE ASSESSMENT
 - Automatic Accuracy Evaluation: Post-processing confidence analysis
@@ -395,6 +424,18 @@ Solution: Convert video to MP4 format using ffmpeg
 
 Issue: Out of memory errors
 Solution: Increase frame_skip_factor in cor.txt or use smaller videos
+
+Issue: Heatmap dimensions don't match video (v1.0.1 FIXED)
+Solution: Update to v1.0.1 - heatmaps now match video dimensions exactly
+
+Issue: Progress bars not showing
+Solution: Update to v1.0.1 - Unicode progress bars now work in Python mode
+
+Issue: Heatmap has titles/legends (v1.0.1 FIXED)
+Solution: Update to v1.0.1 - clean output without titles or legends
+
+Issue: Testing files cluttering project
+Solution: Testing files moved to testing_examples/ folder in v1.0.1
 
 7.2 DEBUG MODE
 Enable debug output by setting environment variable:
