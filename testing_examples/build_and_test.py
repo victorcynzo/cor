@@ -69,18 +69,18 @@ def clean_build():
                 path.unlink()
                 print(f"Removed file: {path}")
 
-def build_extension():
-    """Build the C extension"""
-    print("Building C extension...")
+def install_package():
+    """Install the Python package"""
+    print("Installing Python package...")
     
-    # Try different build approaches
-    build_commands = [
-        "python setup.py build_ext --inplace",
+    # Try different installation approaches
+    install_commands = [
         "pip install -e .",
-        "python -m pip install -e ."
+        "python -m pip install -e .",
+        "python setup.py install"
     ]
     
-    for cmd in build_commands:
+    for cmd in install_commands:
         print(f"Trying: {cmd}")
         if run_command(cmd, check=False):
             print("✓ Build successful")
@@ -164,10 +164,10 @@ def main():
     # Step 2: Clean previous builds
     clean_build()
     
-    # Step 3: Build extension
-    if not build_extension():
+    # Step 3: Install package
+    if not install_package():
         print("\\n" + "=" * 60)
-        print("BUILD FAILED")
+        print("INSTALLATION FAILED")
         print("=" * 60)
         print("Possible solutions:")
         print("1. Install OpenCV development headers:")
@@ -177,7 +177,7 @@ def main():
         print("   Windows: Install OpenCV manually")
         print("2. Install required Python packages:")
         print("   pip install -r requirements-dev.txt")
-        print("3. Check compiler installation (gcc/clang/MSVC)")
+        print("3. Check Python installation and permissions")
         return 1
     
     # Step 4: Run tests

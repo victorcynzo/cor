@@ -19,7 +19,7 @@ TABLE OF CONTENTS
 
 1. OVERVIEW
 -----------
-Cor is a comprehensive gaze detection library implemented in Python using OpenCV and matplotlib. 
+Cor is a comprehensive gaze detection library implemented in pure Python using OpenCV and matplotlib. 
 It provides automated eye tracking and gaze analysis capabilities for video processing 
 applications. The library uses proven computer vision algorithms for robust detection 
 across various lighting conditions and head poses.
@@ -35,7 +35,7 @@ Key Features:
 - Automatic calibration system for eye and gaze detection
 - Video visualization with gaze tracking overlays
 - Real-time progress tracking with Unicode progress bars (█)
-- Pure Python implementation with optional C extension
+- Pure Python implementation
 - Cross-platform compatibility (Windows, macOS, Linux)
 - Comprehensive configuration management (133+ parameters)
 
@@ -82,132 +82,13 @@ Method 2 - Source Installation:
     cd cor
     pip install -e .
 
-Method 3 - Direct Installation:
-    pip install opencv-python matplotlib numpy Pillow
-    pip install -e .
-
-Method 2 - Source Installation:
-    git clone https://github.com/cor-team/cor.git
+Method 3 - Development Installation:
+    git clone https://github.com/victorcynzo/cor
     cd cor
     pip install -e .
-
-Method 3 - C Extension Installation (High Performance):
-
-Prerequisites:
-- C++ compiler (Visual Studio 2019+ on Windows, GCC 7+ on Linux, Xcode on macOS)
-- OpenCV development headers and libraries (version 4.5+)
-- Python development headers
-- CMake (optional, for advanced builds)
-
-Windows Installation:
-    # Install Visual Studio Build Tools or Visual Studio Community
-    # Download from: https://visualstudio.microsoft.com/downloads/
-    
-    # Install OpenCV development package
-    pip install opencv-contrib-python-headless
-    
-    # Clone and build
-    git clone https://github.com/cor-team/cor.git
-    cd cor
-    python setup.py build_ext --inplace
-    pip install -e .
-
-Linux/Ubuntu Installation:
-    # Install development tools
-    sudo apt-get update
-    sudo apt-get install build-essential python3-dev pkg-config
-    
-    # Install OpenCV development headers
-    sudo apt-get install libopencv-dev libopencv-contrib-dev
-    # Alternative: sudo apt-get install libopencv-dev python3-opencv
-    
-    # Install Python packages
-    pip install opencv-contrib-python-headless numpy
-    
-    # Clone and build
-    git clone https://github.com/cor-team/cor.git
-    cd cor
-    python setup.py build_ext --inplace
-    pip install -e .
-
-macOS Installation:
-    # Install Xcode command line tools
-    xcode-select --install
-    
-    # Install OpenCV via Homebrew
-    brew install opencv
-    
-    # Install Python packages
-    pip install opencv-contrib-python-headless numpy
-    
-    # Clone and build
-    git clone https://github.com/cor-team/cor.git
-    cd cor
-    python setup.py build_ext --inplace
-    pip install -e .
-
-Method 4 - Automated Build and Test:
-    python build_and_test.py
-
-C Extension Verification:
-    python -c "import cor; v = cor.version(); print(f'Mode: {v[\"mode\"]}, C Extension: {v[\"c_extension\"]}')"
-    
-    Expected output for successful C extension:
-    Mode: C Extension, C Extension: True
-    
-    If you see "Python fallback", the C extension failed to build.
-
-Troubleshooting C Extension Build:
-- Windows: Ensure Visual Studio Build Tools are installed and in PATH
-- Linux: Install missing development packages: sudo apt-get install python3-dev libopencv-dev
-- macOS: Update Xcode command line tools: xcode-select --install
-- All platforms: Verify OpenCV installation: python -c "import cv2; print(cv2.__version__)"
 
 Verification:
     python -c "import cor; print(cor.__version__)"
-
-RUNNING C EXTENSION VS PYTHON FALLBACK:
-
-The Cor library automatically detects which implementation is available and uses the best one:
-
-1. If C extension is successfully compiled and installed → Uses C Extension mode
-2. If C extension is not available → Falls back to Python implementation
-
-Detection and Usage:
-    import cor
-    
-    # Check which version is running
-    version_info = cor.version()
-    print(f"Mode: {version_info['mode']}")
-    print(f"C Extension Available: {version_info['c_extension']}")
-    
-    # Usage is identical regardless of mode
-    cor.run("video.mp4", "--visualize")
-
-Mode-Specific Features:
-    Python Fallback Mode:
-    - All basic gaze detection functionality
-    - Heatmap generation and visualization
-    - Configuration management
-    - Frame extraction and benchmarking
-    - CLI interface
-    
-    C Extension Mode (Additional Features):
-    - 10-100x faster processing
-    - Real-time camera processing
-    - Advanced attention analysis
-    - Advanced heatmap modes
-    - JSON data export
-    - Better memory management
-
-Performance Comparison:
-    Python Fallback: ~15-30 FPS processing, suitable for videos up to 1080p
-    C Extension: ~60-150 FPS processing, handles 4K videos efficiently
-
-Switching Between Modes:
-    - To force Python fallback: Rename or remove the compiled C extension files
-    - To use C extension: Follow C Extension Installation instructions above
-    - The library will automatically use the best available implementation
 
 3. API REFERENCE
 ----------------
@@ -371,48 +252,7 @@ cor.benchmark(video_file, max_frames=100)
     Example: results = cor.benchmark("video.mp4", 200)
     Use Cases: Hardware optimization, performance tuning, system requirements assessment
 
-cor.analyze_attention(video_file)
-    Description: Analyzes attention patterns including fixations and saccades
-    Parameters:
-        video_file (str): Path to video file
-    Returns: Dictionary with attention analysis results
-    Example: analysis = cor.analyze_attention("video.mp4")
 
-cor.generate_advanced_heatmap(video_file, mode="density", output_path=None)
-    Description: Generates advanced heatmaps with specific visualization modes
-    Parameters:
-        video_file (str): Path to video file
-        mode (str): Heatmap mode ("density", "fixation", "saccade")
-        output_path (str, optional): Output file path
-    Returns: None
-    Example: cor.generate_advanced_heatmap("video.mp4", "fixation", "fixation_map.jpg")
-
-cor.init_realtime(camera_id=0)
-    Description: Initializes real-time camera processing
-    Parameters:
-        camera_id (int): Camera device ID (default: 0)
-    Returns: Boolean indicating success
-    Example: success = cor.init_realtime(0)
-
-cor.process_realtime_frame()
-    Description: Processes single frame from camera in real-time
-    Parameters: None
-    Returns: Dictionary with gaze point data
-    Example: gaze_data = cor.process_realtime_frame()
-
-cor.cleanup_realtime()
-    Description: Cleans up real-time processing resources
-    Parameters: None
-    Returns: None
-    Example: cor.cleanup_realtime()
-
-cor.export_analysis(video_file, output_path=None)
-    Description: Exports detailed analysis results to JSON file
-    Parameters:
-        video_file (str): Path to video file
-        output_path (str, optional): Output JSON file path
-    Returns: String path to exported file
-    Example: export_path = cor.export_analysis("video.mp4")
 
 3.2 PATH MANAGEMENT FUNCTIONS (NEW IN v1.0.2)
 
@@ -595,21 +435,21 @@ Enhanced Batch Processing with Paths:
     session_videos = cor.find_videos("session_*.mp4")
     cor.run_batch(session_videos, "--visualize")
 
-3.3 INTERNAL FUNCTIONS (C++ IMPLEMENTATION)
+3.3 INTERNAL FUNCTIONS (PYTHON IMPLEMENTATION)
 
 detect_eyes(frame, calibration_data)
-    Description: Detects eye regions in a single frame
-    Implementation: Haar cascades + custom ellipse fitting
+    Description: Detects eye regions in a single frame using OpenCV
+    Implementation: Haar cascades with configurable parameters
     Returns: Eye bounding boxes and pupil centers
 
 detect_gaze_direction(eye_data, calibration_data)
     Description: Calculates gaze direction from eye detection data
-    Implementation: Pupil center analysis + geometric calculations
+    Implementation: Pupil center analysis with geometric calculations
     Returns: Gaze vector coordinates
 
 generate_heatmap(gaze_data, frame_dimensions, color_scheme)
-    Description: Creates heatmap from accumulated gaze data
-    Implementation: Gaussian kernel density estimation
+    Description: Creates heatmap from accumulated gaze data using matplotlib
+    Implementation: 2D Gaussian kernel density estimation
     Returns: Heatmap image array
 
 4. CONFIGURATION FILES
@@ -774,10 +614,10 @@ Usage:
 ---------------------------
 
 6.1 PROCESSING OPTIMIZATIONS
-- Multi-threading: Parallel processing of video frames
-- Memory Management: Efficient buffer allocation and reuse
 - Frame Skipping: Configurable frame sampling for speed
+- Memory Management: Efficient processing of large videos
 - ROI Processing: Region of interest focusing for efficiency
+- Streaming Processing: Minimized memory footprint for large files
 
 6.2 PROGRESS TRACKING (v1.0.1 Enhancement)
 - Real-time Progress Bars: Visual feedback for all video processing operations
@@ -807,6 +647,7 @@ Usage:
 - Standard Video (720p, 30fps): ~15-25 fps processing speed
 - High Resolution (1080p+): ~8-15 fps processing speed
 - Calibration Interface: Real-time interaction (30+ fps)
+- Pure Python Implementation: Optimized for reliability and accuracy
 
 7. TROUBLESHOOTING
 ------------------
@@ -885,24 +726,25 @@ Batch Processing Workflow:
 --------------------
 
 9.1 ARCHITECTURE
-- Core Engine: C++ implementation for performance
-- Python Bindings: Simplified interface for ease of use
+- Core Engine: Pure Python implementation using OpenCV and matplotlib
 - Configuration System: Text-based for user accessibility
 - Modular Design: Separate components for different functions
+- Cross-platform Compatibility: Works on Windows, macOS, and Linux
 
-9.2 IMPLEMENTED ADVANCED FEATURES
-- Real-time camera input support with cor.init_realtime()
-- Advanced attention pattern analysis with fixation and saccade detection
-- Multiple heatmap visualization modes (density, fixation, saccade)
-- JSON export of detailed analysis results
+9.2 IMPLEMENTED FEATURES
+- Comprehensive gaze detection and analysis
+- Interactive calibration system for eye and gaze detection
+- Professional heatmap generation with exact video dimension matching
+- Enhanced batch processing with folder and pattern-based processing
+- Confidence assessment with detailed accuracy metrics
 - Performance benchmarking and optimization tools
 
 9.3 FUTURE ENHANCEMENTS
 - Machine learning-based eye detection
-- 3D gaze vector estimation
+- Enhanced gaze accuracy algorithms
 - Multi-person tracking capabilities
-- Cloud processing integration
-- Mobile device support
+- Additional video format support
+- Performance optimizations
 
 9.3 CONTRIBUTING
 See CONTRIBUTING.md for development guidelines and coding standards.

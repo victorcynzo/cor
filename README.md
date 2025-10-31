@@ -4,6 +4,59 @@
 [![Python Version](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.5+-green.svg)](https://opencv.org/)
 
+## Major Changes v1.0.5 ALPHA
+
+**🔧 Critical Bug Fixes & Library Simplification:**
+
+**🚨 Detection Rate Bug Fixed:**
+- **Issue Resolved**: Fixed critical bug where detection rates could exceed 100% (e.g., 100.2%), which is mathematically impossible
+- **Root Cause**: Subtle frame counting logic error where gaze points could exceed processed frames in edge cases
+- **Solution**: Added mathematical capping using `min(1.0, gaze_points / processed_frames)` to ensure detection rates never exceed 100%
+- **Impact**: Detection rates now properly capped at 100.0%, maintaining logical consistency
+
+**🧹 C++ Extension Removal & Library Simplification:**
+- **C++ Extension Completely Removed**: After thorough analysis, discovered the C++ extension provided no real performance benefits
+- **Why Removed**: 
+  - Complex build requirements (OpenCV headers, C++ compiler, build tools)
+  - Frequent compilation failures on Windows
+  - No actual performance improvements over Python implementation
+  - Advanced features were non-functional stubs that always returned errors
+  - Added complexity without meaningful advantages
+- **Result**: Clean, pure Python implementation that's easier to install, maintain, and use
+
+**✅ Simplified Installation:**
+- **Before**: Complex build process with C++ compilation, OpenCV headers, compiler requirements
+- **Now**: Simple `pip install opencv-python matplotlib` - works immediately
+- **Benefit**: No more build failures, compiler issues, or platform-specific problems
+
+**📚 Documentation Cleanup:**
+- **Honest Feature Documentation**: Removed misleading references to non-functional advanced features
+- **Accurate Installation Instructions**: Updated to reflect simple Python-only installation
+- **Clean Codebase**: Removed all C++ infrastructure, build scripts, and unused code
+- **Consistent Messaging**: Documentation now accurately reflects actual library capabilities
+
+**🎯 Focus on Core Functionality:**
+The library now focuses on what it does best:
+- ✅ Reliable gaze detection and analysis
+- ✅ Interactive calibration system
+- ✅ Professional heatmap generation
+- ✅ Comprehensive batch processing
+- ✅ Enhanced statistics and CSV export
+- ✅ Cross-platform compatibility
+
+**🔍 Enhanced Debugging:**
+- Added warning messages to identify underlying counting issues
+- Improved error handling and user feedback
+- Better diagnostic information for troubleshooting
+
+**📈 Reliability Improvements:**
+- Eliminated build-time failures and compilation issues
+- Consistent behavior across all platforms
+- Reduced complexity leads to fewer potential failure points
+- Focus on proven, working functionality
+
+---
+
 ## Major Changes v1.0.4
 
 **📊 Enhanced Gaze Statistics & CSV Export:**
@@ -77,9 +130,8 @@
 - **Cross-Platform CLI**: Works seamlessly on Windows, macOS, and Linux with proper entry points
 
 **📚 Enhanced Documentation & User Experience:**
-- **Comprehensive C Extension Guide**: Detailed platform-specific installation instructions for high-performance C version
-- **Clear Prerequisites**: Explicit requirements and troubleshooting for C++ compilation
-- **Installation Verification**: Added utility scripts to check installation status and guide upgrades
+- **Comprehensive Installation Guide**: Simple pip installation with clear setup instructions
+- **Installation Verification**: Added utility scripts to check installation status
 - **Professional Documentation**: Enhanced README and Documentation.txt with complete API coverage
 - **Educational Examples**: Organized example files with clear guidance on built-in vs custom CLI usage
 
@@ -108,13 +160,13 @@
 - Optimized matplotlib figure sizing to match video resolution precisely (no more scaling artifacts)
 - Added comprehensive progress tracking to video processing, calibration, and heatmap generation
 - Improved terminal output formatting with proper carriage returns and flush operations
-- Enhanced Python fallback mode with full functionality implementation
+- Enhanced Python implementation with full functionality
 
-**✅ Validation**: All functionality tested and verified with test_video.mp4 - library now works reliably in Python fallback mode with professional-quality output.
+**✅ Validation**: All functionality tested and verified with test_video.mp4 - library now works reliably with professional-quality output.
 
 ---
 
-Cor is a comprehensive Python library for gaze detection and eye tracking in video files. It provides automatic calibration capabilities, professional heatmap generation, and comprehensive visualization tools for gaze analysis. The library works entirely in Python using OpenCV and matplotlib, making it easy to install and use across all platforms.
+Cor is a comprehensive Python library for gaze detection and eye tracking in video files. It provides automatic calibration capabilities, professional heatmap generation, and comprehensive visualization tools for gaze analysis. The library is implemented entirely in Python using OpenCV and matplotlib, making it easy to install and use across all platforms.
 
 ## Features
 
@@ -125,7 +177,7 @@ Cor is a comprehensive Python library for gaze detection and eye tracking in vid
 - **Face and Eye Detection**: Robust detection using OpenCV Haar cascades
 - **Gaze Estimation**: Advanced gaze direction calculation from eye positions
 - **Progress Tracking**: Real-time progress updates during video processing
-- **Easy Installation**: Pure Python implementation - no C++ compilation required
+- **Easy Installation**: Pure Python implementation with simple pip install
 - **Cross-platform**: Works on Windows, macOS, and Linux
 - **Flexible Configuration**: Extensive customization through configuration files
 
@@ -435,7 +487,7 @@ Validates video file compatibility:
 - Retrieves values from configuration files (cor.txt, eye-detection-values.txt, gaze-direction-values.txt)
 - Supports custom config file paths
 - Returns parameter value or None if not found
-- Works in both Python fallback and C extension modes
+- Works with the Python implementation
 
 ### `cor.set_config(param_name, param_value, config_file="cor.txt")`
 **✨ New in v1.0.1**: Updates configuration parameters:
@@ -465,8 +517,7 @@ Returns version information and system status:
 ```python
 {
     'version': '1.0.4',
-    'mode': 'Python fallback',
-    'c_extension': False,
+    'mode': 'Python',
     'opencv_available': True
 }
 ```
@@ -514,14 +565,16 @@ cor.run("sample_video.mp4", "--visualize")
 # - sample_video_heatmap.mp4
 ```
 
-## C Extension vs Python Fallback
+## Installation
 
-Cor provides two implementation modes to balance performance and compatibility:
+### Simple Installation
+```bash
+pip install cor
+```
 
-### 🐍 **Python Fallback Mode** (Default)
-**Installation**: `pip install cor` (automatic)
+That's it! The library is ready to use with all features available.
 
-**Features Available:**
+### Features Available
 - ✅ Complete gaze detection with heatmaps (`cor.run()`)
 - ✅ Automatic eye and gaze calibration
 - ✅ Video validation and format support
@@ -530,191 +583,30 @@ Cor provides two implementation modes to balance performance and compatibility:
 - ✅ Performance benchmarking
 - ✅ Unicode progress bars for all operations
 - ✅ Professional heatmap generation (exact video dimensions)
+- ✅ Batch processing capabilities
+- ✅ 18 video format support
 
-**Performance**: Good for most use cases, handles videos up to 1080p efficiently
+### Requirements
+- Python 3.7 or higher
+- OpenCV (automatically installed with `opencv-python`)
+- NumPy, Matplotlib, Pillow (automatically installed)
 
-**Requirements**: Only Python + OpenCV (automatically installed)
-
-### ⚡ **C Extension Mode** (High Performance)
-**Installation**: Requires compilation (see Installation section below)
-
-**Additional Features:**
-- 🚀 10-100x faster processing for large videos
-- 🎥 Real-time camera processing (`init_realtime()`, `process_realtime_frame()`)
-- 📊 Advanced attention analysis (`analyze_attention()`)
-- 🎨 Advanced heatmap modes (`generate_advanced_heatmap()`)
-- 💾 Better memory management for 4K+ videos
-- 📤 JSON data export (`export_analysis()`)
-
-**Performance**: Optimized for professional use, handles 4K videos and real-time processing
-
-**Requirements**: C++ compiler + OpenCV development headers
-
-### 🔧 **Installation Guide**
-
-#### Python Fallback (Recommended for most users)
-```bash
-pip install cor
-```
-That's it! The library will automatically use Python fallback mode.
-
-#### C Extension (For advanced users/performance)
-
-**Prerequisites:**
-- C++ compiler (Visual Studio on Windows, GCC on Linux, Xcode on macOS)
-- OpenCV development headers and libraries
-- Python development headers
-
-**Step-by-Step Installation:**
-
-**Windows:**
-```bash
-# 1. Install Visual Studio Build Tools or Visual Studio Community
-# 2. Install OpenCV development package
-pip install opencv-contrib-python-headless
-
-# 3. Clone and build
-git clone https://github.com/cor-team/cor.git
-cd cor
-python setup.py build_ext --inplace
-pip install -e .
-
-# 4. Verify C extension is loaded
-python -c "import cor; print(cor.version())"
-```
-
-**Linux/Ubuntu:**
-```bash
-# 1. Install development tools and OpenCV headers
-sudo apt-get update
-sudo apt-get install build-essential python3-dev
-sudo apt-get install libopencv-dev libopencv-contrib-dev
-
-# 2. Install Python OpenCV package
-pip install opencv-contrib-python-headless
-
-# 3. Clone and build
-git clone https://github.com/cor-team/cor.git
-cd cor
-python setup.py build_ext --inplace
-pip install -e .
-
-# 4. Verify C extension is loaded
-python -c "import cor; print(cor.version())"
-```
-
-**macOS:**
-```bash
-# 1. Install Xcode command line tools
-xcode-select --install
-
-# 2. Install OpenCV via Homebrew
-brew install opencv
-
-# 3. Install Python OpenCV package
-pip install opencv-contrib-python-headless
-
-# 4. Clone and build
-git clone https://github.com/cor-team/cor.git
-cd cor
-python setup.py build_ext --inplace
-pip install -e .
-
-# 5. Verify C extension is loaded
-python -c "import cor; print(cor.version())"
-```
-
-**Verification:**
-After installation, check that the C extension is working:
+### Verification
+After installation, verify everything is working:
 ```python
 import cor
 version_info = cor.version()
-print(f"Mode: {version_info['mode']}")  # Should show "C Extension" not "Python fallback"
-print(f"C Extension: {version_info['c_extension']}")  # Should be True
+print(f"Cor version: {version_info['version']}")
+print(f"Mode: {version_info['mode']}")
+print(f"OpenCV available: {version_info['opencv_available']}")
 ```
-
-**Troubleshooting:**
-- If compilation fails, ensure all development headers are installed
-- On Windows, make sure Visual Studio Build Tools are properly installed
-- On Linux, try `sudo apt-get install pkg-config` if OpenCV is not found
-- On macOS, ensure Xcode command line tools are up to date
-
-### 📊 **Feature Comparison Table**
-
-| Feature | Python Fallback | C Extension |
-|---------|-----------------|-------------|
-| Basic gaze detection | ✅ | ✅ |
-| Heatmap generation | ✅ | ✅ |
-| Progress bars | ✅ | ✅ |
-| Video formats support | ✅ | ✅ |
-| Configuration management | ✅ | ✅ |
-| Frame extraction | ✅ | ✅ |
-| Performance benchmarking | ✅ | ✅ |
-| Real-time camera processing | ❌ | ✅ |
-| Advanced attention analysis | ❌ | ✅ |
-| Advanced heatmap modes | ❌ | ✅ |
-| JSON data export | ❌ | ✅ |
-| Processing speed | Good | Excellent |
-| Memory usage | Standard | Optimized |
-| Installation complexity | Simple | Advanced |
-
-### 🎯 **Which Version Should You Use?**
-
-**Choose Python Fallback if:**
-- You want easy installation with no compilation
-- You're processing videos under 1080p resolution
-- You need basic gaze detection and heatmaps
-- You're new to gaze detection or computer vision
-
-**Choose C Extension if:**
-- You need maximum performance for large videos (4K+)
-- You want real-time camera processing
-- You need advanced analysis features
-- You're building production applications
-- You have experience with C++ compilation
-
-## 🚀 **Running the C Extension vs Python Version**
-
-**The usage is identical** - Cor automatically detects which version is available:
-
-```python
-import cor
-
-# This code works the same in both versions
-cor.run("video.mp4", "--visualize")
-
-# Check which version you're running
-version_info = cor.version()
-print(f"Running in: {version_info['mode']}")
-```
-
-**Command Line Usage (Same for Both):**
-```bash
-# Works with both Python fallback and C extension
-cor video.mp4 --visualize
-cor video.mp4 --calibrate
-cor --version  # Shows which mode is active
-```
-
-**Advanced Features (C Extension Only):**
-```python
-# These functions require C extension
-cor.analyze_attention("video.mp4")           # Advanced attention analysis
-cor.generate_advanced_heatmap("video.mp4")   # Advanced heatmap modes
-cor.init_realtime(0)                         # Real-time camera processing
-cor.export_analysis("video.mp4")             # JSON data export
-```
-
-**Performance Comparison:**
-- **Python Fallback**: ~15-30 FPS processing, good for videos up to 1080p
-- **C Extension**: ~60-150 FPS processing, handles 4K videos efficiently
 
 ## Testing and Examples
 
 The `testing_examples/` folder contains comprehensive testing and example scripts:
 
 - **`test_cor.py`** - Complete test suite for all functions
-- **`build_and_test.py`** - Automated build and testing script
+- **`build_and_test.py`** - Automated installation and testing script
 - **`demo_test.py`** - Demo script using test_video.mp4
 - **`example_advanced_usage.py`** - Advanced usage examples
 - **`example_cli_wrapper.py`** - Example of creating custom CLI wrappers (educational)
@@ -727,7 +619,7 @@ To run tests:
 cd testing_examples
 python test_cor.py              # Run main test suite
 python demo_test.py             # Run demo with test video
-python build_and_test.py        # Full build and test
+python build_and_test.py        # Full installation and test
 ```
 
 ## Batch Processing
@@ -756,7 +648,7 @@ for video in video_files:
 - **Progress Visualization**: Unicode block characters (█) with real-time terminal updates
 
 ### Performance
-- **Processing Speed**: ~30-60 FPS on modern hardware (Python mode), up to 100+ FPS (C extension)
+- **Processing Speed**: ~30-60 FPS on modern hardware
 - **Memory Usage**: Efficient frame-by-frame processing, ~50-200MB typical usage
 - **Output Quality**: Exact video dimension matching, professional-grade heatmaps
 - **Progress Tracking**: Real-time updates every 10 frames with percentage completion
@@ -773,17 +665,15 @@ cor/
 ├── setup.py                     # Installation script
 ├── requirements.txt             # Runtime dependencies
 ├── requirements-dev.txt         # Development dependencies
-├── Makefile                     # Build automation
+
 ├── LICENSE                      # MIT license
 ├── cor/                         # Main Python package
 │   └── __init__.py             # Core implementation
-├── src/                         # C++ source code (optional)
-├── include/                     # C++ headers (optional)
 ├── eye-detection-values.txt     # Eye detection configuration
 ├── gaze-direction-values.txt    # Gaze direction configuration
 ├── cor.txt                      # General configuration
 └── testing_examples/            # Testing and example files
-    ├── build_and_test.py       # Build automation
+    ├── build_and_test.py       # Installation and testing automation
     ├── test_cor.py             # Test suite
     ├── comprehensive_test.py   # Code validation
     ├── demo_test.py            # Demo script
@@ -794,10 +684,11 @@ cor/
 
 ## Installation Notes
 
-This library uses a pure Python implementation that works out-of-the-box with standard packages:
-- No C++ compilation required
-- No complex dependencies
+This library uses a pure Python implementation that works out-of-the-box:
+- Simple pip installation
+- No compilation required
 - Works with standard `opencv-python` package
+- Cross-platform compatibility
 - Cross-platform compatibility
 - Clean project structure with testing files organized separately
 
@@ -810,16 +701,6 @@ cor.run("video.mp4", "--visualize")
 # Interactive calibration
 cor.calibrate_eyes("video.mp4")
 cor.calibrate_gaze("video.mp4")
-
-# Advanced analysis
-analysis = cor.analyze_attention("video.mp4")
-cor.generate_advanced_heatmap("video.mp4", "fixation")
-cor.export_analysis("video.mp4", "results.json")
-
-# Real-time processing
-cor.init_realtime(0)  # Camera 0
-gaze_data = cor.process_realtime_frame()
-cor.cleanup_realtime()
 ```
 
 ## Command Line Usage
@@ -888,9 +769,9 @@ Available in `cor.txt`:
 ## Performance
 
 Cor is optimized for performance with:
-- Native C++ implementation for core algorithms
-- OpenCV integration for efficient video processing
-- Multi-threaded processing capabilities
+- Efficient Python implementation
+- OpenCV integration for fast video processing
+- Optimized algorithms for gaze detection
 - Memory-efficient streaming for large video files
 
 ## Progress Tracking
@@ -898,7 +779,7 @@ Cor is optimized for performance with:
 All video processing operations include real-time progress bars:
 - **Video Processing**: Shows frame-by-frame progress during analysis
 - **Calibration**: Tracks progress through calibration frames
-- **Attention Analysis**: Displays progress during pattern analysis
+- **Statistical Analysis**: Shows progress during confidence assessment
 - **Heatmap Generation**: Shows processing status for visualization
 - **Benchmarking**: Real-time performance measurement progress
 
@@ -907,7 +788,7 @@ Progress bars use Unicode block characters (█) for clear visual feedback and d
 - Percentage completion
 - Operation-specific status messages
 
-**✅ v1.0.1 Fix**: Progress bars now actually appear during runtime (previously only worked in C++ mode).
+**✅ v1.0.1 Fix**: Progress bars now work reliably during runtime.
 
 ## Confidence Assessment
 
