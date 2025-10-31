@@ -4,6 +4,37 @@
 [![Python Version](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.5+-green.svg)](https://opencv.org/)
 
+## Major Changes v1.0.3
+
+**🎯 Advanced Batch Processing & PATH Management:**
+- **Enhanced Batch Processing**: Process entire folders, use pattern matching, and filter by video formats
+- **18 Video Format Support**: Comprehensive support for `.mp4`, `.avi`, `.mov`, `.mkv`, `.wmv`, `.flv`, `.webm`, `.m4v`, `.3gp`, `.asf`, `.rm`, `.rmvb`, `.vob`, `.ogv`, `.dv`, `.ts`, `.mts`, `.m2ts`
+- **Flexible PATH Management**: Set custom input/output paths, add search directories, automatic video discovery
+- **Recursive Folder Processing**: Process videos in subfolders with `--recursive` flag
+- **Pattern-Based Processing**: Use glob patterns like `*.mp4`, `*session*.avi` for selective processing
+
+**📊 Professional Confidence Assessment:**
+- **Automatic Confidence Analysis**: Real-time confidence assessment with detailed metrics display
+- **CSV Export**: Confidence data automatically saved to `confidence_results.csv` for analysis
+- **Organized Output Folders**: All results saved in dedicated folders (single video or batch processing)
+- **Comprehensive Metrics**: Detection rate, confidence distribution, overall accuracy scoring
+
+**🖥️ Advanced CLI Features:**
+- **Batch Folder Processing**: `--batch-folder /path/to/videos` processes all videos in directory
+- **Pattern Matching**: `--batch-pattern "*.mp4"` processes files matching patterns
+- **Format Filtering**: `--extensions mp4 avi` processes only specified formats
+- **Recursive Search**: `--recursive` includes subfolders in processing
+- **PATH Integration**: Full CLI support for custom input/output paths and search directories
+
+**🧹 Project Organization:**
+- **Documentation Consolidation**: Removed redundant files, integrated all information into README.md and Documentation.txt
+- **Clean File Structure**: Streamlined project with essential files only
+- **Enhanced API Documentation**: Complete function reference with examples and use cases
+
+**✅ Production Ready**: Library now provides enterprise-level batch processing capabilities with professional confidence assessment and flexible path management.
+
+---
+
 ## Major Changes v1.0.2
 
 **🚀 Professional CLI Integration:**
@@ -146,6 +177,65 @@ cor video.mp4 --calibrate          # Both calibrations
 cor --help-cor
 ```
 
+### Enhanced Batch Processing (New in v1.0.2)
+
+Cor now supports advanced batch processing with multiple input methods:
+
+```bash
+# Process all videos in a folder
+cor --batch-folder /path/to/videos
+
+# Include subfolders recursively
+cor --batch-folder /path/to/videos --recursive
+
+# Process specific video formats only
+cor --batch-folder /videos --extensions mp4 avi mov
+
+# Process videos matching patterns
+cor --batch-pattern "*.mp4"
+cor --batch-pattern "*session*.avi"
+cor --batch-pattern "experiment_*.mov"
+
+# Combine with visualization and custom output
+cor --batch-folder /project --recursive --visualize --output-path /results
+```
+
+**Supported Video Formats (18 total):**
+`.mp4`, `.avi`, `.mov`, `.mkv`, `.wmv`, `.flv`, `.webm`, `.m4v`, `.3gp`, `.asf`, `.rm`, `.rmvb`, `.vob`, `.ogv`, `.dv`, `.ts`, `.mts`, `.m2ts`
+
+### PATH Management (New in v1.0.2)
+
+Cor now supports flexible path management, allowing you to work with videos and outputs in any directory without moving files:
+
+```bash
+# Set custom input path for video files
+cor --input-path /path/to/videos video.mp4
+
+# Set custom output path for results
+cor --output-path /path/to/results video.mp4
+
+# Add search paths for video discovery
+cor --search-path /videos --search-path /backup video.mp4
+
+# Find videos using patterns
+cor --find-videos "*.mp4"
+cor --find-videos "*gaze*"
+
+# Combined path usage
+cor --input-path /videos --output-path /results --batch *.mp4 --visualize
+
+# Batch processing with custom paths
+cor --input-path /project/videos --output-path /project/analysis --batch *.mp4
+```
+
+**Path Features:**
+- **Input Path**: Set directory where video files are located
+- **Output Path**: Set directory where results will be saved  
+- **Search Paths**: Add multiple directories to search for videos
+- **Pattern Matching**: Find videos using glob patterns (e.g., `*.mp4`, `*session*.avi`)
+- **Automatic Resolution**: Videos found automatically in configured paths
+- **Organized Output**: Results saved in structured folders within custom output directory
+
 ## Quick Start
 
 ```python
@@ -160,6 +250,14 @@ cor.run("video.mp4")
 # With visualization video
 cor.run("video.mp4", "--visualize")
 
+# Enhanced batch processing (New in v1.0.2)
+cor.run_batch(["video1.mp4", "video2.mp4"])  # Multiple files
+cor.run_folder("/path/to/videos")            # All videos in folder
+cor.run_pattern("*.mp4")                     # Pattern matching
+
+# Advanced batch options
+cor.run_folder("/videos", recursive=True, extensions=['.mp4', '.avi'])
+
 # Automatic calibration
 cor.calibrate_eyes("video.mp4")
 cor.calibrate_gaze("video.mp4")
@@ -170,12 +268,77 @@ print(cor.version())
 
 ## Output Files
 
-When you run `cor.run("video.mp4")`, the library creates:
+When you run `cor.run("video.mp4")`, the library creates organized output in dedicated folders:
 
-- **`video_heatmap-pure.jpg`** - Pure heatmap visualization showing gaze intensity
-- **`video_heatmap-overlay.jpg`** - Heatmap overlaid on the 10th frame of the video
+**Single Video Processing:**
+```
+video_name/
+├── video_name_heatmap-pure.jpg     # Pure heatmap visualization
+├── video_name_heatmap-overlay.jpg  # Heatmap overlaid on 10th frame
+├── video_name_heatmap.mp4          # Visualization video (with --visualize)
+└── confidence_results.csv          # Confidence assessment data
+```
 
-**✨ v1.0.1 Improvements**: Heatmap images now match input video dimensions exactly with no titles, legends, or scaling artifacts - perfect for professional analysis, research publications, and further processing. Clean, minimal output suitable for academic and commercial use.
+**Batch Processing:**
+```
+batch_2025-10-31_14-30-45/
+├── video1_heatmap-pure.jpg
+├── video1_heatmap-overlay.jpg
+├── video2_heatmap-pure.jpg
+├── video2_heatmap-overlay.jpg
+└── confidence_results.csv          # All videos' confidence data
+```
+
+**✨ v1.0.2 Improvements**: 
+- **Organized Folders**: All outputs saved in dedicated folders (no more cluttered directories)
+- **Custom Output Paths**: Save results anywhere using `--output-path`
+- **Confidence Assessment**: Automatic confidence analysis with CSV export
+- **Exact Dimensions**: Heatmap images match input video dimensions exactly
+- **Professional Quality**: Clean, minimal output suitable for research and commercial use
+
+## Confidence Assessment (New in v1.0.2)
+
+After each gaze detection analysis, Cor automatically evaluates and displays the confidence in its accuracy:
+
+### Assessment Metrics
+- **Detection Rate**: Percentage of frames with successful gaze detection
+- **Average Confidence**: Mean confidence score across all detected gaze points
+- **Confidence Distribution**: Breakdown of high/medium/low confidence detections
+- **Overall Accuracy Confidence**: Composite score indicating reliability
+
+### Example Output
+```
+=== GAZE DETECTION CONFIDENCE ASSESSMENT ===
+📊 Analysis Results:
+   • Total frames processed: 1500
+   • Valid gaze points detected: 1342
+   • Detection rate: 89.5%
+   • Average confidence per point: 76.3%
+
+📈 Confidence Distribution:
+   • High confidence (≥80%): 892 points (66.5%)
+   • Medium confidence (60-79%): 321 points (23.9%)
+   • Low confidence (<60%): 129 points (9.6%)
+
+🎯 Overall Accuracy Confidence: 82.4%
+✅ Excellent - High reliability for research and analysis
+============================================
+```
+
+### Confidence Levels
+- **85%+**: Excellent - High reliability for research and analysis
+- **70-84%**: Good - Suitable for most applications
+- **55-69%**: Fair - Consider recalibration for better accuracy
+- **<55%**: Poor - Recalibration strongly recommended
+
+### CSV Export
+All confidence data is automatically saved to `confidence_results.csv` with headers:
+- Input Video Title
+- Overall Accuracy Confidence  
+- Average Confidence Per Point
+- Detection Rate
+- Valid Gaze Points Detected
+- Total Frames Processed
 
 When you run `cor.run("video.mp4", "--visualize")`, it additionally creates:
 

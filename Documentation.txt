@@ -1,9 +1,9 @@
 COR GAZE DETECTION LIBRARY - TECHNICAL DOCUMENTATION
 ==================================================
 
-VERSION: 1.0.2
+VERSION: 1.0.3
 LAST UPDATED: October 2024
-MAJOR UPDATE: Integrated CLI functionality, enhanced C extension documentation, professional user experience
+MAJOR UPDATE: Advanced batch processing, PATH management, confidence assessment, enhanced CLI functionality
 
 TABLE OF CONTENTS
 -----------------
@@ -25,16 +25,28 @@ applications. The library uses proven computer vision algorithms for robust dete
 across various lighting conditions and head poses.
 
 Key Features:
-- Multi-format video processing (MP4, AVI, MOV, MKV, WMV, FLV, WEBM)
-- Automatic calibration system for eye and gaze detection
+- Multi-format video processing (18 supported formats including MP4, AVI, MOV, MKV, WMV, FLV, WEBM)
+- Advanced batch processing with folder and pattern-based processing
+- Flexible PATH management with custom input/output directories
+- Automatic confidence assessment with CSV export
 - Professional heatmap generation with exact video dimension matching
-- Clean, publication-ready output (no titles, legends, or scaling artifacts)
+- Organized output folders for clean project management
+- Enhanced CLI with comprehensive batch processing options
+- Automatic calibration system for eye and gaze detection
 - Video visualization with gaze tracking overlays
 - Real-time progress tracking with Unicode progress bars (█)
-- Pure Python implementation - no compilation required
+- Pure Python implementation with optional C extension
 - Cross-platform compatibility (Windows, macOS, Linux)
 - Comprehensive configuration management (133+ parameters)
-- Repository organization with testing files in dedicated folder
+
+Version 1.0.3 Enhancements:
+- Enhanced batch processing: Process folders, use patterns, filter by format
+- PATH management: Custom input/output paths, search directories, automatic discovery
+- Confidence assessment: Real-time analysis with CSV export for research workflows
+- Organized output: Dedicated folders for single videos and batch processing
+- Advanced CLI: Folder processing, pattern matching, recursive search, format filtering
+- 18 video format support: Comprehensive format compatibility for diverse workflows
+- Documentation consolidation: Streamlined project structure with integrated documentation
 
 2. INSTALLATION AND SETUP
 --------------------------
@@ -390,7 +402,188 @@ cor.export_analysis(video_file, output_path=None)
     Returns: String path to exported file
     Example: export_path = cor.export_analysis("video.mp4")
 
-3.2 INTERNAL FUNCTIONS (C++ IMPLEMENTATION)
+3.2 PATH MANAGEMENT FUNCTIONS (NEW IN v1.0.2)
+
+cor.set_input_path(path)
+    Description: Sets custom input directory for video files
+    Parameters:
+        path (str): Absolute path to directory containing video files
+    Returns: Boolean indicating success (True if path exists)
+    Side Effects: All subsequent video operations will search this directory first
+    Example: cor.set_input_path("/project/videos")
+    Use Cases: Organize videos by project, work with network storage, batch processing
+
+cor.set_output_path(path)
+    Description: Sets custom output directory for all results
+    Parameters:
+        path (str): Absolute path where results should be saved
+    Returns: Boolean indicating success
+    Side Effects: Creates directory if it doesn't exist, all outputs saved here
+    Example: cor.set_output_path("/project/analysis")
+    Use Cases: Organize results by project, save to network storage, separate analysis runs
+
+cor.add_search_path(path)
+    Description: Adds directory to search paths for video discovery
+    Parameters:
+        path (str): Absolute path to directory to search
+    Returns: Boolean indicating success (True if path exists)
+    Side Effects: Path added to search list, videos found automatically
+    Example: cor.add_search_path("/backup/videos")
+    Use Cases: Multi-source video processing, backup locations, distributed storage
+
+cor.clear_paths()
+    Description: Clears all custom path configurations
+    Parameters: None
+    Returns: None
+    Side Effects: Resets to default behavior (current directory)
+    Example: cor.clear_paths()
+    Use Cases: Reset between projects, clean configuration
+
+cor.get_paths()
+    Description: Returns current path configuration
+    Parameters: None
+    Returns: Dictionary with input_path, output_path, and search_paths
+    Example: paths = cor.get_paths()
+    Use Cases: Debug path configuration, save/restore settings
+
+cor.find_videos(pattern="*.mp4", search_all_paths=True)
+    Description: Finds video files using glob patterns across configured paths
+    Parameters:
+        pattern (str): Glob pattern for matching files (default: "*.mp4")
+        search_all_paths (bool): Whether to search all configured paths (default: True)
+    Returns: List of absolute paths to matching video files
+    Example: videos = cor.find_videos("*session*.avi")
+    Use Cases: Batch processing, video discovery, pattern-based selection
+
+3.4 ENHANCED BATCH PROCESSING FUNCTIONS (NEW IN v1.0.2)
+
+cor.run_batch(video_files_or_folder, *args, **kwargs)
+    Description: Enhanced batch processing with multiple input methods
+    Parameters:
+        video_files_or_folder: Can be list of files, folder path, or pattern string
+        *args: Additional arguments (e.g., "--visualize")
+        **kwargs: Options like recursive=True, extensions=['.mp4', '.avi']
+    Returns: Dictionary with batch processing results
+    Examples:
+        cor.run_batch(["video1.mp4", "video2.mp4"])  # Multiple files
+        cor.run_batch("/path/to/videos")              # All videos in folder
+        cor.run_batch("*.mp4")                        # Pattern matching
+        cor.run_batch("/videos", recursive=True, extensions=['.mp4'])
+
+cor.run_folder(folder_path, *args, **kwargs)
+    Description: Process all videos in a folder (convenience function)
+    Parameters:
+        folder_path (str): Path to folder containing videos
+        *args: Additional arguments (e.g., "--visualize")
+        **kwargs: Options like recursive=True, extensions=['.mp4', '.avi']
+    Returns: Dictionary with processing results
+    Example: cor.run_folder("/project/videos", recursive=True)
+
+cor.run_pattern(pattern, *args, **kwargs)
+    Description: Process videos matching a glob pattern (convenience function)
+    Parameters:
+        pattern (str): Glob pattern (e.g., "*.mp4", "*session*.avi")
+        *args: Additional arguments (e.g., "--visualize")
+        **kwargs: Additional options
+    Returns: Dictionary with processing results
+    Example: cor.run_pattern("experiment_*.mp4", "--visualize")
+
+cor.find_all_videos_in_folder(folder_path=None, recursive=False)
+    Description: Find all supported video files in a folder
+    Parameters:
+        folder_path (str, optional): Folder to search (default: input_path or current)
+        recursive (bool): Search subfolders recursively (default: False)
+    Returns: List of absolute paths to video files
+    Supported Formats: 18 formats including .mp4, .avi, .mov, .mkv, .wmv, etc.
+    Example: videos = cor.find_all_videos_in_folder("/data", recursive=True)
+
+cor.find_videos_by_extension(extension, folder_path=None, recursive=False)
+    Description: Find videos by specific extension in folder
+    Parameters:
+        extension (str): Video extension (e.g., ".mp4", "avi")
+        folder_path (str, optional): Folder to search (default: input_path or current)
+        recursive (bool): Search subfolders recursively (default: False)
+    Returns: List of absolute paths to matching video files
+    Example: mp4_videos = cor.find_videos_by_extension(".mp4", "/data")
+
+cor.get_supported_formats()
+    Description: Get list of all supported video formats
+    Parameters: None
+    Returns: List of supported file extensions
+    Formats: ['.mp4', '.avi', '.mov', '.mkv', '.wmv', '.flv', '.webm', 
+              '.m4v', '.3gp', '.asf', '.rm', '.rmvb', '.vob', '.ogv', 
+              '.dv', '.ts', '.mts', '.m2ts']
+    Example: formats = cor.get_supported_formats()
+
+cor.is_video_file(file_path)
+    Description: Check if file is a supported video format
+    Parameters:
+        file_path (str): Path to file to check
+    Returns: Boolean indicating if file is a supported video
+    Example: is_video = cor.is_video_file("sample.mp4")
+
+ENHANCED BATCH USAGE EXAMPLES:
+
+Basic Batch Processing:
+    # Process multiple specific files
+    cor.run_batch(["video1.mp4", "video2.avi", "video3.mov"])
+    
+    # Process all videos in a folder
+    cor.run_batch("/project/videos")
+    
+    # Process videos matching pattern
+    cor.run_batch("session_*.mp4")
+
+Advanced Batch Processing:
+    # Recursive folder processing with specific formats
+    cor.run_batch("/project", recursive=True, extensions=['.mp4', '.avi'])
+    
+    # Batch processing with visualization
+    cor.run_folder("/videos", "--visualize", recursive=True)
+    
+    # Pattern-based processing with custom output
+    cor.set_output_path("/analysis")
+    cor.run_pattern("experiment_*.mp4", "--visualize")
+
+Multi-Format Processing:
+    # Find all supported videos
+    all_videos = cor.find_all_videos_in_folder("/data", recursive=True)
+    print(f"Found {len(all_videos)} videos")
+    
+    # Process by format
+    mp4_videos = cor.find_videos_by_extension(".mp4", "/data")
+    avi_videos = cor.find_videos_by_extension(".avi", "/data")
+    
+    # Batch process each format separately
+    cor.run_batch(mp4_videos, "--visualize")
+    cor.run_batch(avi_videos)
+
+PATH USAGE EXAMPLES:
+
+Basic Path Setup:
+    cor.set_input_path("/data/recordings")
+    cor.set_output_path("/analysis/results")
+    cor.run("experiment_01.mp4")  # Automatically finds video and saves results
+
+Multi-Source Processing:
+    cor.add_search_path("/camera1/recordings")
+    cor.add_search_path("/camera2/recordings")
+    videos = cor.find_videos("*.mp4")
+    for video in videos:
+        cor.run(video)
+
+Enhanced Batch Processing with Paths:
+    cor.set_input_path("/project/videos")
+    cor.set_output_path("/project/analysis")
+    
+    # Process all videos in input path
+    cor.run_folder(None, recursive=True)  # Uses input_path
+    
+    # Process specific patterns
+    session_videos = cor.find_videos("session_*.mp4")
+    cor.run_batch(session_videos, "--visualize")
+
+3.3 INTERNAL FUNCTIONS (C++ IMPLEMENTATION)
 
 detect_eyes(frame, calibration_data)
     Description: Detects eye regions in a single frame
@@ -480,6 +673,64 @@ Example Content:
     
     pupil_line_color=255,255,0
     # RGB color values for pupil connection lines
+
+4.4 CONFIDENCE ASSESSMENT (NEW IN v1.0.2)
+
+Automatic Confidence Analysis:
+    After each gaze detection analysis, Cor automatically evaluates the reliability 
+    of the results and provides detailed confidence metrics both in terminal output 
+    and CSV export format.
+
+Confidence Metrics:
+    - Detection Rate: Percentage of frames with successful gaze detection
+    - Average Confidence: Mean confidence score across all detected gaze points  
+    - Confidence Distribution: Breakdown of high/medium/low confidence detections
+    - Overall Accuracy Confidence: Composite score indicating overall reliability
+
+Confidence Calculation:
+    Overall Accuracy = (Average Confidence × 0.5) + (Detection Rate × 0.3) + (High Confidence Ratio × 0.2)
+    
+    This weighted formula considers:
+    - Individual point quality (50% weight)
+    - Detection consistency (30% weight)  
+    - High-quality detection ratio (20% weight)
+
+Confidence Levels:
+    - 85%+: Excellent - High reliability for research and analysis
+    - 70-84%: Good - Suitable for most applications
+    - 55-69%: Fair - Consider recalibration for better accuracy
+    - <55%: Poor - Recalibration strongly recommended
+
+Terminal Output Example:
+    === GAZE DETECTION CONFIDENCE ASSESSMENT ===
+    📊 Analysis Results:
+       • Total frames processed: 1500
+       • Valid gaze points detected: 1342
+       • Detection rate: 89.5%
+       • Average confidence per point: 76.3%
+    
+    📈 Confidence Distribution:
+       • High confidence (≥80%): 892 points (66.5%)
+       • Medium confidence (60-79%): 321 points (23.9%)
+       • Low confidence (<60%): 129 points (9.6%)
+    
+    🎯 Overall Accuracy Confidence: 82.4%
+    ✅ Excellent - High reliability for research and analysis
+    ============================================
+
+CSV Export Format:
+    File: confidence_results.csv (saved in output folder)
+    Headers: Input Video Title, Overall Accuracy Confidence, Average Confidence Per Point,
+             Detection Rate, Valid Gaze Points Detected, Total Frames Processed
+    
+    Single Video: One row per video processed
+    Batch Processing: All videos in same CSV file for easy comparison
+
+Usage:
+    Confidence assessment runs automatically with every cor.run() call
+    No additional parameters required - assessment appears after processing
+    CSV file created/updated automatically in output folder
+    Use for quality control, research validation, and batch analysis comparison
 
 5. ALGORITHMS AND METHODS
 -------------------------

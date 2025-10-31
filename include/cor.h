@@ -80,12 +80,21 @@ PyObject* cor_init_realtime(PyObject* self, PyObject* args);
 PyObject* cor_process_realtime_frame(PyObject* self, PyObject* args);
 PyObject* cor_cleanup_realtime(PyObject* self, PyObject* args);
 PyObject* cor_export_analysis(PyObject* self, PyObject* args);
-PyObject* cor_analyze_attention(PyObject* self, PyObject* args);
-PyObject* cor_generate_advanced_heatmap(PyObject* self, PyObject* args);
-PyObject* cor_init_realtime(PyObject* self, PyObject* args);
-PyObject* cor_process_realtime_frame(PyObject* self, PyObject* args);
-PyObject* cor_cleanup_realtime(PyObject* self, PyObject* args);
-PyObject* cor_export_analysis(PyObject* self, PyObject* args);
+
+// PATH management function declarations
+PyObject* cor_set_input_path(PyObject* self, PyObject* args);
+PyObject* cor_set_output_path(PyObject* self, PyObject* args);
+PyObject* cor_add_search_path(PyObject* self, PyObject* args);
+PyObject* cor_clear_paths(PyObject* self, PyObject* args);
+PyObject* cor_get_paths(PyObject* self, PyObject* args);
+PyObject* cor_find_videos(PyObject* self, PyObject* args);
+PyObject* cor_find_all_videos_in_folder(PyObject* self, PyObject* args);
+PyObject* cor_find_videos_by_extension(PyObject* self, PyObject* args);
+PyObject* cor_get_supported_formats(PyObject* self, PyObject* args);
+PyObject* cor_is_video_file(PyObject* self, PyObject* args);
+PyObject* cor_run_batch(PyObject* self, PyObject* args, PyObject* kwargs);
+PyObject* cor_run_folder(PyObject* self, PyObject* args, PyObject* kwargs);
+PyObject* cor_run_pattern(PyObject* self, PyObject* args, PyObject* kwargs);
 
 // Internal functions
 int load_eye_detection_config(const char* filename);
