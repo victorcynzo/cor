@@ -927,7 +927,7 @@ for video in video_files:
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+We welcome contributions!
 
 ## License
 
@@ -951,23 +951,3 @@ If you use Cor in your research, please cite:
 - **Documentation**: [Full Documentation](https://cor-gaze.readthedocs.io/)
 - **Issues**: [GitHub Issues](https://github.com/cor-team/cor/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/cor-team/cor/discussions)
-
-## Changelog
-
-### v1.0.1 (Latest)
-- **Fixed Critical Heatmap Bug**: Resolved boolean indexing error that prevented heatmap generation
-- **Exact Video Dimensions**: Heatmap outputs now match input video dimensions precisely (no scaling artifacts)
-- **Clean Professional Output**: Removed titles and legends from heatmap images for publication-ready visualization
-- **Working Progress Bars**: Implemented Unicode progress bars (█) that actually display during runtime
-- **Enhanced User Experience**: Real-time progress tracking for video processing, calibration, and heatmap generation
-- **Improved Reliability**: Fixed meshgrid-based Gaussian blob generation for accurate visualization
-- **Repository Organization**: Moved testing/example files to `testing_examples/` folder for cleaner structure
-- **Enhanced Configuration**: Improved `get_config()` and `set_config()` functions with better error handling
-- **Better Documentation**: Updated README and Documentation.txt with all latest features and fixes
-
-### v1.0.0
-- Initial release
-- Core gaze detection functionality
-- Interactive calibration tools
-- Heatmap generation with multiple color schemes
-- Multi-format video support
