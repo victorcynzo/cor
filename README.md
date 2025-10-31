@@ -622,21 +622,6 @@ python demo_test.py             # Run demo with test video
 python build_and_test.py        # Full installation and test
 ```
 
-## Batch Processing
-
-```python
-import cor
-import os
-
-video_files = ["video1.mp4", "video2.avi", "video3.mov"]
-
-for video in video_files:
-    if os.path.exists(video):
-        print(f"Processing {video}...")
-        cor.run(video, "--visualize")
-        print(f"Completed: {video}")
-```
-
 ## Technical Details
 
 ### Algorithms Used
@@ -691,30 +676,6 @@ This library uses a pure Python implementation that works out-of-the-box:
 - Cross-platform compatibility
 - Cross-platform compatibility
 - Clean project structure with testing files organized separately
-
-## Basic gaze detection
-cor.run("video.mp4")
-
-# With visualization
-cor.run("video.mp4", "--visualize")
-
-# Interactive calibration
-cor.calibrate_eyes("video.mp4")
-cor.calibrate_gaze("video.mp4")
-```
-
-## Command Line Usage
-
-```bash
-# Get help
-python -c "import cor; cor.help()"
-
-# Run gaze detection
-python -c "import cor; cor.run('video.mp4')"
-
-# Run with visualization
-python -c "import cor; cor.run('video.mp4', '--visualize')"
-```
 
 ## Core Functions
 
@@ -824,44 +785,6 @@ After each gaze detection analysis, Cor automatically evaluates and displays the
 - **70-84%**: Good - Suitable for most applications
 - **55-69%**: Fair - Consider recalibration for better accuracy
 - **<55%**: Poor - Recalibration strongly recommended
-
-## Examples
-
-### Basic Workflow
-
-```python
-import cor
-
-# Step 1: Calibrate eye detection (optional)
-cor.calibrate_eyes("sample_video.mp4")
-
-# Step 2: Calibrate gaze detection (optional)  
-cor.calibrate_gaze("sample_video.mp4")
-
-# Step 3: Run analysis
-cor.run("sample_video.mp4")
-
-# Step 4: Run with visualization
-cor.run("sample_video.mp4", "--visualize")
-```
-
-### Batch Processing
-
-```python
-import cor
-import os
-
-video_files = ["video1.mp4", "video2.avi", "video3.mov"]
-
-for video in video_files:
-    if os.path.exists(video):
-        cor.run(video, "--visualize")
-        print(f"Processed: {video}")
-```
-
-## Contributing
-
-We welcome contributions!
 
 ## License
 
