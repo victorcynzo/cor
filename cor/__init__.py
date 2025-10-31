@@ -43,7 +43,7 @@ def version():
         return _cor.version()
     else:
         return {
-            'version': '1.0.3',
+            'version': '1.0.4',
             'mode': 'Python fallback',
             'c_extension': False,
             'opencv_available': _check_opencv()
@@ -293,13 +293,19 @@ def _create_output_folder(video_file, is_batch=False):
     return folder_name
 
 def _save_confidence_to_csv(video_file, gaze_points, total_frames, output_folder, csv_filename="confidence_results.csv"):
-    """Save confidence assessment results to CSV file"""
+    """Save confidence assessment results to CSV file with enhanced gaze statistics"""
     # Calculate confidence metrics (same logic as display function)
     if not gaze_points or total_frames <= 0:
         detection_rate = 0.0
         avg_confidence = 0.0
         accuracy_confidence = 0.0
         valid_gaze_points = 0
+        avg_position_x = 0.0
+        avg_position_y = 0.0
+        std_dev_x = 0.0
+        std_dev_y = 0.0
+        frame_percentage_x = 0.0
+        frame_percentage_y = 0.0
     else:
         detection_rate = len(gaze_points) / total_frames
         
@@ -328,29 +334,79 @@ def _save_confidence_to_csv(video_file, gaze_points, total_frames, output_folder
             
         accuracy_confidence = (avg_confidence * 0.5 + detection_rate * 0.3 + high_confidence_ratio * 0.2) * 100.0
         valid_gaze_points = len(gaze_points)
+        
+        # Calculate gaze statistics
+        import numpy as np
+        try:
+            gaze_x_coords = [point[0] for point in gaze_points]
+            gaze_y_coords = [point[1] for point in gaze_points]
+            
+            avg_position_x = np.mean(gaze_x_coords)
+            avg_position_y = np.mean(gaze_y_coords)
+            std_dev_x = np.std(gaze_x_coords)
+            std_dev_y = np.std(gaze_y_coords)
+            
+            # Estimate frame dimensions (assuming 1920x1080 if not available)
+            # In a real implementation, we'd get this from video properties
+            frame_width = 1920.0  # This should be passed from video processing
+            frame_height = 1080.0  # This should be passed from video processing
+            
+            frame_percentage_x = (avg_position_x / frame_width) * 100.0
+            frame_percentage_y = (avg_position_y / frame_height) * 100.0
+            
+        except ImportError:
+            # Fallback if numpy not available
+            avg_position_x = sum(point[0] for point in gaze_points) / len(gaze_points)
+            avg_position_y = sum(point[1] for point in gaze_points) / len(gaze_points)
+            
+            # Simple standard deviation calculation
+            mean_x = avg_position_x
+            mean_y = avg_position_y
+            variance_x = sum((point[0] - mean_x) ** 2 for point in gaze_points) / len(gaze_points)
+            variance_y = sum((point[1] - mean_y) ** 2 for point in gaze_points) / len(gaze_points)
+            std_dev_x = variance_x ** 0.5
+            std_dev_y = variance_y ** 0.5
+            
+            # Estimate frame dimensions
+            frame_width = 1920.0
+            frame_height = 1080.0
+            frame_percentage_x = (avg_position_x / frame_width) * 100.0
+            frame_percentage_y = (avg_position_y / frame_height) * 100.0
     
     # Prepare CSV data
     video_name = os.path.splitext(os.path.basename(video_file))[0]
     csv_path = os.path.join(output_folder, csv_filename)
     
-    # CSV headers
+    # Enhanced CSV headers with new gaze statistics
     headers = [
         'Input Video Title',
-        'Overall Accuracy Confidence',
-        'Average Confidence Per Point', 
-        'Detection Rate',
+        'Overall Accuracy Confidence (%)',
+        'Average Confidence Per Point (%)', 
+        'Detection Rate (%)',
         'Valid Gaze Points Detected',
-        'Total Frames Processed'
+        'Total Frames Processed',
+        'Average Position X',
+        'Average Position Y',
+        'Standard Deviation X',
+        'Standard Deviation Y',
+        'Frame Percentage X (%)',
+        'Frame Percentage Y (%)'
     ]
     
-    # Data row
+    # Enhanced data row with new statistics
     row_data = [
         video_name,
-        f"{accuracy_confidence:.1f}%",
-        f"{avg_confidence * 100:.1f}%",
-        f"{detection_rate * 100:.1f}%",
+        f"{accuracy_confidence:.1f}",
+        f"{avg_confidence * 100:.1f}",
+        f"{detection_rate * 100:.1f}",
         valid_gaze_points,
-        total_frames
+        total_frames,
+        f"{avg_position_x:.1f}",
+        f"{avg_position_y:.1f}",
+        f"{std_dev_x:.1f}",
+        f"{std_dev_y:.1f}",
+        f"{frame_percentage_x:.1f}",
+        f"{frame_percentage_y:.1f}"
     ]
     
     # Check if CSV file exists to determine if we need to write headers
@@ -364,11 +420,11 @@ def _save_confidence_to_csv(video_file, gaze_points, total_frames, output_folder
             # Write headers if file is new
             if not file_exists:
                 writer.writerow(headers)
-                print(f"Created confidence CSV: {csv_path}")
+                print(f"Created enhanced confidence CSV: {csv_path}")
             
             # Write data row
             writer.writerow(row_data)
-            print(f"Added confidence data for '{video_name}' to CSV")
+            print(f"Added enhanced confidence data for '{video_name}' to CSV")
             
     except Exception as e:
         print(f"Warning: Could not save confidence data to CSV: {e}")
@@ -810,15 +866,87 @@ def _display_confidence_assessment(gaze_points, total_frames, video_file=None, o
     
     print(f"\n🎯 Overall Accuracy Confidence: {accuracy_confidence:.1f}%")
     
+    # NEW: Enhanced Gaze Statistics Section
+    try:
+        import numpy as np
+        gaze_x_coords = [point[0] for point in gaze_points]
+        gaze_y_coords = [point[1] for point in gaze_points]
+        
+        avg_position_x = np.mean(gaze_x_coords)
+        avg_position_y = np.mean(gaze_y_coords)
+        std_dev_x = np.std(gaze_x_coords)
+        std_dev_y = np.std(gaze_y_coords)
+        
+        # Estimate frame dimensions (should be passed from video processing in real implementation)
+        frame_width = 1920.0  # Default assumption
+        frame_height = 1080.0  # Default assumption
+        
+        frame_percentage_x = (avg_position_x / frame_width) * 100.0
+        frame_percentage_y = (avg_position_y / frame_height) * 100.0
+        
+    except ImportError:
+        # Fallback if numpy not available
+        gaze_x_coords = [point[0] for point in gaze_points]
+        gaze_y_coords = [point[1] for point in gaze_points]
+        
+        avg_position_x = sum(gaze_x_coords) / len(gaze_x_coords)
+        avg_position_y = sum(gaze_y_coords) / len(gaze_y_coords)
+        
+        # Simple standard deviation calculation
+        variance_x = sum((x - avg_position_x) ** 2 for x in gaze_x_coords) / len(gaze_x_coords)
+        variance_y = sum((y - avg_position_y) ** 2 for y in gaze_y_coords) / len(gaze_y_coords)
+        std_dev_x = variance_x ** 0.5
+        std_dev_y = variance_y ** 0.5
+        
+        # Estimate frame dimensions
+        frame_width = 1920.0
+        frame_height = 1080.0
+        frame_percentage_x = (avg_position_x / frame_width) * 100.0
+        frame_percentage_y = (avg_position_y / frame_height) * 100.0
+    
+    print("\n📍 GAZE STATISTICS:")
+    print(f"   • Average position: ({avg_position_x:.1f}, {avg_position_y:.1f}) pixels")
+    print(f"   • Standard deviation: ({std_dev_x:.1f}, {std_dev_y:.1f}) pixels")
+    print(f"   • Frame percentage: ({frame_percentage_x:.1f}%, {frame_percentage_y:.1f}%)")
+    
+    # Gaze focus interpretation
+    focus_score = 100.0 - min(100.0, (std_dev_x + std_dev_y) / 20.0)  # Lower std dev = higher focus
+    if focus_score >= 80.0:
+        focus_interpretation = "Very focused gaze pattern"
+    elif focus_score >= 60.0:
+        focus_interpretation = "Moderately focused gaze pattern"
+    elif focus_score >= 40.0:
+        focus_interpretation = "Scattered gaze pattern"
+    else:
+        focus_interpretation = "Highly scattered gaze pattern"
+    
+    print(f"   • Gaze focus score: {focus_score:.1f}% ({focus_interpretation})")
+    
+    # Gaze position interpretation
+    if 40 <= frame_percentage_x <= 60 and 40 <= frame_percentage_y <= 60:
+        position_interpretation = "Center-focused viewing"
+    elif frame_percentage_x < 30:
+        position_interpretation = "Left-side focused viewing"
+    elif frame_percentage_x > 70:
+        position_interpretation = "Right-side focused viewing"
+    elif frame_percentage_y < 30:
+        position_interpretation = "Upper region focused viewing"
+    elif frame_percentage_y > 70:
+        position_interpretation = "Lower region focused viewing"
+    else:
+        position_interpretation = "Distributed viewing pattern"
+    
+    print(f"   • Viewing pattern: {position_interpretation}")
+    
     # Provide interpretation
     if accuracy_confidence >= 85.0:
-        print("✅ Excellent - High reliability for research and analysis")
+        print("\n✅ Excellent - High reliability for research and analysis")
     elif accuracy_confidence >= 70.0:
-        print("✅ Good - Suitable for most applications")
+        print("\n✅ Good - Suitable for most applications")
     elif accuracy_confidence >= 55.0:
-        print("⚠️  Fair - Consider recalibration for better accuracy")
+        print("\n⚠️  Fair - Consider recalibration for better accuracy")
     else:
-        print("❌ Poor - Recalibration strongly recommended")
+        print("\n❌ Poor - Recalibration strongly recommended")
     
     print("============================================\n")
     

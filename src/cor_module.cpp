@@ -86,7 +86,7 @@ PyMODINIT_FUNC PyInit_cor(void) {
     }
     
     // Add version information
-    PyModule_AddStringConstant(module, "__version__", "1.0.3");
+    PyModule_AddStringConstant(module, "__version__", "1.0.4");
     PyModule_AddIntConstant(module, "VERSION_MAJOR", COR_VERSION_MAJOR);
     PyModule_AddIntConstant(module, "VERSION_MINOR", COR_VERSION_MINOR);
     PyModule_AddIntConstant(module, "VERSION_PATCH", COR_VERSION_PATCH);
@@ -423,7 +423,7 @@ void print_progress_bar(int current, int total, const char* prefix = "Progress",
     }
 }
 
-// Confidence assessment utility
+// Enhanced confidence assessment utility with gaze statistics
 void display_confidence_assessment(const std::vector<GazePoint>& gaze_points, int total_frames) {
     if (gaze_points.empty() || total_frames <= 0) {
         printf("\n=== GAZE DETECTION CONFIDENCE ASSESSMENT ===\n");
@@ -458,6 +458,38 @@ void display_confidence_assessment(const std::vector<GazePoint>& gaze_points, in
     // Calculate overall accuracy confidence
     float accuracy_confidence = (average_confidence * 0.5f + detection_rate * 0.3f + high_confidence_ratio * 0.2f) * 100.0f;
     
+    // Calculate enhanced gaze statistics
+    float sum_x = 0.0f, sum_y = 0.0f;
+    for (const auto& point : gaze_points) {
+        sum_x += point.x;
+        sum_y += point.y;
+    }
+    float avg_position_x = sum_x / gaze_points.size();
+    float avg_position_y = sum_y / gaze_points.size();
+    
+    // Calculate standard deviation
+    float variance_x = 0.0f, variance_y = 0.0f;
+    for (const auto& point : gaze_points) {
+        variance_x += (point.x - avg_position_x) * (point.x - avg_position_x);
+        variance_y += (point.y - avg_position_y) * (point.y - avg_position_y);
+    }
+    variance_x /= gaze_points.size();
+    variance_y /= gaze_points.size();
+    float std_dev_x = sqrt(variance_x);
+    float std_dev_y = sqrt(variance_y);
+    
+    // Convert normalized coordinates to pixel coordinates (assuming 1920x1080)
+    float frame_width = 1920.0f;
+    float frame_height = 1080.0f;
+    float avg_pixel_x = avg_position_x * frame_width;
+    float avg_pixel_y = avg_position_y * frame_height;
+    float std_pixel_x = std_dev_x * frame_width;
+    float std_pixel_y = std_dev_y * frame_height;
+    
+    // Frame percentage
+    float frame_percentage_x = avg_position_x * 100.0f;
+    float frame_percentage_y = avg_position_y * 100.0f;
+    
     // Display assessment
     printf("\n=== GAZE DETECTION CONFIDENCE ASSESSMENT ===\n");
     printf("📊 Analysis Results:\n");
@@ -475,15 +507,53 @@ void display_confidence_assessment(const std::vector<GazePoint>& gaze_points, in
     
     printf("\n🎯 Overall Accuracy Confidence: %.1f%%\n", accuracy_confidence);
     
+    // NEW: Enhanced Gaze Statistics Section
+    printf("\n📍 GAZE STATISTICS:\n");
+    printf("   • Average position: (%.1f, %.1f) pixels\n", avg_pixel_x, avg_pixel_y);
+    printf("   • Standard deviation: (%.1f, %.1f) pixels\n", std_pixel_x, std_pixel_y);
+    printf("   • Frame percentage: (%.1f%%, %.1f%%)\n", frame_percentage_x, frame_percentage_y);
+    
+    // Gaze focus interpretation
+    float focus_score = 100.0f - std::min(100.0f, (std_pixel_x + std_pixel_y) / 20.0f);
+    const char* focus_interpretation;
+    if (focus_score >= 80.0f) {
+        focus_interpretation = "Very focused gaze pattern";
+    } else if (focus_score >= 60.0f) {
+        focus_interpretation = "Moderately focused gaze pattern";
+    } else if (focus_score >= 40.0f) {
+        focus_interpretation = "Scattered gaze pattern";
+    } else {
+        focus_interpretation = "Highly scattered gaze pattern";
+    }
+    printf("   • Gaze focus score: %.1f%% (%s)\n", focus_score, focus_interpretation);
+    
+    // Gaze position interpretation
+    const char* position_interpretation;
+    if (frame_percentage_x >= 40.0f && frame_percentage_x <= 60.0f && 
+        frame_percentage_y >= 40.0f && frame_percentage_y <= 60.0f) {
+        position_interpretation = "Center-focused viewing";
+    } else if (frame_percentage_x < 30.0f) {
+        position_interpretation = "Left-side focused viewing";
+    } else if (frame_percentage_x > 70.0f) {
+        position_interpretation = "Right-side focused viewing";
+    } else if (frame_percentage_y < 30.0f) {
+        position_interpretation = "Upper region focused viewing";
+    } else if (frame_percentage_y > 70.0f) {
+        position_interpretation = "Lower region focused viewing";
+    } else {
+        position_interpretation = "Distributed viewing pattern";
+    }
+    printf("   • Viewing pattern: %s\n", position_interpretation);
+    
     // Provide interpretation
     if (accuracy_confidence >= 85.0f) {
-        printf("✅ Excellent - High reliability for research and analysis\n");
+        printf("\n✅ Excellent - High reliability for research and analysis\n");
     } else if (accuracy_confidence >= 70.0f) {
-        printf("✅ Good - Suitable for most applications\n");
+        printf("\n✅ Good - Suitable for most applications\n");
     } else if (accuracy_confidence >= 55.0f) {
-        printf("⚠️  Fair - Consider recalibration for better accuracy\n");
+        printf("\n⚠️  Fair - Consider recalibration for better accuracy\n");
     } else {
-        printf("❌ Poor - Recalibration strongly recommended\n");
+        printf("\n❌ Poor - Recalibration strongly recommended\n");
     }
     
     printf("============================================\n\n");
@@ -499,7 +569,7 @@ rsion information function
 PyObject* cor_version(PyObject* self, PyObject* args) {
     PyObject* version_dict = PyDict_New();
     
-    PyDict_SetItemString(version_dict, "version", PyUnicode_FromString("1.0.1"));
+    PyDict_SetItemString(version_dict, "version", PyUnicode_FromString("1.0.4"));
     PyDict_SetItemString(version_dict, "major", PyLong_FromLong(COR_VERSION_MAJOR));
     PyDict_SetItemString(version_dict, "minor", PyLong_FromLong(COR_VERSION_MINOR));
     PyDict_SetItemString(version_dict, "patch", PyLong_FromLong(COR_VERSION_PATCH));

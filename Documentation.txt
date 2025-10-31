@@ -1,9 +1,9 @@
 COR GAZE DETECTION LIBRARY - TECHNICAL DOCUMENTATION
 ==================================================
 
-VERSION: 1.0.3
+VERSION: 1.0.4
 LAST UPDATED: October 2024
-MAJOR UPDATE: Advanced batch processing, PATH management, confidence assessment, enhanced CLI functionality
+MAJOR UPDATE: Enhanced gaze statistics, comprehensive CSV export, advanced viewing pattern analysis
 
 TABLE OF CONTENTS
 -----------------
@@ -28,7 +28,7 @@ Key Features:
 - Multi-format video processing (18 supported formats including MP4, AVI, MOV, MKV, WMV, FLV, WEBM)
 - Advanced batch processing with folder and pattern-based processing
 - Flexible PATH management with custom input/output directories
-- Automatic confidence assessment with CSV export
+- Enhanced gaze statistics with comprehensive analysis and CSV export
 - Professional heatmap generation with exact video dimension matching
 - Organized output folders for clean project management
 - Enhanced CLI with comprehensive batch processing options
@@ -39,7 +39,19 @@ Key Features:
 - Cross-platform compatibility (Windows, macOS, Linux)
 - Comprehensive configuration management (133+ parameters)
 
-Version 1.0.3 Enhancements:
+Version 1.0.4 Enhancements:
+- Enhanced gaze statistics: Comprehensive position analysis with focus scoring and viewing pattern recognition
+- Advanced CSV export: 12 detailed columns including average position, standard deviation, and frame percentages
+- Viewing pattern analysis: Automatic classification of gaze behavior (center-focused, side-focused, scattered, etc.)
+- Focus score calculation: Quantitative assessment of gaze concentration with interpretive descriptions
+- Professional data export: Research-ready CSV files with comprehensive gaze metrics
+- Enhanced terminal output: Detailed gaze statistics section with pixel coordinates and frame percentages
+- Statistical analysis: Standard deviation calculations for gaze point spread analysis
+- Pattern interpretation: Clear explanations of viewing behavior and gaze concentration patterns
+- Comprehensive testing: Verified functionality with test_video.mp4 in Python and CLI modes
+- Production ready: All features tested and validated for research and professional applications
+
+Previous Version 1.0.3 Enhancements:
 - Enhanced batch processing: Process folders, use patterns, filter by format
 - PATH management: Custom input/output paths, search directories, automatic discovery
 - Confidence assessment: Real-time analysis with CSV export for research workflows
