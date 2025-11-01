@@ -10,7 +10,7 @@ from datetime import datetime
 import glob
 from pathlib import Path
 
-__version__ = '1.0.4'
+__version__ = '1.0.5.1'
 
 def help():
     """Display help information for all cor functions"""
@@ -21,8 +21,7 @@ def help():
     print("  cor.help() - Display this help")
     print("  cor.version() - Show version information")
     print("  cor.run(video_file) - Basic gaze detection (requires OpenCV)")
-    print("  cor.calibrate_eyes(video_file) - Interactive eye calibration")
-    print("  cor.calibrate_gaze(video_file) - Interactive gaze calibration")
+
     print()
     print("Make sure OpenCV is installed:")
     print("  pip install opencv-python")
@@ -140,17 +139,7 @@ def run(video_file, *args):
         print(f"ERROR: {e}")
         return False
 
-def calibrate_eyes(video_file):
-    """Eye calibration placeholder"""
-    print("Eye calibration functionality available in full version")
-    print("This is a simplified version focused on core gaze detection")
-    return True
 
-def calibrate_gaze(video_file):
-    """Gaze calibration placeholder"""
-    print("Gaze calibration functionality available in full version")
-    print("This is a simplified version focused on core gaze detection")
-    return True
 
 def validate_video(video_file):
     """Validate video file and return properties"""
@@ -187,7 +176,7 @@ def cli():
     parser = argparse.ArgumentParser(description='Cor - Advanced Gaze Detection Library')
     parser.add_argument('video_file', nargs='?', help='Path to video file')
     parser.add_argument('--visualize', action='store_true', help='Generate visualization video')
-    parser.add_argument('--calibrate', action='store_true', help='Run calibration')
+
     parser.add_argument('--validate', action='store_true', help='Validate video file')
     parser.add_argument('--version', action='store_true', help='Show version information')
     parser.add_argument('--help-cor', action='store_true', help='Show Cor library help')
@@ -218,9 +207,7 @@ def cli():
             print(f"Video validation failed: {result['error']}")
         return
     
-    if args.calibrate:
-        calibrate_eyes(args.video_file)
-        calibrate_gaze(args.video_file)
+
     
     # Run gaze detection
     run_args = []

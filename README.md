@@ -4,6 +4,127 @@
 [![Python Version](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
 [![OpenCV](https://img.shields.io/badge/OpenCV-4.5+-green.svg)](https://opencv.org/)
 
+## Smaller Changes v1.0.5.1 ALPHA
+
+**📚 Documentation Cleanup & Accuracy Improvements:**
+
+**🔍 Core Functions Documentation:**
+- **Duplicate Sections Removed**: Eliminated duplicate "Core Functions" sections in README
+- **Accurate Function Descriptions**: Updated Core Functions section to reflect actual implementation
+- **Path Management Functions**: Added documentation for `set_input_path()`, `set_output_path()`, `clear_paths()`, `get_paths()`
+- **Honest Calibration Documentation**: Clarified that calibration functions currently only display informational messages
+
+**🚫 Non-Existent Features Removed:**
+- **CLI Options Cleanup**: Removed documentation for non-existent CLI options (`--extract-frames`, `--benchmark`, `--config`, `--get-config`)
+- **Batch Processing**: Removed references to non-implemented batch processing CLI options and functions
+- **PyPI Installation Warning**: Added warning about PyPI package name conflict and removed `pip install cor` instructions
+
+**✅ Installation & Usage Clarification:**
+- **Source Installation Only**: Updated all installation instructions to use source installation (`git clone` + `pip install -e .`)
+- **Usage Methods Reorganization**: Consolidated CLI and Python usage examples into clear, organized sections
+- **Feature Consolidation**: Merged duplicate Features sections and removed redundant Performance sections
+
+**🎯 Non-Functional Feature Removal:**
+- **Removed Misleading Claims**: Updated documentation to remove references to "interactive calibration system"
+- **Deleted Placeholder Functions**: Completely removed `cor.calibrate_eyes()` and `cor.calibrate_gaze()` functions that only displayed messages
+- **Removed CLI Option**: Eliminated `--calibrate` CLI option that provided no actual functionality
+- **Clean Function Set**: Library now only exposes working functionality (run, validate, help, version, path management)
+
+---
+
+## Future Implementations
+
+### Interactive Calibration System (Planned)
+
+**📋 Overview:**
+The interactive calibration system will provide a GUI-based interface for users to manually calibrate eye detection and gaze direction parameters by visually adjusting detection boundaries on video frames.
+
+**🎯 Planned Functionality:**
+
+**Eye Detection Calibration (to be implemented as `cor.calibrate_eyes(video_file)`):**
+- Extract 20 evenly distributed frames from input video
+- Display frames sequentially in OpenCV GUI window
+- Allow user to visually adjust detection edges/ellipses/circles around eyes and pupils
+- Provide real-time feedback on detection accuracy
+- Save optimized parameters to `eye-detection-values.txt`
+
+**Gaze Direction Calibration (to be implemented as `cor.calibrate_gaze(video_file)`):**
+- Display 20 frames with detected eye regions highlighted
+- Show current gaze direction indicators (green lines/arrows)
+- Allow user to adjust gaze offset, sensitivity, and projection parameters
+- Provide visual feedback with pupil tracking lines
+- Save calibrated parameters to `gaze-direction-values.txt`
+
+**🛠️ Implementation Steps Required:**
+
+1. **Frame Extraction Module:**
+   ```python
+   def extract_calibration_frames(video_file, num_frames=20):
+       # Extract evenly distributed frames from video
+       # Return list of frame images and timestamps
+   ```
+
+2. **Interactive GUI Components:**
+   ```python
+   def create_calibration_window():
+       # Create OpenCV window with controls
+       # Add trackbars for parameter adjustment
+       # Implement mouse event handlers
+   ```
+
+3. **Eye Detection Calibration Interface:**
+   ```python
+   def interactive_eye_calibration(video_file):
+       # Display frames with adjustable detection boundaries
+       # Allow user to modify Haar cascade parameters
+       # Show real-time detection results
+       # Save parameters when calibration complete
+   ```
+
+4. **Gaze Direction Calibration Interface:**
+   ```python
+   def interactive_gaze_calibration(video_file):
+       # Display frames with gaze direction indicators
+       # Allow adjustment of gaze offset and sensitivity
+       # Show projection lines and tracking feedback
+       # Save gaze parameters when complete
+   ```
+
+5. **Parameter Management:**
+   ```python
+   def save_calibration_data(params, config_file):
+       # Save user-adjusted parameters to configuration files
+       # Include metadata (timestamp, calibration quality, etc.)
+       # Handle existing data merge/overwrite options
+   ```
+
+6. **GUI Controls Implementation:**
+   - Trackbars for real-time parameter adjustment
+   - Mouse click handlers for manual point selection
+   - Keyboard shortcuts for navigation and saving
+   - Progress indicators and frame counters
+   - Reset and undo functionality
+
+**📦 Dependencies Required:**
+- OpenCV GUI components (`cv2.imshow`, `cv2.createTrackbar`, `cv2.setMouseCallback`)
+- Enhanced parameter validation and range checking
+- Configuration file management improvements
+- User interaction state management
+
+**🎮 User Experience Flow:**
+1. User will call `cor.calibrate_eyes("video.mp4")`
+2. System extracts 20 representative frames
+3. GUI window opens showing first frame with detected features
+4. User adjusts detection parameters using trackbars/mouse
+5. System shows real-time feedback on detection quality
+6. User navigates through all 20 frames, fine-tuning parameters
+7. System saves optimized parameters to configuration file
+8. Calibration complete with quality assessment report
+
+This interactive system will significantly improve calibration accuracy and user experience compared to the current configuration file-based approach.
+
+---
+
 ## Major Changes v1.0.5 ALPHA
 
 **🔧 Critical Bug Fixes & Library Simplification:**
@@ -38,7 +159,7 @@
 **🎯 Focus on Core Functionality:**
 The library now focuses on what it does best:
 - ✅ Reliable gaze detection and analysis
-- ✅ Interactive calibration system
+- ✅ Configuration-based calibration system
 - ✅ Professional heatmap generation
 - ✅ Comprehensive batch processing
 - ✅ Enhanced statistics and CSV export
@@ -57,7 +178,7 @@ The library now focuses on what it does best:
 
 ---
 
-## Major Changes v1.0.4
+## Major Changes v1.0.4 ALPHA
 
 **📊 Enhanced Gaze Statistics & CSV Export:**
 - **Advanced Gaze Statistics**: New comprehensive gaze analysis section in terminal output with position metrics, standard deviation, and focus scoring
@@ -89,7 +210,7 @@ The library now focuses on what it does best:
 
 ---
 
-## Major Changes v1.0.3
+## Major Changes v1.0.3 ALPHA
 
 **🎯 Advanced Batch Processing & PATH Management:**
 - **Enhanced Batch Processing**: Process entire folders, use pattern matching, and filter by video formats
@@ -120,7 +241,7 @@ The library now focuses on what it does best:
 
 ---
 
-## Major Changes v1.0.2
+## Major Changes v1.0.2 ALPHA
 
 **🚀 Professional CLI Integration:**
 - **Built-in Command Line Interface**: Integrated comprehensive CLI directly into the library as standard feature
@@ -145,7 +266,7 @@ The library now focuses on what it does best:
 
 ---
 
-## Previous Changes v1.0.1
+## Previous Changes v1.0.1 ALPHA
 
 **🔧 Critical Fixes & Enhancements:**
 - **Fixed Heatmap Generation Bug**: Resolved boolean indexing error that prevented heatmap creation
@@ -170,30 +291,29 @@ Cor is a comprehensive Python library for gaze detection and eye tracking in vid
 
 ## Features
 
-- **Multi-format Video Support**: Process various video file formats (MP4, AVI, MOV, MKV, etc.)
+- **Multi-format Video Support**: Process various video file formats (MP4, AVI, MOV, MKV, etc.) with automatic format detection
 - **Automatic Calibration**: Intelligent calibration for eye detection and gaze direction
-- **Professional Heatmap Generation**: High-quality heatmaps with multiple color schemes
+- **Professional Heatmap Generation**: High-quality heatmaps with exact video dimensions and multiple color schemes
 - **Video Visualization**: Create gaze tracking videos with overlay graphics
 - **Face and Eye Detection**: Robust detection using OpenCV Haar cascades
 - **Gaze Estimation**: Advanced gaze direction calculation from eye positions
-- **Progress Tracking**: Real-time progress updates during video processing
-- **Easy Installation**: Pure Python implementation with simple pip install
-- **Cross-platform**: Works on Windows, macOS, and Linux
-- **Flexible Configuration**: Extensive customization through configuration files
+- **Video Validation**: Check video compatibility and display detailed properties (dimensions, frame count, FPS, duration)
+- **Progress Tracking**: Real-time progress updates with Unicode progress bars during video processing
+- **Path Management**: Flexible input/output path configuration for organized file handling
+- **Command Line Interface**: Built-in CLI with comprehensive options for direct terminal usage
+- **Easy Installation**: Pure Python implementation with simple pip install - no compilation required
+- **Cross-platform**: Works seamlessly on Windows, macOS, and Linux
+- **Codec Support**: Compatible with various video codecs (H.264, H.265, VP8, VP9, etc.)
 
 ## Installation
+
+> **⚠️ Important Note**: There is a different package named `cor` on PyPI. Do NOT use `pip install cor` as it will install an unrelated package. Please install from source as shown below.
 
 ### Prerequisites
 
 - Python 3.7 or higher
 - OpenCV 4.5 or higher
 - NumPy 1.19 or higher
-
-### Install from PyPI
-
-```bash
-pip install cor
-```
 
 ### Install from Source
 
@@ -203,11 +323,15 @@ cd cor
 pip install -e .
 ```
 
+This will install the Cor gaze detection library with all dependencies and make the `cor` command available in your terminal.
+
 ## Command Line Usage
 
 ### Built-in CLI (Recommended)
 
 After installation, you can use Cor directly from the command line:
+
+The current CLI supports these options:
 
 ```bash
 # Basic gaze detection
@@ -216,111 +340,33 @@ cor video.mp4
 # With visualization video
 cor video.mp4 --visualize
 
-# Full workflow with calibration
-cor video.mp4 --calibrate --visualize
+# Video validation - checks if video can be opened and shows properties
+cor video.mp4 --validate
 
-# Get help
-cor --help
 
-# Show version
+
+# Show version information
 cor --version
+
+# Show library help
+cor --help-cor
 ```
 
-### Alternative CLI Methods
+### Alternative CLI Access Methods
+
+You can also run Cor using Python module syntax:
 
 ```bash
 # Using Python module
 python -m cor video.mp4 --visualize
 
-# Using Python import (legacy)
-python -c "import cor; cor.run('video.mp4', '--visualize')"
+# Direct Python execution
+python -c "import cor; cor.run('video.mp4')"
 ```
 
-### Advanced CLI Options
+## Python Module Method
 
-```bash
-# Video validation and properties
-cor video.mp4 --validate
-
-# Extract preview frames
-cor video.mp4 --extract-frames 10
-
-# Performance benchmarking
-cor video.mp4 --benchmark 100
-
-# Configuration management
-cor --config heatmap_color_scheme sequential_red
-cor --get-config heatmap_color_scheme
-
-# Calibration options
-cor video.mp4 --eye-calibrate      # Eye detection only
-cor video.mp4 --gaze-calibrate     # Gaze direction only
-cor video.mp4 --calibrate          # Both calibrations
-
-# Show Cor library help
-cor --help-cor
-```
-
-### Enhanced Batch Processing (New in v1.0.2)
-
-Cor now supports advanced batch processing with multiple input methods:
-
-```bash
-# Process all videos in a folder
-cor --batch-folder /path/to/videos
-
-# Include subfolders recursively
-cor --batch-folder /path/to/videos --recursive
-
-# Process specific video formats only
-cor --batch-folder /videos --extensions mp4 avi mov
-
-# Process videos matching patterns
-cor --batch-pattern "*.mp4"
-cor --batch-pattern "*session*.avi"
-cor --batch-pattern "experiment_*.mov"
-
-# Combine with visualization and custom output
-cor --batch-folder /project --recursive --visualize --output-path /results
-```
-
-**Supported Video Formats (18 total):**
-`.mp4`, `.avi`, `.mov`, `.mkv`, `.wmv`, `.flv`, `.webm`, `.m4v`, `.3gp`, `.asf`, `.rm`, `.rmvb`, `.vob`, `.ogv`, `.dv`, `.ts`, `.mts`, `.m2ts`
-
-### PATH Management (New in v1.0.2)
-
-Cor now supports flexible path management, allowing you to work with videos and outputs in any directory without moving files:
-
-```bash
-# Set custom input path for video files
-cor --input-path /path/to/videos video.mp4
-
-# Set custom output path for results
-cor --output-path /path/to/results video.mp4
-
-# Add search paths for video discovery
-cor --search-path /videos --search-path /backup video.mp4
-
-# Find videos using patterns
-cor --find-videos "*.mp4"
-cor --find-videos "*gaze*"
-
-# Combined path usage
-cor --input-path /videos --output-path /results --batch *.mp4 --visualize
-
-# Batch processing with custom paths
-cor --input-path /project/videos --output-path /project/analysis --batch *.mp4
-```
-
-**Path Features:**
-- **Input Path**: Set directory where video files are located
-- **Output Path**: Set directory where results will be saved  
-- **Search Paths**: Add multiple directories to search for videos
-- **Pattern Matching**: Find videos using glob patterns (e.g., `*.mp4`, `*session*.avi`)
-- **Automatic Resolution**: Videos found automatically in configured paths
-- **Organized Output**: Results saved in structured folders within custom output directory
-
-## Quick Start
+Import and use Cor functions directly in Python scripts:
 
 ```python
 import cor
@@ -334,21 +380,28 @@ cor.run("video.mp4")
 # With visualization video
 cor.run("video.mp4", "--visualize")
 
-# Enhanced batch processing (New in v1.0.2)
-cor.run_batch(["video1.mp4", "video2.mp4"])  # Multiple files
-cor.run_folder("/path/to/videos")            # All videos in folder
-cor.run_pattern("*.mp4")                     # Pattern matching
+# Video validation
+result = cor.validate_video("video.mp4")
+if result['valid']:
+    print(f"Video: {result['width']}x{result['height']}, {result['frame_count']} frames")
 
-# Advanced batch options
-cor.run_folder("/videos", recursive=True, extensions=['.mp4', '.avi'])
 
-# Automatic calibration
-cor.calibrate_eyes("video.mp4")
-cor.calibrate_gaze("video.mp4")
 
 # Check version and status
-print(cor.version())
+version_info = cor.version()
+print(f"Cor version: {version_info['version']}")
+
+# Process multiple videos
+for video in ["video1.mp4", "video2.mp4"]:
+    cor.run(video)
+
+# Path management
+cor.set_input_path("/path/to/videos")
+cor.set_output_path("/path/to/results")
+cor.run("video.mp4")  # Uses configured paths
 ```
+
+
 
 ## Output Files
 
@@ -363,19 +416,8 @@ video_name/
 └── confidence_results.csv          # Confidence assessment data
 ```
 
-**Batch Processing:**
-```
-batch_2025-10-31_14-30-45/
-├── video1_heatmap-pure.jpg
-├── video1_heatmap-overlay.jpg
-├── video2_heatmap-pure.jpg
-├── video2_heatmap-overlay.jpg
-└── confidence_results.csv          # All videos' confidence data
-```
-
 **✨ v1.0.2 Improvements**: 
 - **Organized Folders**: All outputs saved in dedicated folders (no more cluttered directories)
-- **Custom Output Paths**: Save results anywhere using `--output-path`
 - **Confidence Assessment**: Automatic confidence analysis with CSV export
 - **Exact Dimensions**: Heatmap images match input video dimensions exactly
 - **Professional Quality**: Clean, minimal output suitable for research and commercial use
@@ -452,91 +494,86 @@ When you run `cor.run("video.mp4", "--visualize")`, it additionally creates:
 ## Core Functions
 
 ### `cor.help()`
-Displays comprehensive help information about all available functions.
-
-### `cor.run(video_file, *args)`
-Performs complete gaze detection analysis:
-- Detects faces and eyes in each frame
-- Calculates gaze direction from eye positions
-- Generates professional heatmaps
-- Creates visualization video (with `--visualize` flag)
-- Shows processing progress
-
-### `cor.calibrate_eyes(video_file)`
-Automatic eye detection calibration:
-- Analyzes video frames for optimal detection parameters
-- Tests detection success rate
-- Saves calibration to `eye-detection-values.txt`
-- Provides feedback on detection quality
-
-### `cor.calibrate_gaze(video_file)`
-Automatic gaze direction calibration:
-- Analyzes gaze patterns across video frames
-- Calculates optimal gaze estimation parameters
-- Saves calibration to `gaze-direction-values.txt`
-- Reports average gaze positions
-
-### `cor.validate_video(video_file)`
-Validates video file compatibility:
-- Checks if video file can be opened
-- Returns boolean validation result
-- Works with all supported video formats
-
-### `cor.get_config(param_name, config_file="cor.txt")`
-**✨ New in v1.0.1**: Reads configuration parameters:
-- Retrieves values from configuration files (cor.txt, eye-detection-values.txt, gaze-direction-values.txt)
-- Supports custom config file paths
-- Returns parameter value or None if not found
-- Works with the Python implementation
-
-### `cor.set_config(param_name, param_value, config_file="cor.txt")`
-**✨ New in v1.0.1**: Updates configuration parameters:
-- Writes/updates configuration files dynamically
-- Creates config file if it doesn't exist
-- Supports all configuration files
-- Enables runtime parameter adjustment
-
-### `cor.extract_frames(video_file, num_frames=10, output_dir="frames")`
-**✨ New in v1.0.1**: Extracts frames from video:
-- Saves evenly distributed frames as JPG images
-- Creates output directory automatically
-- Shows extraction progress with Unicode progress bar (█)
-- Returns list of extracted frame paths
-- Useful for video preview and quality assessment
-
-### `cor.benchmark(video_file, max_frames=100)`
-**✨ New in v1.0.1**: Performance benchmarking:
-- Measures processing speed and detection rates
-- Analyzes up to specified number of frames
-- Returns detailed performance metrics (FPS, detection rate, processing time)
-- Shows benchmarking progress with real-time updates
-- Helps optimize settings for different hardware configurations
+Displays comprehensive help information about all available functions and usage instructions.
 
 ### `cor.version()`
 Returns version information and system status:
 ```python
 {
-    'version': '1.0.4',
+    'version': '1.0.5.1',
     'mode': 'Python',
     'opencv_available': True
 }
 ```
 
-## How It Works
+### `cor.run(video_file, *args)`
+Performs gaze detection analysis on the specified video:
+- Processes video frames for basic gaze detection
+- Generates heatmap visualization (`{videoname}_heatmap-pure.jpg`)
+- Creates visualization video with `--visualize` flag
+- Requires OpenCV and matplotlib to be installed
+- Returns success status and output file information
 
-1. **Face Detection**: Uses OpenCV Haar cascades to detect faces in video frames
-2. **Eye Detection**: Locates eyes within detected face regions
-3. **Gaze Estimation**: Calculates gaze direction based on eye center positions
-4. **Heatmap Generation**: Creates Gaussian-based density maps using matplotlib
-5. **Visualization**: Overlays gaze tracking graphics on video frames
+
+
+### `cor.validate_video(video_file)`
+Validates video file compatibility and returns properties:
+- Checks if video file can be opened with OpenCV
+- Returns detailed video information (dimensions, frame count, FPS, duration)
+- Works with all OpenCV-supported video formats
+- Provides error messages for invalid files
+
+### Path Management Functions
+
+### `cor.set_input_path(path)`
+Sets custom input directory for video files:
+- Configures default location for video file searches
+- Validates path existence before setting
+- Returns success/failure status
+
+### `cor.set_output_path(path)`
+Sets custom output directory for results:
+- Configures where processed files will be saved
+- Creates directory if it doesn't exist
+- Returns success/failure status
+
+### `cor.clear_paths()`
+Clears all custom path configurations and resets to defaults.
+
+### `cor.get_paths()`
+Returns current path configuration settings for input, output, and search paths.
 
 ## Configuration
 
-The library uses three configuration files for customization:
+Cor uses several configuration files for customization:
 
-- **`eye-detection-values.txt`** - Eye detection parameters
-- **`gaze-direction-values.txt`** - Gaze calibration settings
-- **`cor.txt`** - General configuration and heatmap options
+- **`eye-detection-values.txt`**: Eye detection parameters including Haar cascade settings, detection thresholds, and quality enhancement options
+- **`gaze-direction-values.txt`**: Gaze calibration settings including offset values, sensitivity, smoothing, and tracking enhancement parameters
+- **`cor.txt`**: General configuration and heatmap options
+
+### Calibration Files
+
+The calibration files contain optimized parameters for accurate detection:
+
+**Eye Detection Calibration (`eye-detection-values.txt`)**:
+- Scale factor, minimum neighbors, and size parameters for Haar cascades
+- Eye region padding and pupil detection thresholds
+- Quality enhancement settings (noise reduction, contrast, brightness)
+- Detection confidence and optimization mode settings
+
+**Gaze Direction Calibration (`gaze-direction-values.txt`)**:
+- Gaze offset coordinates and sensitivity adjustments
+- Projection parameters for improved tracking accuracy
+- Temporal smoothing and spatial filtering options
+- Motion compensation and head pose correction settings
+
+### Heatmap Color Schemes
+
+Available in `cor.txt`:
+
+1. **Sequential Numerical**: Single color gradient (default: blue)
+2. **Diverging Numerical**: Two-color gradient (default: blue to red)
+3. **Multi-color**: 5 or 7 color categorical schemes
 
 ## Supported Video Formats
 
@@ -544,47 +581,7 @@ The library uses three configuration files for customization:
 - Automatic format detection and validation
 - Various codecs: H.264, H.265, VP8, VP9, etc.
 
-## Example Workflow
-
-```python
-import cor
-
-# Step 1: Calibrate for your specific video (optional but recommended)
-cor.calibrate_eyes("sample_video.mp4")
-cor.calibrate_gaze("sample_video.mp4")
-
-# Step 2: Run basic analysis
-cor.run("sample_video.mp4")
-
-# Step 3: Create visualization video
-cor.run("sample_video.mp4", "--visualize")
-
-# Step 4: Check results
-# - sample_video_heatmap-pure.jpg
-# - sample_video_heatmap-overlay.jpg  
-# - sample_video_heatmap.mp4
-```
-
-## Installation
-
-### Simple Installation
-```bash
-pip install cor
-```
-
 That's it! The library is ready to use with all features available.
-
-### Features Available
-- ✅ Complete gaze detection with heatmaps (`cor.run()`)
-- ✅ Automatic eye and gaze calibration
-- ✅ Video validation and format support
-- ✅ Configuration management (`get_config()`, `set_config()`)
-- ✅ Frame extraction with progress bars
-- ✅ Performance benchmarking
-- ✅ Unicode progress bars for all operations
-- ✅ Professional heatmap generation (exact video dimensions)
-- ✅ Batch processing capabilities
-- ✅ 18 video format support
 
 ### Requirements
 - Python 3.7 or higher
@@ -629,12 +626,14 @@ python build_and_test.py        # Full installation and test
 - **Eye Detection**: Haar Cascade with region-of-interest optimization (haarcascade_eye.xml)
 - **Gaze Estimation**: Eye center triangulation with forward projection and perpendicular vector calculation
 - **Heatmap Generation**: 2D Gaussian kernel density estimation with configurable sigma (25 pixels default)
+- **Visualization**: Overlays gaze tracking graphics on video frames
 - **Video Processing**: OpenCV VideoCapture and VideoWriter with progress tracking
 - **Progress Visualization**: Unicode block characters (█) with real-time terminal updates
 
 ### Performance
-- **Processing Speed**: ~30-60 FPS on modern hardware
-- **Memory Usage**: Efficient frame-by-frame processing, ~50-200MB typical usage
+- **Processing Speed**: ~30-60 FPS on modern hardware with efficient Python implementation
+- **Memory Usage**: Efficient frame-by-frame processing and memory-efficient streaming, ~50-200MB typical usage
+- **OpenCV Integration**: Fast video processing with optimized algorithms for gaze detection
 - **Output Quality**: Exact video dimension matching, professional-grade heatmaps
 - **Progress Tracking**: Real-time updates every 10 frames with percentage completion
 - **Detection Accuracy**: Automatic confidence assessment with detailed reporting
@@ -676,115 +675,6 @@ This library uses a pure Python implementation that works out-of-the-box:
 - Cross-platform compatibility
 - Cross-platform compatibility
 - Clean project structure with testing files organized separately
-
-## Core Functions
-
-### `cor.help()`
-Displays all available commands and their descriptions.
-
-### `cor.calibrate_eyes(video_file)`
-Opens an interactive calibration window for eye detection:
-- Shows 20 frames from the video sequentially
-- Allows manual adjustment of detection boundaries around eyes and pupils
-- Saves calibration values to `eye-detection-values.txt`
-- Handles existing calibration data with overwrite/merge options
-
-### `cor.calibrate_gaze(video_file)`
-Opens an interactive calibration window for gaze direction:
-- Shows 20 frames from the video sequentially
-- Provides visual gaze direction adjustment with green indicator and pupil lines
-- Saves calibration values to `gaze-direction-values.txt`
-- Handles existing calibration data with overwrite/merge options
-
-### `cor.run(video_file, *args)`
-Performs gaze detection analysis on the specified video:
-
-**Standard Output:**
-- `{videoname}_heatmap-pure.jpg`: Pure heatmap visualization
-- `{videoname}_heatmap-overlay.jpg`: Heatmap overlaid on 10th frame
-
-**With `--visualize` flag:**
-- `{videoname}_heatmap.{ext}`: Full video with gaze visualization overlay
-
-## Configuration
-
-Cor uses several configuration files for customization:
-
-- **`eye-detection-values.txt`**: Eye detection parameters
-- **`gaze-direction-values.txt`**: Gaze calibration settings  
-- **`cor.txt`**: General configuration and heatmap options
-
-### Heatmap Color Schemes
-
-Available in `cor.txt`:
-
-1. **Sequential Numerical**: Single color gradient (default: blue)
-2. **Diverging Numerical**: Two-color gradient (default: blue to red)
-3. **Multi-color**: 5 or 7 color categorical schemes
-
-## Supported Video Formats
-
-- MP4, AVI, MOV, MKV, WMV, FLV, WEBM
-- Various codecs: H.264, H.265, VP8, VP9, etc.
-
-## Performance
-
-Cor is optimized for performance with:
-- Efficient Python implementation
-- OpenCV integration for fast video processing
-- Optimized algorithms for gaze detection
-- Memory-efficient streaming for large video files
-
-## Progress Tracking
-
-All video processing operations include real-time progress bars:
-- **Video Processing**: Shows frame-by-frame progress during analysis
-- **Calibration**: Tracks progress through calibration frames
-- **Statistical Analysis**: Shows progress during confidence assessment
-- **Heatmap Generation**: Shows processing status for visualization
-- **Benchmarking**: Real-time performance measurement progress
-
-Progress bars use Unicode block characters (█) for clear visual feedback and display:
-- Current/total frames processed
-- Percentage completion
-- Operation-specific status messages
-
-**✅ v1.0.1 Fix**: Progress bars now work reliably during runtime.
-
-## Confidence Assessment
-
-After each gaze detection analysis, Cor automatically evaluates and displays the confidence in its accuracy:
-
-### Assessment Metrics
-- **Detection Rate**: Percentage of frames with successful gaze detection
-- **Average Confidence**: Mean confidence score across all detected gaze points
-- **Confidence Distribution**: Breakdown of high/medium/low confidence detections
-- **Overall Accuracy Confidence**: Composite score indicating reliability
-
-### Example Output
-```
-=== GAZE DETECTION CONFIDENCE ASSESSMENT ===
-📊 Analysis Results:
-   • Total frames processed: 1500
-   • Valid gaze points detected: 1342
-   • Detection rate: 89.5%
-   • Average confidence per point: 76.3%
-
-📈 Confidence Distribution:
-   • High confidence (≥80%): 892 points (66.5%)
-   • Medium confidence (60-79%): 321 points (23.9%)
-   • Low confidence (<60%): 129 points (9.6%)
-
-🎯 Overall Accuracy Confidence: 82.4%
-✅ Excellent - High reliability for research and analysis
-============================================
-```
-
-### Confidence Levels
-- **85%+**: Excellent - High reliability for research and analysis
-- **70-84%**: Good - Suitable for most applications
-- **55-69%**: Fair - Consider recalibration for better accuracy
-- **<55%**: Poor - Recalibration strongly recommended
 
 ## License
 

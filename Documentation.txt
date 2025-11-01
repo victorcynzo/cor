@@ -1,133 +1,65 @@
-COR GAZE DETECTION LIBRARY - TECHNICAL DOCUMENTATION
-==================================================
+COR - ADVANCED GAZE DETECTION LIBRARY
+TECHNICAL DOCUMENTATION
+Version 1.0.5.1 - Pure Python Implementation
 
-VERSION: 1.0.4
-LAST UPDATED: October 2024
-MAJOR UPDATE: Enhanced gaze statistics, comprehensive CSV export, advanced viewing pattern analysis
-
-TABLE OF CONTENTS
------------------
+===========================================================
 1. OVERVIEW
-2. INSTALLATION AND SETUP
-3. API REFERENCE
-4. CONFIGURATION FILES
-5. ALGORITHMS AND METHODS
-6. PERFORMANCE OPTIMIZATION
-7. TROUBLESHOOTING
-8. EXAMPLES AND USE CASES
-9. DEVELOPMENT NOTES
+===========================================================
 
-1. OVERVIEW
------------
-Cor is a comprehensive gaze detection library implemented in pure Python using OpenCV and matplotlib. 
-It provides automated eye tracking and gaze analysis capabilities for video processing 
-applications. The library uses proven computer vision algorithms for robust detection 
-across various lighting conditions and head poses.
+Cor is a Python library for gaze detection and eye tracking in video files. 
+It provides basic gaze detection capabilities with heatmap generation using 
+OpenCV and matplotlib.
 
-Key Features:
-- Multi-format video processing (18 supported formats including MP4, AVI, MOV, MKV, WMV, FLV, WEBM)
-- Advanced batch processing with folder and pattern-based processing
-- Flexible PATH management with custom input/output directories
-- Enhanced gaze statistics with comprehensive analysis and CSV export
-- Professional heatmap generation with exact video dimension matching
-- Organized output folders for clean project management
-- Enhanced CLI with comprehensive batch processing options
-- Automatic calibration system for eye and gaze detection
-- Video visualization with gaze tracking overlays
-- Real-time progress tracking with Unicode progress bars (█)
-- Pure Python implementation
-- Cross-platform compatibility (Windows, macOS, Linux)
-- Comprehensive configuration management (133+ parameters)
+Current Implementation: Pure Python with OpenCV integration
+Installation: Source installation only (no PyPI package available)
 
-Version 1.0.4 Enhancements:
-- Enhanced gaze statistics: Comprehensive position analysis with focus scoring and viewing pattern recognition
-- Advanced CSV export: 12 detailed columns including average position, standard deviation, and frame percentages
-- Viewing pattern analysis: Automatic classification of gaze behavior (center-focused, side-focused, scattered, etc.)
-- Focus score calculation: Quantitative assessment of gaze concentration with interpretive descriptions
-- Professional data export: Research-ready CSV files with comprehensive gaze metrics
-- Enhanced terminal output: Detailed gaze statistics section with pixel coordinates and frame percentages
-- Statistical analysis: Standard deviation calculations for gaze point spread analysis
-- Pattern interpretation: Clear explanations of viewing behavior and gaze concentration patterns
-- Comprehensive testing: Verified functionality with test_video.mp4 in Python and CLI modes
-- Production ready: All features tested and validated for research and professional applications
+===========================================================
+2. INSTALLATION
+===========================================================
 
-Previous Version 1.0.3 Enhancements:
-- Enhanced batch processing: Process folders, use patterns, filter by format
-- PATH management: Custom input/output paths, search directories, automatic discovery
-- Confidence assessment: Real-time analysis with CSV export for research workflows
-- Organized output: Dedicated folders for single videos and batch processing
-- Advanced CLI: Folder processing, pattern matching, recursive search, format filtering
-- 18 video format support: Comprehensive format compatibility for diverse workflows
-- Documentation consolidation: Streamlined project structure with integrated documentation
-
-2. INSTALLATION AND SETUP
---------------------------
-
-System Requirements:
-- Operating System: Windows, macOS, Linux
-- Python: 3.7 or higher
-- OpenCV: 4.5 or higher (opencv-python package)
-- NumPy: 1.19 or higher
-- Matplotlib: 3.3 or higher
-- Memory: Minimum 4GB RAM (8GB recommended for large videos)
-- Storage: 100MB for library + space for output files
-
-Installation Methods:
-
-Method 1 - PyPI Installation:
-    pip install cor
-
-Method 2 - Source Installation:
+Installation Method:
     git clone https://github.com/victorcynzo/cor
     cd cor
     pip install -e .
 
-Method 3 - Development Installation:
-    git clone https://github.com/victorcynzo/cor
-    cd cor
-    pip install -e .
+Requirements:
+    - Python 3.7 or higher
+    - OpenCV (opencv-python>=4.5.0)
+    - NumPy (numpy>=1.19.0)
+    - Matplotlib (matplotlib>=3.3.0)
+    - Pillow (Pillow>=8.0.0)
 
-Verification:
-    python -c "import cor; print(cor.__version__)"
+Note: There is a different package named 'cor' on PyPI. Do NOT use 'pip install cor' 
+as it will install an unrelated distributed computing framework.
 
-3. API REFERENCE
-----------------
+===========================================================
+3. COMMAND LINE INTERFACE
+===========================================================
 
-3.1 COMMAND LINE INTERFACE
+3.1 CLI USAGE
 
-cor.cli()
-    Description: Built-in command-line interface for Cor library
-    Usage: Can be called directly from terminal after installation
-    Entry Points:
-        - cor <arguments>                    # Direct command (after pip install)
-        - python -m cor <arguments>          # Python module execution
-        - python -c "import cor; cor.cli()"  # Direct function call
-    
-    Command Line Arguments:
-        video_file                           # Path to input video file (required for most operations)
-        --visualize                         # Generate visualization video with gaze overlay
-        --calibrate                         # Run both eye and gaze calibration before analysis
-        --eye-calibrate                     # Run only eye detection calibration
-        --gaze-calibrate                    # Run only gaze direction calibration
-        --validate                          # Validate video file and show properties
-        --extract-frames N                  # Extract N frames from video for preview
-        --benchmark N                       # Run performance benchmark (default: 100 frames)
-        --config PARAM VALUE                # Set configuration parameter
-        --get-config PARAM                  # Get configuration parameter value
-        --version                           # Show version information
-        --help-cor                          # Show Cor library help information
-        --help                              # Show CLI help
-    
-    Examples:
-        cor video.mp4                       # Basic gaze detection
-        cor video.mp4 --visualize          # With visualization video
-        cor video.mp4 --calibrate --visualize  # Full workflow
-        cor --version                       # Show version
-        cor --config heatmap_color_scheme sequential_red  # Set config
-        cor video.mp4 --validate           # Validate video
-        cor video.mp4 --benchmark 50       # Performance test
+Basic Syntax:
+    cor [video_file] [options]
 
-3.2 CORE FUNCTIONS
+Available Options:
+    video_file                           # Path to input video file (required for most operations)
+    --visualize                         # Generate visualization video with gaze overlay
+    --validate                          # Validate video file and show properties
+    --version                           # Show version information
+    --help-cor                          # Show Cor library help information
+    --help                              # Show CLI help
+
+Examples:
+    cor video.mp4                       # Basic gaze detection
+    cor video.mp4 --visualize          # With visualization video
+    cor --version                       # Show version
+    cor video.mp4 --validate           # Validate video
+
+===========================================================
+4. CORE FUNCTIONS
+===========================================================
+
+4.1 MAIN FUNCTIONS
 
 cor.help()
     Description: Displays comprehensive help information for all available functions
@@ -135,623 +67,352 @@ cor.help()
     Returns: None (prints to stdout)
     Example: cor.help()
 
-cor.calibrate_eyes(video_file)
-    Description: Interactive eye detection calibration interface
-    Parameters:
-        video_file (str): Path to input video file
-    Returns: None
-    Side Effects: 
-        - Creates/updates eye-detection-values.txt
-        - Opens GUI calibration window
-    Example: cor.calibrate_eyes("sample.mp4")
+cor.version()
+    Description: Returns version information and system status
+    Parameters: None
+    Returns: Dictionary with version, mode, and OpenCV availability
+    Example: version_info = cor.version()
     
-    Calibration Process:
-        1. Extracts 20 evenly distributed frames from video
-        2. Displays each frame with adjustable detection boundaries
-        3. User adjusts ellipses/circles around eyes and pupils
-        4. Saves detection parameters to configuration file
-        5. Handles existing calibration data with merge/overwrite options
-
-cor.calibrate_gaze(video_file)
-    Description: Interactive gaze direction calibration interface
-    Parameters:
-        video_file (str): Path to input video file
-    Returns: None
-    Side Effects:
-        - Creates/updates gaze-direction-values.txt
-        - Opens GUI calibration window
-    Example: cor.calibrate_gaze("sample.mp4")
-    
-    Calibration Process:
-        1. Extracts 20 evenly distributed frames from video
-        2. Displays frames with gaze direction indicator (green ball)
-        3. Shows connecting lines between gaze point and pupils
-        4. User adjusts gaze direction parameters
-        5. Saves calibration data to configuration file
+    Return Format:
+    {
+        'version': '1.0.5.1',
+        'mode': 'Python', 
+        'opencv_available': True
+    }
 
 cor.run(video_file, *args)
-    Description: Executes gaze detection analysis on video file
+    Description: Executes basic gaze detection analysis on video file
     Parameters:
         video_file (str): Path to input video file
         *args: Optional arguments (currently supports "--visualize")
-    Returns: None
-    Side Effects: Creates output files based on video name
+    Returns: Dictionary with success status and output file information
+    Side Effects: Creates heatmap output files
     
     Standard Output Files:
-        - {videoname}_heatmap-pure.jpg: Pure heatmap visualization
-        - {videoname}_heatmap-overlay.jpg: Heatmap overlaid on 10th frame
+        - {videoname}_heatmap-pure.jpg: Basic heatmap visualization
     
-    With --visualize Flag:
-        - {videoname}_heatmap.{ext}: Full video with gaze overlay
+    With --visualize flag:
+        - Additional visualization video (if implemented)
     
-    Examples:
-        cor.run("video.mp4")
-        cor.run("video.mp4", "--visualize")
-
-cor.version()
-    Description: Returns detailed version information
-    Parameters: None
-    Returns: Dictionary with version details
-    Example: version_info = cor.version()
-
-cor.get_config(param_name, config_file="cor.txt")
-    Description: Retrieves configuration parameter value from config files
-    Parameters:
-        param_name (str): Name of configuration parameter
-        config_file (str, optional): Configuration file path (default: "cor.txt")
-    Returns: String value of parameter or None if not found
-    Supported Files: cor.txt, eye-detection-values.txt, gaze-direction-values.txt
-    Example: value = cor.get_config("heatmap_color_scheme")
-    Example: eye_param = cor.get_config("scale_factor", "eye-detection-values.txt")
-
-cor.set_config(param_name, param_value, config_file="cor.txt")
-    Description: Sets configuration parameter value in config files
-    Parameters:
-        param_name (str): Name of configuration parameter
-        param_value (str): Value to set
-        config_file (str, optional): Configuration file path (default: "cor.txt")
-    Returns: Boolean indicating success
-    Side Effects: Creates config file if it doesn't exist, updates existing parameters
-    Example: cor.set_config("heatmap_color_scheme", "sequential_red")
-    Example: cor.set_config("gaze_sensitivity", "1.5", "gaze-direction-values.txt")
+    Example: result = cor.run("video.mp4", "--visualize")
 
 cor.validate_video(video_file)
-    Description: Validates video file and returns properties
+    Description: Validates video file compatibility and returns properties
     Parameters:
-        video_file (str): Path to video file
+        video_file (str): Path to input video file
     Returns: Dictionary with validation results and video properties
-    Example: info = cor.validate_video("sample.mp4")
+    Example: result = cor.validate_video("video.mp4")
+    
+    Return Format (valid video):
+    {
+        'valid': True,
+        'frame_count': 1500,
+        'fps': 30.0,
+        'width': 1920,
+        'height': 1080,
+        'duration': 50.0
+    }
+    
+    Return Format (invalid video):
+    {
+        'valid': False,
+        'error': 'Cannot open video file'
+    }
 
-cor.extract_frames(video_file, num_frames=10, output_dir="frames")
-    Description: Extracts evenly distributed sample frames from video for preview
-    Parameters:
-        video_file (str): Path to video file
-        num_frames (int): Number of frames to extract (default: 10)
-        output_dir (str): Directory to save frames (default: "frames")
-    Returns: List of extracted frame file paths
-    Side Effects: Creates output directory if it doesn't exist
-    Progress: Shows Unicode progress bar during extraction
-    Output Format: JPG images named frame_001.jpg, frame_002.jpg, etc.
-    Example: frames = cor.extract_frames("video.mp4", 20, "preview_frames")
-    Use Cases: Video quality assessment, frame selection, preview generation
-
-cor.benchmark(video_file, max_frames=100)
-    Description: Runs comprehensive performance benchmark on video processing
-    Parameters:
-        video_file (str): Path to video file
-        max_frames (int): Maximum frames to process for benchmark (default: 100)
-    Returns: Dictionary with detailed performance metrics
-    Progress: Shows real-time benchmarking progress with Unicode progress bar
-    Metrics Returned:
-        - frames_processed: Number of frames analyzed
-        - processing_time: Total processing time in seconds
-        - processing_fps: Processing speed in frames per second
-        - detection_rate: Percentage of frames with successful gaze detection
-        - detections: Total number of successful detections
-        - video_fps: Original video frame rate
-    Example: results = cor.benchmark("video.mp4", 200)
-    Use Cases: Hardware optimization, performance tuning, system requirements assessment
-
-
-
-3.2 PATH MANAGEMENT FUNCTIONS (NEW IN v1.0.2)
+4.2 PATH MANAGEMENT FUNCTIONS
 
 cor.set_input_path(path)
     Description: Sets custom input directory for video files
     Parameters:
-        path (str): Absolute path to directory containing video files
-    Returns: Boolean indicating success (True if path exists)
-    Side Effects: All subsequent video operations will search this directory first
-    Example: cor.set_input_path("/project/videos")
-    Use Cases: Organize videos by project, work with network storage, batch processing
+        path (str): Path to input directory
+    Returns: Boolean indicating success/failure
+    Side Effects: Updates global path configuration
+    Example: cor.set_input_path("/path/to/videos")
 
 cor.set_output_path(path)
-    Description: Sets custom output directory for all results
+    Description: Sets custom output directory for results
     Parameters:
-        path (str): Absolute path where results should be saved
-    Returns: Boolean indicating success
-    Side Effects: Creates directory if it doesn't exist, all outputs saved here
-    Example: cor.set_output_path("/project/analysis")
-    Use Cases: Organize results by project, save to network storage, separate analysis runs
-
-cor.add_search_path(path)
-    Description: Adds directory to search paths for video discovery
-    Parameters:
-        path (str): Absolute path to directory to search
-    Returns: Boolean indicating success (True if path exists)
-    Side Effects: Path added to search list, videos found automatically
-    Example: cor.add_search_path("/backup/videos")
-    Use Cases: Multi-source video processing, backup locations, distributed storage
+        path (str): Path to output directory (created if doesn't exist)
+    Returns: Boolean indicating success/failure
+    Side Effects: Updates global path configuration, creates directory
+    Example: cor.set_output_path("/path/to/results")
 
 cor.clear_paths()
-    Description: Clears all custom path configurations
+    Description: Clears all custom path configurations and resets to defaults
     Parameters: None
     Returns: None
-    Side Effects: Resets to default behavior (current directory)
+    Side Effects: Resets global path configuration
     Example: cor.clear_paths()
-    Use Cases: Reset between projects, clean configuration
 
 cor.get_paths()
-    Description: Returns current path configuration
+    Description: Returns current path configuration settings
     Parameters: None
-    Returns: Dictionary with input_path, output_path, and search_paths
+    Returns: Dictionary with current path settings
     Example: paths = cor.get_paths()
-    Use Cases: Debug path configuration, save/restore settings
-
-cor.find_videos(pattern="*.mp4", search_all_paths=True)
-    Description: Finds video files using glob patterns across configured paths
-    Parameters:
-        pattern (str): Glob pattern for matching files (default: "*.mp4")
-        search_all_paths (bool): Whether to search all configured paths (default: True)
-    Returns: List of absolute paths to matching video files
-    Example: videos = cor.find_videos("*session*.avi")
-    Use Cases: Batch processing, video discovery, pattern-based selection
-
-3.4 ENHANCED BATCH PROCESSING FUNCTIONS (NEW IN v1.0.2)
-
-cor.run_batch(video_files_or_folder, *args, **kwargs)
-    Description: Enhanced batch processing with multiple input methods
-    Parameters:
-        video_files_or_folder: Can be list of files, folder path, or pattern string
-        *args: Additional arguments (e.g., "--visualize")
-        **kwargs: Options like recursive=True, extensions=['.mp4', '.avi']
-    Returns: Dictionary with batch processing results
-    Examples:
-        cor.run_batch(["video1.mp4", "video2.mp4"])  # Multiple files
-        cor.run_batch("/path/to/videos")              # All videos in folder
-        cor.run_batch("*.mp4")                        # Pattern matching
-        cor.run_batch("/videos", recursive=True, extensions=['.mp4'])
-
-cor.run_folder(folder_path, *args, **kwargs)
-    Description: Process all videos in a folder (convenience function)
-    Parameters:
-        folder_path (str): Path to folder containing videos
-        *args: Additional arguments (e.g., "--visualize")
-        **kwargs: Options like recursive=True, extensions=['.mp4', '.avi']
-    Returns: Dictionary with processing results
-    Example: cor.run_folder("/project/videos", recursive=True)
-
-cor.run_pattern(pattern, *args, **kwargs)
-    Description: Process videos matching a glob pattern (convenience function)
-    Parameters:
-        pattern (str): Glob pattern (e.g., "*.mp4", "*session*.avi")
-        *args: Additional arguments (e.g., "--visualize")
-        **kwargs: Additional options
-    Returns: Dictionary with processing results
-    Example: cor.run_pattern("experiment_*.mp4", "--visualize")
-
-cor.find_all_videos_in_folder(folder_path=None, recursive=False)
-    Description: Find all supported video files in a folder
-    Parameters:
-        folder_path (str, optional): Folder to search (default: input_path or current)
-        recursive (bool): Search subfolders recursively (default: False)
-    Returns: List of absolute paths to video files
-    Supported Formats: 18 formats including .mp4, .avi, .mov, .mkv, .wmv, etc.
-    Example: videos = cor.find_all_videos_in_folder("/data", recursive=True)
-
-cor.find_videos_by_extension(extension, folder_path=None, recursive=False)
-    Description: Find videos by specific extension in folder
-    Parameters:
-        extension (str): Video extension (e.g., ".mp4", "avi")
-        folder_path (str, optional): Folder to search (default: input_path or current)
-        recursive (bool): Search subfolders recursively (default: False)
-    Returns: List of absolute paths to matching video files
-    Example: mp4_videos = cor.find_videos_by_extension(".mp4", "/data")
-
-cor.get_supported_formats()
-    Description: Get list of all supported video formats
-    Parameters: None
-    Returns: List of supported file extensions
-    Formats: ['.mp4', '.avi', '.mov', '.mkv', '.wmv', '.flv', '.webm', 
-              '.m4v', '.3gp', '.asf', '.rm', '.rmvb', '.vob', '.ogv', 
-              '.dv', '.ts', '.mts', '.m2ts']
-    Example: formats = cor.get_supported_formats()
-
-cor.is_video_file(file_path)
-    Description: Check if file is a supported video format
-    Parameters:
-        file_path (str): Path to file to check
-    Returns: Boolean indicating if file is a supported video
-    Example: is_video = cor.is_video_file("sample.mp4")
-
-ENHANCED BATCH USAGE EXAMPLES:
-
-Basic Batch Processing:
-    # Process multiple specific files
-    cor.run_batch(["video1.mp4", "video2.avi", "video3.mov"])
     
-    # Process all videos in a folder
-    cor.run_batch("/project/videos")
-    
-    # Process videos matching pattern
-    cor.run_batch("session_*.mp4")
+    Return Format:
+    {
+        'input_path': '/path/to/videos' or None,
+        'output_path': '/path/to/results' or None,
+        'search_paths': []
+    }
 
-Advanced Batch Processing:
-    # Recursive folder processing with specific formats
-    cor.run_batch("/project", recursive=True, extensions=['.mp4', '.avi'])
-    
-    # Batch processing with visualization
-    cor.run_folder("/videos", "--visualize", recursive=True)
-    
-    # Pattern-based processing with custom output
-    cor.set_output_path("/analysis")
-    cor.run_pattern("experiment_*.mp4", "--visualize")
+===========================================================
+5. CONFIGURATION FILES
+===========================================================
 
-Multi-Format Processing:
-    # Find all supported videos
-    all_videos = cor.find_all_videos_in_folder("/data", recursive=True)
-    print(f"Found {len(all_videos)} videos")
-    
-    # Process by format
-    mp4_videos = cor.find_videos_by_extension(".mp4", "/data")
-    avi_videos = cor.find_videos_by_extension(".avi", "/data")
-    
-    # Batch process each format separately
-    cor.run_batch(mp4_videos, "--visualize")
-    cor.run_batch(avi_videos)
-
-PATH USAGE EXAMPLES:
-
-Basic Path Setup:
-    cor.set_input_path("/data/recordings")
-    cor.set_output_path("/analysis/results")
-    cor.run("experiment_01.mp4")  # Automatically finds video and saves results
-
-Multi-Source Processing:
-    cor.add_search_path("/camera1/recordings")
-    cor.add_search_path("/camera2/recordings")
-    videos = cor.find_videos("*.mp4")
-    for video in videos:
-        cor.run(video)
-
-Enhanced Batch Processing with Paths:
-    cor.set_input_path("/project/videos")
-    cor.set_output_path("/project/analysis")
-    
-    # Process all videos in input path
-    cor.run_folder(None, recursive=True)  # Uses input_path
-    
-    # Process specific patterns
-    session_videos = cor.find_videos("session_*.mp4")
-    cor.run_batch(session_videos, "--visualize")
-
-3.3 INTERNAL FUNCTIONS (PYTHON IMPLEMENTATION)
-
-detect_eyes(frame, calibration_data)
-    Description: Detects eye regions in a single frame using OpenCV
-    Implementation: Haar cascades with configurable parameters
-    Returns: Eye bounding boxes and pupil centers
-
-detect_gaze_direction(eye_data, calibration_data)
-    Description: Calculates gaze direction from eye detection data
-    Implementation: Pupil center analysis with geometric calculations
-    Returns: Gaze vector coordinates
-
-generate_heatmap(gaze_data, frame_dimensions, color_scheme)
-    Description: Creates heatmap from accumulated gaze data using matplotlib
-    Implementation: 2D Gaussian kernel density estimation
-    Returns: Heatmap image array
-
-4. CONFIGURATION FILES
-----------------------
-
-4.1 eye-detection-values.txt
+5.1 eye-detection-values.txt
 Format: Key-value pairs, one per line
-Purpose: Stores eye detection calibration parameters
+Purpose: Stores eye detection configuration parameters
 
 Example Content:
-    eye_cascade_scale_factor=1.1
-    eye_cascade_min_neighbors=5
-    eye_region_width_factor=0.3
-    eye_region_height_factor=0.4
-    pupil_detection_threshold=50
-    pupil_min_radius=5
-    pupil_max_radius=30
-    left_eye_offset_x=0
-    left_eye_offset_y=0
-    right_eye_offset_x=0
-    right_eye_offset_y=0
+    scale_factor=1.1
+    min_neighbors=3
+    min_size_width=20
+    min_size_height=20
+    eye_region_padding=15
+    pupil_detection_threshold=40
+    max_size_width=300
+    max_size_height=300
+    detection_flags=0
+    noise_reduction=true
+    contrast_enhancement=1.2
+    brightness_adjustment=0.1
+    detection_confidence=100%
+    calibration_mode=optimized_automatic
 
-4.2 gaze-direction-values.txt
+5.2 gaze-direction-values.txt
 Format: Key-value pairs, one per line
-Purpose: Stores gaze direction calibration parameters
+Purpose: Stores gaze direction configuration parameters
 
 Example Content:
-    gaze_sensitivity_x=1.0
-    gaze_sensitivity_y=1.0
-    gaze_offset_x=0
-    gaze_offset_y=0
-    pupil_to_gaze_ratio=0.8
-    gaze_smoothing_factor=0.3
-    min_confidence_threshold=0.7
-    max_gaze_angle=45
+    gaze_offset_x=0.425
+    gaze_offset_y=0.445
+    gaze_sensitivity=1.2
+    gaze_smoothing=0.2
+    forward_projection=0.25
+    vertical_adjustment=0.08
+    horizontal_adjustment=0.02
+    temporal_smoothing=0.15
+    spatial_filtering=true
+    outlier_rejection_threshold=2.5
+    confidence_weighting=true
+    motion_compensation=true
+    head_pose_correction=0.1
+    eye_aspect_ratio_threshold=0.25
+    calibration_points=10
+    calibration_mode=optimized_automatic
+    average_gaze_x=323.3
+    average_gaze_y=545.3
+    optimization_level=high
 
-4.3 cor.txt
-Format: Key-value pairs with descriptions
-Purpose: General configuration and heatmap settings
+5.3 cor.txt
+Format: Key-value pairs, one per line
+Purpose: General configuration and heatmap options
 
 Example Content:
     # Heatmap Configuration
     heatmap_color_scheme=sequential_blue
-    # Options: sequential_blue, sequential_red, sequential_green, 
-    #          diverging_blue_red, diverging_green_red, 
-    #          categorical_5, categorical_7
-    
     heatmap_intensity_multiplier=1.0
-    # Controls overall heatmap brightness (0.1 - 5.0)
-    
     heatmap_blur_radius=15
-    # Gaussian blur radius for heatmap smoothing (5 - 50)
-    
     heatmap_resolution_factor=1.0
-    # Resolution multiplier for heatmap generation (0.5 - 2.0)
+    heatmap_alpha_transparency=0.6
     
     # Video Processing
     frame_skip_factor=1
-    # Process every Nth frame (1 = all frames, 2 = every other frame)
-    
+    max_processing_fps=30
     output_video_quality=0.8
-    # Video compression quality for --visualize output (0.1 - 1.0)
+    video_codec_preference=h264
     
-    # Visualization
+    # Visualization Settings
     gaze_circle_radius=10
-    # Radius of gaze indicator circle in pixels
-    
     gaze_circle_color=0,255,0
-    # RGB color values for gaze indicator (0-255 each)
-    
+    gaze_circle_thickness=2
     pupil_line_thickness=2
-    # Thickness of lines connecting gaze point to pupils
-    
     pupil_line_color=255,255,0
-    # RGB color values for pupil connection lines
-
-4.4 CONFIDENCE ASSESSMENT (NEW IN v1.0.2)
-
-Automatic Confidence Analysis:
-    After each gaze detection analysis, Cor automatically evaluates the reliability 
-    of the results and provides detailed confidence metrics both in terminal output 
-    and CSV export format.
-
-Confidence Metrics:
-    - Detection Rate: Percentage of frames with successful gaze detection
-    - Average Confidence: Mean confidence score across all detected gaze points  
-    - Confidence Distribution: Breakdown of high/medium/low confidence detections
-    - Overall Accuracy Confidence: Composite score indicating overall reliability
-
-Confidence Calculation:
-    Overall Accuracy = (Average Confidence × 0.5) + (Detection Rate × 0.3) + (High Confidence Ratio × 0.2)
+    show_eye_boundaries=false
+    show_pupil_centers=true
     
-    This weighted formula considers:
-    - Individual point quality (50% weight)
-    - Detection consistency (30% weight)  
-    - High-quality detection ratio (20% weight)
-
-Confidence Levels:
-    - 85%+: Excellent - High reliability for research and analysis
-    - 70-84%: Good - Suitable for most applications
-    - 55-69%: Fair - Consider recalibration for better accuracy
-    - <55%: Poor - Recalibration strongly recommended
-
-Terminal Output Example:
-    === GAZE DETECTION CONFIDENCE ASSESSMENT ===
-    📊 Analysis Results:
-       • Total frames processed: 1500
-       • Valid gaze points detected: 1342
-       • Detection rate: 89.5%
-       • Average confidence per point: 76.3%
+    # Performance Settings
+    max_memory_usage_mb=1024
+    enable_gpu_acceleration=false
+    thread_count=0
+    enable_frame_caching=true
     
-    📈 Confidence Distribution:
-       • High confidence (≥80%): 892 points (66.5%)
-       • Medium confidence (60-79%): 321 points (23.9%)
-       • Low confidence (<60%): 129 points (9.6%)
+    # Output Settings
+    output_filename_template={videoname}_{type}
+    create_timestamp_folders=false
+    overwrite_existing_files=true
+    include_processing_metadata=true
     
-    🎯 Overall Accuracy Confidence: 82.4%
-    ✅ Excellent - High reliability for research and analysis
-    ============================================
+    # Quality Control
+    minimum_detection_confidence=0.6
+    maximum_tracking_error=50
+    enable_outlier_filtering=true
+    temporal_consistency_check=true
 
-CSV Export Format:
-    File: confidence_results.csv (saved in output folder)
-    Headers: Input Video Title, Overall Accuracy Confidence, Average Confidence Per Point,
-             Detection Rate, Valid Gaze Points Detected, Total Frames Processed
+Available Heatmap Color Schemes:
+    - sequential_blue, sequential_red, sequential_green, sequential_purple
+    - diverging_blue_red, diverging_green_red, diverging_blue_yellow
+    - categorical_5, categorical_7, rainbow
+
+Note: Configuration files can be manually edited to adjust detection parameters.
+The library reads these files during processing to apply custom settings.
+
+===========================================================
+6. SUPPORTED VIDEO FORMATS
+===========================================================
+
+Supported Formats:
+    - MP4, AVI, MOV, MKV, WMV, FLV, WEBM
+    - M4V, 3GP, ASF, RM, RMVB, VOB, OGV
+    - DV, TS, MTS, M2TS
+
+Codec Support:
+    - H.264, H.265, VP8, VP9, and other OpenCV-supported codecs
+    - Automatic format detection and validation
+
+===========================================================
+7. OUTPUT FILES
+===========================================================
+
+7.1 STANDARD OUTPUT
+
+When processing a video file, Cor creates:
+    - {videoname}_heatmap-pure.jpg: Basic heatmap visualization
+
+Output Location:
+    - Current directory (default)
+    - Custom output path (if set using cor.set_output_path())
+
+7.2 FILE ORGANIZATION
+
+Single Video Processing:
+    video_name/
+    ├── video_name_heatmap-pure.jpg     # Pure heatmap visualization
+    └── (additional files if --visualize used)
+
+===========================================================
+8. USAGE EXAMPLES
+===========================================================
+
+8.1 BASIC USAGE
+
+Python Script:
+    import cor
     
-    Single Video: One row per video processed
-    Batch Processing: All videos in same CSV file for easy comparison
+    # Display help
+    cor.help()
+    
+    # Check version
+    version_info = cor.version()
+    print(f"Cor version: {version_info['version']}")
+    
+    # Validate video
+    result = cor.validate_video("video.mp4")
+    if result['valid']:
+        print(f"Video: {result['width']}x{result['height']}, {result['frame_count']} frames")
+    
+    # Process video
+    cor.run("video.mp4")
 
-Usage:
-    Confidence assessment runs automatically with every cor.run() call
-    No additional parameters required - assessment appears after processing
-    CSV file created/updated automatically in output folder
-    Use for quality control, research validation, and batch analysis comparison
+Command Line:
+    # Basic processing
+    cor video.mp4
+    
+    # With validation
+    cor video.mp4 --validate
+    
+    # Show version
+    cor --version
 
-5. ALGORITHMS AND METHODS
--------------------------
+8.2 PATH MANAGEMENT
 
-5.1 EYE DETECTION ALGORITHM
-- Primary Method: Haar Cascade Classifiers
-- Backup Method: Template matching with normalized correlation
-- Pupil Detection: Circular Hough Transform + intensity analysis
-- Refinement: Ellipse fitting for improved accuracy
+    # Set custom paths
+    cor.set_input_path("/path/to/videos")
+    cor.set_output_path("/path/to/results")
+    
+    # Process with custom paths
+    cor.run("video.mp4")
+    
+    # Check current paths
+    paths = cor.get_paths()
+    print(f"Input: {paths['input_path']}")
+    print(f"Output: {paths['output_path']}")
+    
+    # Clear paths
+    cor.clear_paths()
 
-5.2 GAZE ESTIMATION ALGORITHM
-- Method: Pupil center corneal reflection (PCCR) approximation
-- Calibration: User-defined reference points for accuracy
-- Smoothing: Temporal filtering to reduce noise
-- Confidence Scoring: Quality assessment for each detection
+===========================================================
+9. TROUBLESHOOTING
+===========================================================
 
-5.3 HEATMAP GENERATION (v1.0.1 Major Fix)
-- Density Estimation: 2D Gaussian kernel density estimation with meshgrid coordinates
-- Exact Dimensions: Output images match input video dimensions precisely (no scaling)
-- Clean Output: Professional visualization without titles, legends, or artifacts
-- Gaussian Blobs: Configurable sigma parameter (default: 25 pixels)
-- Normalization: Min-max scaling with configurable intensity multipliers
-- Color Mapping: Multiple schemes with customizable palettes (hot, viridis, plasma, etc.)
-- Overlay Blending: Alpha compositing for frame overlay (default: 0.6 alpha)
-- Figure Optimization: Matplotlib figure sizing calculated from video resolution
-- DPI Control: 100 DPI output for consistent quality across platforms
+9.1 COMMON ISSUES
 
-6. PERFORMANCE OPTIMIZATION
----------------------------
+Issue: "Cannot open video file"
+Solution: Check file path and ensure video format is supported
 
-6.1 PROCESSING OPTIMIZATIONS
-- Frame Skipping: Configurable frame sampling for speed
-- Memory Management: Efficient processing of large videos
-- ROI Processing: Region of interest focusing for efficiency
-- Streaming Processing: Minimized memory footprint for large files
+Issue: "Missing required package" error
+Solution: Install dependencies: pip install opencv-python matplotlib
 
-6.2 PROGRESS TRACKING (v1.0.1 Enhancement)
-- Real-time Progress Bars: Visual feedback for all video processing operations
-- Unicode Block Characters: Clear progress visualization using █ characters
-- Operation-specific Messages: Contextual status information for each process
-- Frame-level Tracking: Detailed progress for video analysis operations
-- Calibration Progress: Step-by-step progress during interactive calibration
-- Terminal Integration: Proper carriage return and flush operations for smooth updates
-- Update Frequency: Progress updates every 10 frames or at completion
-- Cross-platform Compatibility: Works on Windows, macOS, and Linux terminals
-- Performance Impact: Minimal overhead (~1% processing time)
-
-6.3 CONFIDENCE ASSESSMENT
-- Automatic Accuracy Evaluation: Post-processing confidence analysis
-- Detection Rate Analysis: Percentage of successful gaze detections
-- Confidence Distribution: Breakdown of high/medium/low confidence points
-- Overall Accuracy Score: Composite reliability metric (0-100%)
-- Interpretation Guidelines: Clear recommendations based on confidence levels
-- Quality Recommendations: Suggestions for improving detection accuracy
-
-6.4 MEMORY USAGE
-- Typical Usage: 50-200MB for standard video processing
-- Large Videos: Streaming processing to minimize memory footprint
-- Calibration: Temporary storage of 20 frames (~100MB)
-
-6.5 PERFORMANCE BENCHMARKS
-- Standard Video (720p, 30fps): ~15-25 fps processing speed
-- High Resolution (1080p+): ~8-15 fps processing speed
-- Calibration Interface: Real-time interaction (30+ fps)
-- Pure Python Implementation: Optimized for reliability and accuracy
-
-7. TROUBLESHOOTING
-------------------
-
-7.1 COMMON ISSUES
-
-Issue: "OpenCV not found" error
-Solution: Install OpenCV with pip install opencv-python
-
-Issue: Poor eye detection accuracy
-Solution: Run cor.calibrate_eyes() for video-specific tuning
+Issue: Poor detection accuracy
+Solution: Manually adjust parameters in eye-detection-values.txt file
 
 Issue: Gaze direction seems incorrect
-Solution: Use cor.calibrate_gaze() to set proper reference points
+Solution: Manually adjust parameters in gaze-direction-values.txt file
 
 Issue: Video format not supported
-Solution: Convert video to MP4 format using ffmpeg
+Solution: Convert video to MP4 or other supported format
 
-Issue: Out of memory errors
-Solution: Increase frame_skip_factor in cor.txt or use smaller videos
+9.2 INSTALLATION ISSUES
 
-Issue: Heatmap dimensions don't match video (v1.0.1 FIXED)
-Solution: Update to v1.0.1 - heatmaps now match video dimensions exactly
+Issue: "cor command not found"
+Solution: Ensure you installed with 'pip install -e .' from the source directory
 
-Issue: Progress bars not showing
-Solution: Update to v1.0.1 - Unicode progress bars now work in Python mode
+Issue: Wrong package installed
+Solution: If you used 'pip install cor', uninstall it and install from source
 
-Issue: Heatmap has titles/legends (v1.0.1 FIXED)
-Solution: Update to v1.0.1 - clean output without titles or legends
+===========================================================
+10. TECHNICAL SPECIFICATIONS
+===========================================================
 
-Issue: Testing files cluttering project
-Solution: Testing files moved to testing_examples/ folder in v1.0.1
+10.1 IMPLEMENTATION DETAILS
 
-7.2 DEBUG MODE
-Enable debug output by setting environment variable:
-    export COR_DEBUG=1 (Linux/macOS)
-    set COR_DEBUG=1 (Windows)
+Language: Pure Python
+Dependencies: OpenCV, NumPy, Matplotlib, Pillow
+Video Processing: OpenCV VideoCapture
+Heatmap Generation: Matplotlib with random data (placeholder implementation)
+Progress Tracking: Terminal output with processing status
 
-8. EXAMPLES AND USE CASES
--------------------------
+10.2 PERFORMANCE
 
-8.1 RESEARCH APPLICATIONS
-- Eye-tracking studies in psychology and neuroscience
-- User interface usability testing
-- Reading pattern analysis
-- Attention and focus measurement
+Processing Speed: Depends on video size and system capabilities
+Memory Usage: Efficient frame-by-frame processing
+Output Quality: Basic heatmap generation (placeholder implementation)
+Cross-platform: Works on Windows, macOS, and Linux
 
-8.2 COMMERCIAL APPLICATIONS
-- Marketing research and advertisement effectiveness
-- Driver attention monitoring systems
-- Accessibility technology development
-- Gaming and virtual reality interfaces
+10.3 CURRENT LIMITATIONS
 
-8.3 SAMPLE WORKFLOWS
+- Basic placeholder implementation for gaze detection
+- No actual eye tracking or gaze analysis algorithms implemented
+- Heatmap generation uses random data for demonstration
+- No interactive calibration interface
+- Limited to basic video processing and validation
 
-Basic Analysis Workflow:
-    1. Import video file
-    2. Run cor.run("video.mp4") for quick analysis
-    3. Review heatmap outputs
-    4. Adjust parameters if needed
+===========================================================
+11. VERSION INFORMATION
+===========================================================
 
-Precision Analysis Workflow:
-    1. Import video file
-    2. Run cor.calibrate_eyes("video.mp4")
-    3. Run cor.calibrate_gaze("video.mp4")
-    4. Run cor.run("video.mp4", "--visualize")
-    5. Review all outputs and fine-tune parameters
+Current Version: 1.0.5.1
+Implementation: Pure Python
+Status: Basic functionality with placeholder gaze detection
 
-Batch Processing Workflow:
-    1. Calibrate using representative video
-    2. Process multiple videos with same settings
-    3. Compare heatmap outputs across videos
-    4. Generate summary statistics
+Recent Changes (v1.0.5.1):
+- Removed non-functional calibration functions
+- Cleaned up documentation to reflect actual capabilities
+- Removed misleading CLI options
+- Updated installation instructions to source-only
 
-9. DEVELOPMENT NOTES
---------------------
-
-9.1 ARCHITECTURE
-- Core Engine: Pure Python implementation using OpenCV and matplotlib
-- Configuration System: Text-based for user accessibility
-- Modular Design: Separate components for different functions
-- Cross-platform Compatibility: Works on Windows, macOS, and Linux
-
-9.2 IMPLEMENTED FEATURES
-- Comprehensive gaze detection and analysis
-- Interactive calibration system for eye and gaze detection
-- Professional heatmap generation with exact video dimension matching
-- Enhanced batch processing with folder and pattern-based processing
-- Confidence assessment with detailed accuracy metrics
-- Performance benchmarking and optimization tools
-
-9.3 FUTURE ENHANCEMENTS
-- Machine learning-based eye detection
-- Enhanced gaze accuracy algorithms
-- Multi-person tracking capabilities
-- Additional video format support
-- Performance optimizations
-
-9.3 CONTRIBUTING
-See CONTRIBUTING.md for development guidelines and coding standards.
-
-9.4 LICENSE
-MIT License - see LICENSE file for full terms.
-
----
-For additional support, visit: https://github.com/cor-team/cor
-Documentation updates: https://cor-gaze.readthedocs.io/
+===========================================================
+END OF DOCUMENTATION
+===========================================================
